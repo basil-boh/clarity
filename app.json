@@ -1,0 +1,62 @@
+{
+  "expo": {
+    "name": "Clarity",
+    "slug": "clarity",
+    "version": "0.1.0",
+    "orientation": "portrait",
+    "scheme": "clarity",
+    "userInterfaceStyle": "light",
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "sg.hackitrx.cw12.clarity",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false,
+        "NSCameraUsageDescription": "Photograph a meal to check whether it fits your prep diet, or photograph the toilet bowl so the app can compare it against the hospital's bowel-prep scale. Photographs are analysed and then discarded; they are never attached to your record."
+      },
+      "icon": "./assets/app-icon.png"
+    },
+    "android": {
+      "package": "sg.hackitrx.cw12.clarity",
+      "permissions": [
+        "android.permission.CAMERA"
+      ],
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#F7F8FC"
+      }
+    },
+    "web": {
+      "bundler": "metro",
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-font",
+      [
+        "expo-camera",
+        {
+          "cameraPermission": "Photograph a meal or the toilet bowl so the app can check it. Photographs are analysed and then discarded."
+        }
+      ],
+      [
+        "expo-notifications",
+        {
+          "color": "#2B4BF2"
+        }
+      ],
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/splash-icon.png",
+          "imageWidth": 180,
+          "resizeMode": "contain",
+          "backgroundColor": "#F7F8FC"
+        }
+      ]
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "icon": "./assets/app-icon.png"
+  }
+}
