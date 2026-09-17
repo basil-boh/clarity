@@ -13,6 +13,16 @@ npx expo start          # then i / a, or w for the browser
 npm run typecheck
 ```
 
+## Two apps in this repo
+
+| Path  | What it is |
+|-------|------------|
+| `.`   | The Expo app — iOS, Android, and Expo web. The commands above. |
+| `web/`| A mobile-web patient app in Next.js: QR code, sign-in by mobile number and a one-time code, then the prep plan. See `web/README.md`. |
+
+`web/src/domain` is a port of this app's date-derived plan logic, kept as plain
+TypeScript so both apps derive a plan the same way.
+
 ## What the deck asked for, and where it lives
 
 The deck describes nine features in four parts. The parts are the four tabs.
