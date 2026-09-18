@@ -1,6 +1,7 @@
 import { format, parseISO } from 'date-fns'
 
 import { Card, Notice, SectionTitle } from '@/components/ui'
+import { CalendarExportButton } from '@/components/CalendarExportButton'
 import { NoRecord } from '@/components/NoRecord'
 import { StepList } from '@/components/StepList'
 import { PHASE_COPY, buildPlan, offsetFor } from '@/domain/prep'
@@ -40,6 +41,7 @@ export default async function Prep() {
         <p className="mt-2 text-[17px] leading-relaxed text-ink-muted">
           Every day of the run-up, in order. Today is marked.
         </p>
+        <CalendarExportButton procedure={patient.procedure} plan={plan} />
       </header>
 
       <div className="mb-6">
