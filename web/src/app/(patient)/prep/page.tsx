@@ -1,9 +1,7 @@
-import { format, parseISO } from 'date-fns'
-
-import { Card, Notice, SectionTitle } from '@/components/ui'
+import { Card, SectionTitle } from '@/components/ui'
+import { PreparationPlan } from '@/components/PreparationPlan'
 import { NoRecord } from '@/components/NoRecord'
-import { StepList } from '@/components/StepList'
-import { PHASE_COPY, buildPlan, offsetFor } from '@/domain/prep'
+import { buildPlan, offsetFor } from '@/domain/prep'
 import { NEVER } from '@/domain/progress'
 import { livePatient } from '@/lib/patients'
 import { readProgress, prepTimingFrom } from '@/lib/progress'
@@ -33,46 +31,7 @@ export default async function Prep() {
 
   return (
     <>
-      <header className="mb-7">
-        <h1 className="text-[30px] font-bold leading-[1.1] tracking-[-0.03em] text-ink">
-          How to prep
-        </h1>
-        <p className="mt-2 text-[17px] leading-relaxed text-ink-muted">
-          Every day of the run-up, in order. Today is marked.
-        </p>
-      </header>
-
-      <div className="mb-6">
-        <Notice tone="alert">
-          The second dose is the one most often skipped, and it is the one that clears the right
-          side of the colon. Finish both.
-        </Notice>
-      </div>
-
-      <div className="space-y-5">
-        {plan
-          .filter((day) => day.steps.length > 0)
-          .map((day) => {
-            const isToday = day.offset === offset
-            return (
-              <section key={day.offset}>
-                <SectionTitle>
-                  {format(parseISO(day.date), 'EEEE d MMMM')}
-                  {isToday ? ' · Today' : ''}
-                </SectionTitle>
-                <Card className={isToday ? 'border-blue' : undefined}>
-                  <h3 className="mb-1 text-[19px] font-semibold tracking-[-0.015em] text-ink">
-                    {PHASE_COPY[day.phase].name}
-                  </h3>
-                  <p className="mb-4 text-[15px] leading-relaxed text-ink-muted">
-                    {PHASE_COPY[day.phase].blurb}
-                  </p>
-                  <StepList steps={day.steps} completed={patient.completed} />
-                </Card>
-              </section>
-            )
-          })}
-      </div>
+      <PreparationPlan key={patient.procedure.date} procedure={patient.procedure} plan={plan} offset={offset} completed={patient.completed} />
 
       <section className="mt-8">
         <SectionTitle>What this app will never do</SectionTitle>
