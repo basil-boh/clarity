@@ -1,10 +1,8 @@
 import 'server-only'
 
-import { addDays, format } from 'date-fns'
-
-import type { Procedure, Profile } from '@/domain/prep'
+import { dateFromToday, type Procedure, type Profile } from '@/domain/prep'
 import type { Progress } from '@/lib/progress'
-import { UNMEASURED, signalsFromInput, type Signals } from '@/domain/progress'
+import { UNMEASURED, latestFluid, signalsFromInput, type Signals } from '@/domain/progress'
 import { patientSource } from '@/lib/source'
 import { logDbError, patientScope } from '@/lib/supabase'
 
@@ -42,8 +40,8 @@ export type Patient = {
  * The seed half of `supabase/migrations/0001_web_portal.sql` is the same three,
  * as rows.
  */
-function demoCohort(today = new Date()): Patient[] {
-  const iso = (days: number) => format(addDays(today, days), 'yyyy-MM-dd')
+function demoCohort(now = new Date()): Patient[] {
+  const iso = (days: number) => dateFromToday(days, now)
 
   return [
     {
@@ -220,9 +218,9 @@ async function fromSupabase(phone: string): Promise<Patient | null> {
 
 // ---------------------------------------------------------------------------
 
-export async function findPatient(phone: string, today = new Date()): Promise<Patient | null> {
+export async function findPatient(phone: string, now = new Date()): Promise<Patient | null> {
   if (patientSource() === 'supabase') return fromSupabase(phone)
-  return demoCohort(today).find((p) => p.phone === phone) ?? null
+  return demoCohort(now).find((p) => p.phone === phone) ?? null
 }
 
 /** Every demo number, for the sign-in hint. Empty once a database is in play. */
@@ -232,7 +230,7 @@ export function demoNumbers(): { phone: string; name: string; where: string }[] 
     phone: p.phone,
     name: p.profile.displayName,
     where:
-      p.procedure.date > format(addDays(new Date(), 7), 'yyyy-MM-dd')
+      p.procedure.date > dateFromToday(7)
         ? 'waiting'
         : 'in the run-up',
   }))
@@ -260,7 +258,7 @@ export async function livePatient(
   // more recent fact. Anything they have not recorded keeps the source's value,
   // so an untouched signal stays UNMEASURED rather than becoming a zero.
   const reported = signalsFromInput({
-    fluidGlasses: progress.fluidGlasses,
+    fluidGlasses: latestFluid(progress.fluidDays),
     stoolPoint: progress.stoolPoint,
     dietDays: progress.dietDays,
   })

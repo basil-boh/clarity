@@ -1,4 +1,4 @@
-import { differenceInCalendarDays, format, parseISO } from 'date-fns'
+import { addDays, differenceInCalendarDays, format, parseISO } from 'date-fns'
 
 /**
  * The domain, in one file.
@@ -104,9 +104,55 @@ export function phaseFor(offset: number): Phase {
   return 'waiting'
 }
 
+/**
+ * The department's calendar.
+ *
+ * "Today" is a Singapore date wherever the server runs. Reading it off the
+ * server's own clock was right on a laptop in Singapore and wrong on any host
+ * that runs on UTC -- Vercel among them -- which is eight hours behind: from
+ * midnight to 8am the whole plan sat a day late, and procedure morning read as
+ * "Tonight is the prep".
+ */
+export const TIME_ZONE = 'Asia/Singapore'
+
+const WALL_CLOCK = new Intl.DateTimeFormat('en-US', {
+  timeZone: TIME_ZONE,
+  year: 'numeric',
+  month: '2-digit',
+  day: '2-digit',
+  hour: '2-digit',
+  minute: '2-digit',
+  second: '2-digit',
+  hourCycle: 'h23',
+})
+
+/**
+ * What a clock in Singapore reads at `instant`, as a local `Date` -- for
+ * date-fns to format or count from. Not an instant itself: never send it
+ * anywhere or compare it with a real one.
+ */
+export function inSingapore(instant: Date): Date {
+  const part = Object.fromEntries(
+    WALL_CLOCK.formatToParts(instant).map((p) => [p.type, Number(p.value)]),
+  )
+  return new Date(part.year, part.month - 1, part.day, part.hour % 24, part.minute, part.second)
+}
+
+/** Today in Singapore, `yyyy-MM-dd`. */
+export function todayIn(now = new Date()): string {
+  return format(inSingapore(now), 'yyyy-MM-dd')
+}
+
+/** The Singapore date `days` from today, `yyyy-MM-dd`. */
+export function dateFromToday(days: number, now = new Date()): string {
+  return format(addDays(parseISO(todayIn(now)), days), 'yyyy-MM-dd')
+}
+
 /** Days until the procedure. 0 is the morning of; negatives are the run-up. */
-export function offsetFor(procedureDate: string, today = new Date()): number {
-  return -differenceInCalendarDays(parseISO(procedureDate), today)
+export function offsetFor(procedureDate: string, now = new Date()): number {
+  // Counted from the procedure to today rather than negated, which gave -0 on
+  // the day itself.
+  return differenceInCalendarDays(parseISO(todayIn(now)), parseISO(procedureDate))
 }
 
 /**
@@ -262,9 +308,9 @@ function stepsFor(offset: number): StepSpec[] {
  * never stored against it.** A patient who is rescheduled -- and they
  * frequently are -- must not be left following a plan built for the old date.
  */
-export function buildPlan(procedureDate: string, today = new Date()): PlanDay[] {
+export function buildPlan(procedureDate: string, now = new Date()): PlanDay[] {
   const procedure = parseISO(procedureDate)
-  const here = offsetFor(procedureDate, today)
+  const here = offsetFor(procedureDate, now)
 
   return Array.from({ length: 8 }, (_, i) => {
     const offset = i - 7

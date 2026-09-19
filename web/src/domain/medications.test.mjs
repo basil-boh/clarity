@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
-import { medicationIssues, medicationOccurrences, parseMedicationExtraction, resolveMedicationDate } from './medications.ts'
+import { MAX_SAVED_MEDICATIONS, medicationIssues, medicationOccurrences, parseMedicationExtraction, parseSavedMedications, resolveMedicationDate } from './medications.ts'
 import { exportPlanCalendar } from './calendar-export.ts'
 import { buildPlan } from './prep.ts'
 
@@ -119,4 +119,25 @@ test('combined calendar preserves prep events and adds medication alarms at the 
   assert.match(result.content, /TRIGGER:-PT15M/)
   assert.match(result.content, /DTSTART;TZID=Asia\/Singapore:20261010T090000/)
   assert.ok(result.content.includes('SUMMARY:Clarity: Take Example\\, medicine\\; A'))
+})
+
+test('saved entries: confirmed ones in the review shape are kept, anything else is dropped', () => {
+  assert.deepEqual(parseSavedMedications([reviewed()]), [reviewed()])
+  // A stored entry still produces the same reminders after a reload.
+  assert.equal(medicationOccurrences(parseSavedMedications(JSON.parse(JSON.stringify([reviewed()]))), date).length, 3)
+  for (const bad of [null, 'x', { ...reviewed(), confirmed: false }, { ...reviewed(), id: '<script>' },
+    { ...reviewed(), procedureDate: '12/10/2026' }, { ...reviewed(), reminderTimes: 'nine' },
+    { ...reviewed(), doseAmounts: ['x'.repeat(201)] }, { ...reviewed(), draft: null },
+    reviewed({}, { sources: [9] }), reviewed({}, { action: 'double' })]) {
+    assert.deepEqual(parseSavedMedications([bad]), [])
+  }
+  assert.deepEqual(parseSavedMedications('not a list'), [])
+  assert.equal(parseSavedMedications(Array.from({ length: 40 }, (_, i) => reviewed({ id: `e${i}` }))).length, MAX_SAVED_MEDICATIONS)
+})
+
+test('saved entries survive a reschedule so they can be reviewed again, not silently used', () => {
+  const [kept] = parseSavedMedications([reviewed()])
+  assert.ok(kept)
+  assert.ok(medicationIssues(kept, '2026-10-20').includes('The procedure date changed. Read and review the instructions again.'))
+  assert.deepEqual(medicationOccurrences([kept], '2026-10-20'), [])
 })

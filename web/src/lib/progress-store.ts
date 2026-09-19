@@ -3,8 +3,14 @@ import 'server-only'
 import { createHmac, timingSafeEqual } from 'node:crypto'
 import { cookies } from 'next/headers'
 
-import { dosesFor } from '@/domain/prep'
-import { DIET_ANSWERS, type BowelScalePoint, type DietAnswer } from '@/domain/progress'
+import { dosesFor, todayIn } from '@/domain/prep'
+import {
+  DIET_ANSWERS,
+  fluidOn,
+  type BowelScalePoint,
+  type DietAnswer,
+  type FluidDays,
+} from '@/domain/progress'
 import { usingDatabase } from '@/lib/source'
 import { logDbError, patientScope } from '@/lib/supabase'
 import { readSession } from '@/lib/session'
@@ -35,8 +41,8 @@ export type Progress = {
   readonly doses: Record<string, number>
   /** Step uids (`offset:id`) the patient has ticked off. */
   readonly completed: readonly string[]
-  /** Glasses of clear fluid recorded today. */
-  readonly fluidGlasses: number
+  /** Singapore date (`yyyy-MM-dd`) → glasses of clear fluid that day. */
+  readonly fluidDays: FluidDays
   /** Where the patient is on the department's own bowel scale, 1-5. */
   readonly stoolPoint: BowelScalePoint | null
   /** Day offset (`-3`, `-2`, `-1`) → how the diet day went. */
@@ -46,7 +52,7 @@ export type Progress = {
 export const EMPTY: Progress = {
   doses: {},
   completed: [],
-  fluidGlasses: 0,
+  fluidDays: {},
   stoolPoint: null,
   dietDays: {},
 }
@@ -80,6 +86,19 @@ function cleanGlasses(value: unknown): number {
   return Math.max(0, Math.min(Math.round(Number(value) || 0), 30))
 }
 
+/** The prep is a week; a fortnight of days covers it and a reschedule. */
+const FLUID_DAYS_KEPT = 14
+
+function cleanFluidDays(value: unknown): Record<string, number> {
+  if (!value || typeof value !== 'object') return {}
+  const days = Object.entries(value as Record<string, unknown>)
+    .filter(([date]) => /^\d{4}-\d{2}-\d{2}$/.test(date))
+    .map(([date, glasses]) => [date, cleanGlasses(glasses)] as const)
+    .sort(([a], [b]) => a.localeCompare(b))
+    .slice(-FLUID_DAYS_KEPT)
+  return Object.fromEntries(days)
+}
+
 /**
  * The stored shape, brought back into range.
  *
@@ -93,7 +112,7 @@ function normalise(raw: Partial<Progress> | null | undefined): Progress {
   return {
     doses: typeof raw.doses === 'object' && raw.doses ? raw.doses : {},
     completed: cleanCompleted(raw.completed),
-    fluidGlasses: cleanGlasses(raw.fluidGlasses),
+    fluidDays: cleanFluidDays(raw.fluidDays),
     stoolPoint: cleanStoolPoint(raw.stoolPoint),
     dietDays: cleanDietDays(raw.dietDays),
   }
@@ -155,8 +174,30 @@ async function writeCookie(next: Progress): Promise<void> {
 type ProgressRow = {
   completed: string[] | null
   fluid_glasses: number | null
+  /** Absent until `0002_medications_and_fluid_days.sql` has been applied. */
+  fluid_days?: unknown
   stool_point: number | null
   diet_days: unknown
+  updated_at: string | null
+}
+
+const PROGRESS_COLUMNS = 'completed, fluid_glasses, fluid_days, stool_point, diet_days, updated_at'
+/** Before `0002_medications_and_fluid_days.sql` added `fluid_days`. */
+const LEGACY_PROGRESS_COLUMNS = 'completed, fluid_glasses, stool_point, diet_days, updated_at'
+
+/** Postgres: undefined column. PostgREST: a column missing from its schema cache. */
+const missingColumn = (error: { code?: string } | null) =>
+  error?.code === '42703' || error?.code === 'PGRST204'
+
+/**
+ * Fluid by day, from a row. Before `fluid_days` existed the one running count
+ * was `fluid_glasses`, and the last day it can be trusted for is the day the
+ * row was last written -- so that is the day it is filed under.
+ */
+function fluidDaysOf(row: ProgressRow | null): unknown {
+  const days = cleanFluidDays(row?.fluid_days)
+  if (Object.keys(days).length > 0 || !row?.fluid_glasses || !row.updated_at) return days
+  return { [todayIn(new Date(row.updated_at))]: row.fluid_glasses }
 }
 
 type DoseRow = { dose_id: string; consumed_ml: number }
@@ -164,12 +205,16 @@ type DoseRow = { dose_id: string; consumed_ml: number }
 async function readDb(phone: string): Promise<Progress> {
   const scope = patientScope(phone)
 
-  const [progressResult, doseResult] = await Promise.all([
-    scope
-      .select<ProgressRow>('web_progress', 'completed, fluid_glasses, stool_point, diet_days')
-      .maybeSingle(),
+  const [firstRead, doseResult] = await Promise.all([
+    scope.select<ProgressRow>('web_progress', PROGRESS_COLUMNS).maybeSingle(),
     scope.select<DoseRow>('web_doses', 'dose_id, consumed_ml'),
   ])
+
+  // A database the new migration has not reached yet still reads, on the old
+  // columns, rather than showing the patient an empty record.
+  const progressResult = missingColumn(firstRead.error)
+    ? await scope.select<ProgressRow>('web_progress', LEGACY_PROGRESS_COLUMNS).maybeSingle()
+    : firstRead
 
   // A read failure here is recoverable in a way `findPatient`'s is not: the
   // worst case is a screen showing "not recorded" for a signal that was in fact
@@ -188,7 +233,7 @@ async function readDb(phone: string): Promise<Progress> {
   return normalise({
     doses,
     completed: row?.completed ?? [],
-    fluidGlasses: row?.fluid_glasses ?? 0,
+    fluidDays: fluidDaysOf(row) as FluidDays,
     stoolPoint: cleanStoolPoint(row?.stool_point),
     dietDays: cleanDietDays(row?.diet_days),
   })
@@ -221,19 +266,28 @@ async function writeDb(phone: string, next: Progress): Promise<void> {
       updated_at: new Date().toISOString(),
     }))
 
-  const writes: PromiseLike<{ error: unknown }>[] = [
-    scope.client.from('web_progress').upsert(
-      {
-        phone,
-        completed: [...next.completed],
-        fluid_glasses: next.fluidGlasses,
-        stool_point: next.stoolPoint,
-        diet_days: next.dietDays,
-        updated_at: new Date().toISOString(),
-      },
-      { onConflict: 'phone' },
-    ),
-  ]
+  const row = {
+    phone,
+    completed: [...next.completed],
+    // Today's count, kept alongside `fluid_days` so the column still means what
+    // it did to anything reading it, and so a database without `fluid_days`
+    // files it under the right day (see `fluidDaysOf`).
+    fluid_glasses: fluidOn(next.fluidDays, todayIn()),
+    fluid_days: next.fluidDays,
+    stool_point: next.stoolPoint,
+    diet_days: next.dietDays,
+    updated_at: new Date().toISOString(),
+  }
+
+  const progressWrite = async () => {
+    const first = await scope.client.from('web_progress').upsert(row, { onConflict: 'phone' })
+    if (!missingColumn(first.error)) return first
+    // Not migrated yet: save everything but the per-day history.
+    const { fluid_days: _, ...legacy } = row
+    return scope.client.from('web_progress').upsert(legacy, { onConflict: 'phone' })
+  }
+
+  const writes: PromiseLike<{ error: unknown }>[] = [progressWrite()]
 
   if (doseRows.length > 0) {
     writes.push(scope.client.from('web_doses').upsert(doseRows, { onConflict: 'phone,dose_id' }))
@@ -266,6 +320,19 @@ export async function loadProgress(): Promise<Progress> {
   const session = await readSession()
   if (!session) return EMPTY
   return readDb(session.phone)
+}
+
+/**
+ * Someone else's record, for /admin only.
+ *
+ * The one exception to the rule above, and deliberately a separate function
+ * rather than an optional argument on `loadProgress`: a patient screen cannot
+ * reach this by leaving a parameter off. Every caller sits behind
+ * `requireAdmin()`. Database only -- the cookie backend is per-device and has
+ * no record to look up by number.
+ */
+export async function progressOf(phone: string): Promise<Progress> {
+  return readDb(phone)
 }
 
 export async function saveProgress(next: Progress): Promise<void> {

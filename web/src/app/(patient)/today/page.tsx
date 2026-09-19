@@ -17,13 +17,15 @@ import { FLAG_LABEL, computeFlag } from '@/domain/progress'
 import { livePatient } from '@/lib/patients'
 import { formatPhone } from '@/lib/phone'
 import { readProgress, prepTimingFrom } from '@/lib/progress'
-import { readSession } from '@/lib/session'
+import { requireSession } from '@/lib/session'
 import { NoRecord } from '@/components/NoRecord'
+
+import { tickStep } from '../actions'
 
 export const metadata = { title: 'Today — Clarity' }
 
 export default async function Today() {
-  const session = (await readSession())!
+  const session = await requireSession()
   const progress = await readProgress()
   const patient = await livePatient(
     session.phone,
@@ -116,7 +118,12 @@ export default async function Today() {
         <section className="mb-5">
           <SectionTitle>What to do today</SectionTitle>
           <Card>
-            <StepList steps={day.steps} completed={completed} />
+            <StepList
+              steps={day.steps}
+              completed={completed}
+              tickable={day.steps.map((step) => step.uid)}
+              onToggle={tickStep}
+            />
           </Card>
         </section>
       ) : null}

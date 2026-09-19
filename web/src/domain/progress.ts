@@ -232,6 +232,30 @@ export type DietAnswer = (typeof DIET_ANSWERS)[number]['id']
 export const FLUID_TARGET_GLASSES = 8
 
 /**
+ * Clear fluid, per day: Singapore date (`yyyy-MM-dd`) → glasses.
+ *
+ * Per day because "glasses today" has to start again at zero tomorrow; one
+ * running count carried Monday's glasses into Tuesday.
+ */
+export type FluidDays = Readonly<Record<string, number>>
+
+export function fluidOn(days: FluidDays, date: string): number {
+  return days[date] ?? 0
+}
+
+/**
+ * The count the flag reads: the most recent day anything was recorded. On
+ * procedure morning, before a glass is poured, that is the purge night -- the
+ * day the ward is asking about.
+ */
+export function latestFluid(days: FluidDays): number | undefined {
+  const recorded = Object.keys(days)
+    .filter((date) => days[date] > 0)
+    .sort()
+  return recorded.length > 0 ? days[recorded[recorded.length - 1]] : undefined
+}
+
+/**
  * Turn what the patient recorded into the three signals they can move.
  *
  * `prepTiming` is not here: it comes from recorded dose volume, which is a

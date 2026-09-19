@@ -1,11 +1,13 @@
-import { Card, SectionTitle } from '@/components/ui'
+import { Card } from '@/components/ui'
 import { PreparationPlan } from '@/components/PreparationPlan'
 import { NoRecord } from '@/components/NoRecord'
 import { buildPlan, offsetFor } from '@/domain/prep'
-import { NEVER } from '@/domain/progress'
+import { loadMedications } from '@/lib/medications-store'
 import { livePatient } from '@/lib/patients'
-import { readProgress, prepTimingFrom } from '@/lib/progress'
-import { readSession } from '@/lib/session'
+import { readProgress, prepTimingFrom, usingDatabase } from '@/lib/progress'
+import { requireSession } from '@/lib/session'
+
+import { saveMedicationPlan, tickStep } from '../actions'
 
 export const metadata = { title: 'How to prep — Clarity' }
 
@@ -17,8 +19,8 @@ export const metadata = { title: 'How to prep — Clarity' }
  * with today marked. Nothing is collapsed behind a tap.
  */
 export default async function Prep() {
-  const session = (await readSession())!
-  const progress = await readProgress()
+  const session = await requireSession()
+  const [progress, medications] = await Promise.all([readProgress(), loadMedications()])
   const patient = await livePatient(
     session.phone,
     progress,
@@ -31,23 +33,19 @@ export default async function Prep() {
 
   return (
     <>
-      <PreparationPlan key={patient.procedure.date} procedure={patient.procedure} plan={plan} offset={offset} completed={patient.completed} />
+      <PreparationPlan
+        key={patient.procedure.date}
+        procedure={patient.procedure}
+        plan={plan}
+        offset={offset}
+        completed={patient.completed}
+        onToggleStep={tickStep}
+        savedMedications={medications}
+        // Only where there is a database to keep them in; see medications-store.
+        onSaveMedications={usingDatabase() ? saveMedicationPlan : undefined}
+      />
 
       <section className="mt-8">
-        <SectionTitle>What this app will never do</SectionTitle>
-        <Card>
-          <ul className="space-y-4">
-            {NEVER.map((rule) => (
-              <li key={rule.id}>
-                <p className="text-[17px] font-semibold leading-snug text-ink">{rule.rule}</p>
-                <p className="mt-1 text-[15px] leading-relaxed text-ink-muted">{rule.because}</p>
-              </li>
-            ))}
-          </ul>
-        </Card>
-      </section>
-
-      <section className="mt-6">
         <Card>
           <h3 className="text-[17px] font-semibold text-ink">Not sure about something?</h3>
           <p className="mt-1.5 text-[15px] leading-relaxed text-ink-muted">

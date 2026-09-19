@@ -64,12 +64,14 @@ timeline and calendar download. Ambiguous or conflicting instructions cannot
 be added; use a clearer department sheet. Medication alerts occur at the chosen
 time, in Singapore time. Post-procedure scheduling is excluded.
 
-This is a prototype: photos and instructions live only for the current page
-visit. Leaving or refreshing clears them, and a procedure-date change requires
-review again. Downloads do not update previously imported calendar events.
-Clarity does not persist photos or instructions, but photos are sent to OpenAI
-for processing, subject to that service's data controls. No clinician approval
-workflow, database persistence, or prescription inference is included.
+Photos are never stored. With Supabase configured, the instructions a patient
+confirms are saved to their record (`web_medications`), so they survive a reload
+and staff see them in `/admin`; entries still being reviewed are not saved. On
+the demo source there is nowhere to keep them, and leaving or refreshing clears
+them as before. A procedure-date change requires review again. Downloads do not
+update previously imported calendar events. Photos are sent to OpenAI for
+processing, subject to that service's data controls. No clinician approval
+workflow or prescription inference is included.
 
 Run `npm run test:medications` for scheduling, upload validation, and mocked
 provider tests. Real extraction requires a configured API key; test with
@@ -104,6 +106,12 @@ throughout and the cohort is upserted, so running it again repairs a
 half-applied state and puts the three demo patients back on their date
 boundaries.
 
+Then `supabase/migrations/0002_medications_and_fluid_days.sql`, the same way.
+It adds `web_progress.fluid_days` (clear fluid per day) and `web_medications`
+(the medication instructions a patient confirmed — never the photographs), and
+is also safe to re-run. Until it has run the app keeps working on the old
+behaviour and logs which file to apply.
+
 `../supabase/migrations/0001_init.sql` is the **Expo app's** schema and is left
 alone. Every table there is keyed on `auth.users` and every policy on
 `auth.uid()`, because the device holds a Supabase JWT. This app does not — a
@@ -117,6 +125,25 @@ for a real mobile number. On a Twilio **trial** account an SMS only reaches a
 number verified in the Twilio console, so the fictional demo numbers can be
 typed into the sign-in form but the code never arrives. Testing the real SMS
 path means making the verified number a patient.
+
+### Adding patients from `/admin`
+
+Set `ADMIN_PASSWORD` and open `/admin`. It lists every patient with their
+procedure date and the phase they are in today, and adds, edits and deletes
+them. Each patient's page shows everything held for them — booking and stage,
+the readiness flag and its four signals, what they recorded, the medication
+instructions they confirmed, their assistant chat and sign-in codes — with
+editing one step away behind **Edit details**. The stage shortcuts on the form set the date so the patient lands in a
+given phase — the purge night, say — which is the quickest way to see a screen
+at a boundary. "Clear recorded progress" wipes what a patient logged and keeps
+their booking, for running the same number through again.
+
+With `ADMIN_PASSWORD` unset every `/admin` route is a 404. It is one shared
+password, not staff accounts; the cookie it sets is separate from the patient
+session, scoped to `/admin`, and invalidated by changing the password. The
+admin reads the whole ward, so it uses the service role client directly rather
+than `patientScope()` — `requireAdmin()` in `src/lib/admin.ts` is what stands in
+front of every page and server action there instead.
 
 ### Where the authorisation actually is
 
@@ -245,7 +272,7 @@ got through". It **clamps at the prescribed volume**: a counter that runs on to
 
 | Signal | Asked as | Derivation |
 | --- | --- | --- |
-| Fluids | glasses, against a target of 8 | `glasses / 8`, capped at 1 |
+| Fluids | glasses per day, against a target of 8 | the latest day's `glasses / 8`, capped at 1 |
 | Bowel output | the department's own 1–5 scale | `(point − 1) / 4` |
 | Diet | Stuck to it / Mostly / Slipped, per day | mean of the days answered |
 
@@ -255,6 +282,19 @@ told "you want 4 or above" can check that claim against the same words the
 department uses; its swatches are the clarity ramp off the CW12 deck's cover.
 Recording a point raises a flag and says so on the same screen — it does not
 decide whether the scope goes ahead, which is `NEVER[1]`.
+
+Fluid is counted per Singapore date, so the "today" counter starts again at
+zero each day. The flag reads the most recent day anything was recorded — on
+procedure morning, before a glass is poured, that is the purge night.
+
+"Today" is always the Singapore date, whatever zone the server runs in
+(`domain/prep.ts:todayIn`). Most hosts run on UTC, eight hours behind, which
+would otherwise put the whole plan a day late from midnight to 8am.
+
+Steps are ticked off on Today and the Plan: today's and earlier ones, never a
+day ahead. Medication instructions a patient confirms on the Plan are kept in
+`web_medications` (`lib/medications-store.ts`) and shown to staff in `/admin`;
+the photographs they were read from are not kept anywhere.
 
 Prep timing is the odd one out: it is *measured* from dose volume rather than
 self-reported, which is why it lives in `lib/progress.ts` and the other three
@@ -410,13 +450,7 @@ photograph reading, which in the Expo app inferred diet compliance and bowel
 output from a picture. Here both are self-reported instead, which is honest but
 asks more of the patient.
 
-Steps in the plan still cannot be ticked off — `toggleStep` exists in
-`lib/progress.ts` with no UI on it. Fluids are recorded as a single running
-count rather than per day, so the figure is "today" only in name.
-
-**There is no way to get a patient into the database except by hand.** Rows are
-written by the seed half of the migration, or by hand in the SQL editor; there
-is no import from a
-hospital system, and no clinician view — `web_progress` and `web_chat_messages`
-hold what a ward would want to read on the morning, but nothing reads them yet
-except the patient's own screens.
+**Patients are entered one at a time.** `/admin` adds and edits them and shows
+everything held for each one, but there is no import from a hospital system, and
+no ward view across patients — which of tomorrow's list is amber or red, whose
+assistant chat escalated — only one patient at a time.

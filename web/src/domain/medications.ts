@@ -167,3 +167,32 @@ export function medicationOccurrences(entries: readonly ReviewedMedication[], pr
     return occurrences
   }).sort((a, b) => `${a.date}${a.time}`.localeCompare(`${b.date}${b.time}`))
 }
+
+/** At most this many confirmed entries are kept against a patient. */
+export const MAX_SAVED_MEDICATIONS = 30
+
+const stringList = (value: unknown, max: number, length: number): value is string[] =>
+  Array.isArray(value) && value.length <= max && value.every(v => typeof v === 'string' && v.length <= length)
+
+/**
+ * Confirmed entries in the shape the review screen makes, from storage or from
+ * the browser -- anything else is dropped rather than trusted. Shape only: an
+ * entry the procedure date has since moved under is kept, so the screen can ask
+ * for it to be reviewed again. Saving also drops entries with open issues.
+ */
+export function parseSavedMedications(value: unknown): ReviewedMedication[] {
+  if (!Array.isArray(value)) return []
+  return value.slice(0, MAX_SAVED_MEDICATIONS).flatMap((item: unknown) => {
+    if (!item || typeof item !== 'object') return []
+    const e = item as Record<string, unknown>
+    if (typeof e.id !== 'string' || !/^[A-Za-z0-9-]{1,64}$/.test(e.id) || e.confirmed !== true) return []
+    if (typeof e.procedureDate !== 'string' || dateValue(e.procedureDate) === null) return []
+    if (!stringList(e.reminderTimes, 8, 5) || !stringList(e.doseAmounts, 8, 200)) return []
+    try {
+      const [draft] = parseMedicationExtraction({ medications: [e.draft] }, MAX_IMAGES)
+      return [{ id: e.id, draft, reminderTimes: e.reminderTimes, doseAmounts: e.doseAmounts, confirmed: true, procedureDate: e.procedureDate }]
+    } catch {
+      return []
+    }
+  })
+}

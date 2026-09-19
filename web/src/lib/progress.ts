@@ -1,7 +1,7 @@
 import 'server-only'
 
-import { GLASS_ML, dosesFor, totalDoseMl } from '@/domain/prep'
-import type { BowelScalePoint, DietAnswer } from '@/domain/progress'
+import { GLASS_ML, dosesFor, todayIn, totalDoseMl } from '@/domain/prep'
+import { fluidOn, type BowelScalePoint, type DietAnswer } from '@/domain/progress'
 import { usingDatabase } from '@/lib/source'
 import { EMPTY, loadProgress, saveProgress, type Progress } from '@/lib/progress-store'
 
@@ -53,7 +53,12 @@ export async function recordDose(doseId: string, ml: number): Promise<Progress> 
   return next
 }
 
+/** `offset:id`, as `buildPlan` makes them. Anything else is not a step. */
+const STEP_UID = /^-?\d{1,2}:[a-z0-9-]{1,48}$/
+
 export async function toggleStep(uid: string): Promise<Progress> {
+  // Reached from a server action, so the uid is whatever the caller sent.
+  if (typeof uid !== 'string' || !STEP_UID.test(uid)) return readProgress()
   const current = await readProgress()
   const has = current.completed.includes(uid)
   const next: Progress = {
@@ -85,8 +90,13 @@ export function prepTimingFrom(doses: Record<string, number>): number | null {
   return Math.min(1, recorded / totalDoseMl())
 }
 
+/** Glasses of clear fluid recorded today, Singapore time. */
+export function fluidToday(progress: Progress): number {
+  return fluidOn(progress.fluidDays, todayIn())
+}
+
 /**
- * Clear fluid, in glasses.
+ * Clear fluid, in glasses, for today.
  *
  * Capped at 30 rather than at the 8-glass target: the target is what the plan
  * asks for, not a limit, and a patient who drank twelve should be able to say
@@ -94,7 +104,10 @@ export function prepTimingFrom(doses: Record<string, number>): number | null {
  */
 export async function recordFluid(glasses: number): Promise<Progress> {
   const current = await readProgress()
-  const next: Progress = { ...current, fluidGlasses: Math.max(0, Math.min(glasses, 30)) }
+  const next: Progress = {
+    ...current,
+    fluidDays: { ...current.fluidDays, [todayIn()]: Math.max(0, Math.min(glasses, 30)) },
+  }
   await writeProgress(next)
   return next
 }

@@ -16,13 +16,14 @@ import {
 } from '@/domain/progress'
 import { livePatient } from '@/lib/patients'
 import {
+  fluidToday,
   prepTimingFrom,
   readProgress,
   recordDietDay,
   recordFluid,
   recordStool,
 } from '@/lib/progress'
-import { readSession } from '@/lib/session'
+import { requireSession } from '@/lib/session'
 
 export const metadata = { title: 'Progress — Clarity' }
 
@@ -35,7 +36,7 @@ export const metadata = { title: 'Progress — Clarity' }
  * would be worse than no tracker at all.
  */
 export default async function Progress() {
-  const session = (await readSession())!
+  const session = await requireSession()
   const progress = await readProgress()
   const patient = await livePatient(
     session.phone,
@@ -55,7 +56,7 @@ export default async function Progress() {
 
   async function saveFluid(glasses: number): Promise<number> {
     'use server'
-    return (await recordFluid(glasses)).fluidGlasses
+    return fluidToday(await recordFluid(glasses))
   }
 
   async function saveStool(point: BowelScalePoint | null): Promise<BowelScalePoint | null> {
@@ -88,7 +89,7 @@ export default async function Progress() {
       <section className="mb-6">
         <SectionTitle>Record today</SectionTitle>
         <Card className="space-y-5">
-          <FluidInput glasses={progress.fluidGlasses} onRecord={saveFluid} />
+          <FluidInput glasses={fluidToday(progress)} onRecord={saveFluid} />
           <BowelInput point={progress.stoolPoint} onRecord={saveStool} />
           <DietInput
             offset={offset}

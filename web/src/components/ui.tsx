@@ -92,6 +92,11 @@ export function Input(props: React.ComponentPropsWithRef<'input'>) {
   return <input className={twMerge(INPUT, className)} {...rest} />
 }
 
+export function Select(props: React.ComponentPropsWithRef<'select'>) {
+  const { className = '', ...rest } = props
+  return <select className={twMerge(INPUT, 'appearance-auto', className)} {...rest} />
+}
+
 /**
  * A labelled statistic. Used for the appointment date and the countdown, which
  * are the two things a patient opens the app to check.

@@ -1,3 +1,7 @@
+'use client'
+
+import { useState } from 'react'
+
 import { Icon, type IconName } from '@/components/Icon'
 import type { Step } from '@/domain/prep'
 
@@ -43,61 +47,142 @@ const BLOCK: Partial<Record<Step['kind'], string>> = {
   fluid: 'bg-ink text-white',
 }
 
+/**
+ * Ticking a step off.
+ *
+ * Only the steps in `tickable` get a box -- today's and earlier, so nothing can
+ * be marked done before its day, and never a medication reminder, which is a
+ * reminder rather than a step in the plan. The tick shows at once and is put
+ * back if the save fails: on the purge night a box that silently did not save
+ * is worse than one that says so. One save at a time, because each is a
+ * read-then-write of the whole record and two in flight could undo each other.
+ */
 export function StepList({
   steps,
   completed = [],
+  tickable = [],
+  onToggle,
 }: {
   steps: readonly Step[]
   completed?: readonly string[]
+  /** Step uids that can be ticked off here. */
+  tickable?: readonly string[]
+  /** Saves the tick and returns the patient's whole completed list. */
+  onToggle?: (uid: string) => Promise<readonly string[]>
 }) {
-  return (
-    <ol className="divide-y divide-hairline">
-      {steps.map((step) => {
-        const done = completed.includes(step.uid)
-        const solid = step.weight === 'critical' && step.at
+  const [ticked, setTicked] = useState<ReadonlySet<string>>(() => new Set(completed))
+  const [saving, setSaving] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
-        return (
-          <li key={step.uid} className="flex gap-4 py-4 first:pt-0 last:pb-0">
-            <div className="w-[60px] shrink-0">
-              {solid ? (
-                <span
-                  className={`block px-1.5 py-1 text-center font-mono text-[13px] font-medium tabular-nums ${
-                    BLOCK[step.kind] ?? 'bg-ink text-white'
+  async function toggle(uid: string) {
+    if (!onToggle || saving) return
+    const before = ticked
+    const next = new Set(ticked)
+    if (next.has(uid)) next.delete(uid)
+    else next.add(uid)
+    setTicked(next)
+    setSaving(true)
+    setError(null)
+    try {
+      setTicked(new Set(await onToggle(uid)))
+    } catch {
+      setTicked(before)
+      setError('That did not save. Check your connection and try again.')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  return (
+    <>
+      <ol className="divide-y divide-hairline">
+        {steps.map((step) => {
+          const done = ticked.has(step.uid)
+          const canTick = Boolean(onToggle) && tickable.includes(step.uid)
+          const solid = step.weight === 'critical' && step.at
+
+          return (
+            <li key={step.uid} className="flex gap-4 py-4 first:pt-0 last:pb-0">
+              <div className="w-[60px] shrink-0">
+                {solid ? (
+                  <span
+                    className={`block px-1.5 py-1 text-center font-mono text-[13px] font-medium tabular-nums ${
+                      BLOCK[step.kind] ?? 'bg-ink text-white'
+                    }`}
+                  >
+                    {step.at}
+                  </span>
+                ) : (
+                  <span className="block py-1 font-mono text-[13px] tabular-nums text-ink-muted">
+                    {step.at ?? '—'}
+                  </span>
+                )}
+                <span className="mt-1.5 flex items-center gap-1.5 font-mono text-[10.5px] uppercase tracking-[0.1em] text-ink-faint">
+                  <Icon name={KIND_ICON[step.kind]} size={13} className="shrink-0" />
+                  {KIND_LABEL[step.kind]}
+                </span>
+              </div>
+
+              <div className="min-w-0 flex-1">
+                <p
+                  className={`text-[17px] font-semibold leading-snug tracking-[-0.012em] ${
+                    done ? 'text-ink-faint line-through decoration-hairline-strong' : 'text-ink'
                   }`}
                 >
-                  {step.at}
-                </span>
-              ) : (
-                <span className="block py-1 font-mono text-[13px] tabular-nums text-ink-muted">
-                  {step.at ?? '—'}
-                </span>
-              )}
-              <span className="mt-1.5 flex items-center gap-1.5 font-mono text-[10.5px] uppercase tracking-[0.1em] text-ink-faint">
-                <Icon name={KIND_ICON[step.kind]} size={13} className="shrink-0" />
-                {KIND_LABEL[step.kind]}
-              </span>
-            </div>
-
-            <div className="min-w-0 flex-1">
-              <p
-                className={`text-[17px] font-semibold leading-snug tracking-[-0.012em] ${
-                  done ? 'text-ink-faint line-through decoration-hairline-strong' : 'text-ink'
-                }`}
-              >
-                {step.title}
-              </p>
-              {step.detail ? (
-                <p className="mt-1 whitespace-pre-line text-[15px] leading-relaxed text-ink-muted">{step.detail}</p>
-              ) : null}
-              {done ? (
-                <p className="mt-1.5 font-mono text-[11px] uppercase tracking-[0.1em] text-ink-faint">
-                  Done
+                  {step.title}
                 </p>
+                {step.detail ? (
+                  <p className="mt-1 whitespace-pre-line text-[15px] leading-relaxed text-ink-muted">{step.detail}</p>
+                ) : null}
+                {done ? (
+                  <p className="mt-1.5 font-mono text-[11px] uppercase tracking-[0.1em] text-ink-faint">
+                    Done
+                  </p>
+                ) : null}
+              </div>
+
+              {canTick ? (
+                <button
+                  type="button"
+                  role="checkbox"
+                  aria-checked={done}
+                  aria-label={step.title}
+                  disabled={saving}
+                  onClick={() => toggle(step.uid)}
+                  className="-mr-1.5 -mt-1.5 flex h-11 w-11 shrink-0 items-center justify-center disabled:cursor-wait"
+                >
+                  <span
+                    aria-hidden
+                    className={`flex h-7 w-7 items-center justify-center rounded-full border-2 transition-colors ${
+                      done
+                        ? 'border-blue bg-blue text-white'
+                        : 'border-hairline-strong bg-paper text-transparent'
+                    }`}
+                  >
+                    <svg
+                      width="14"
+                      height="14"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="3.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    >
+                      <path d="M5 12.5l4.5 4.5L19 7.5" />
+                    </svg>
+                  </span>
+                </button>
               ) : null}
-            </div>
-          </li>
-        )
-      })}
-    </ol>
+            </li>
+          )
+        })}
+      </ol>
+      {error ? (
+        <p role="alert" className="mt-3 text-[15px] font-medium text-alert">
+          {error}
+        </p>
+      ) : null}
+    </>
   )
 }

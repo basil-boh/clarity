@@ -2,10 +2,9 @@ import { Card, Notice, SectionTitle } from '@/components/ui'
 import { NoRecord } from '@/components/NoRecord'
 import { DoseTracker } from '@/components/DoseTracker'
 import { dosesFor } from '@/domain/prep'
-import { NEVER } from '@/domain/progress'
 import { findPatient } from '@/lib/patients'
 import { readProgress, recordDose } from '@/lib/progress'
-import { readSession } from '@/lib/session'
+import { requireSession } from '@/lib/session'
 
 export const metadata = { title: 'The preparation — Clarity' }
 
@@ -14,7 +13,7 @@ export const metadata = { title: 'The preparation — Clarity' }
  * changes the flag the ward reads in the morning.
  */
 export default async function Doses() {
-  const session = (await readSession())!
+  const session = await requireSession()
   const patient = await findPatient(session.phone)
   if (!patient) return <NoRecord phone={session.phone} />
 
@@ -55,20 +54,6 @@ export default async function Doses() {
           />
         ))}
       </Card>
-
-      <section className="mt-7">
-        <SectionTitle>What this app will never do</SectionTitle>
-        <Card>
-          <ul className="space-y-4">
-            {NEVER.map((rule) => (
-              <li key={rule.id}>
-                <p className="text-[17px] font-semibold leading-snug text-ink">{rule.rule}</p>
-                <p className="mt-1 text-[15px] leading-relaxed text-ink-muted">{rule.because}</p>
-              </li>
-            ))}
-          </ul>
-        </Card>
-      </section>
 
       <a
         href={`tel:${patient.procedure.departmentPhone}`}
