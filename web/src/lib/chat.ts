@@ -33,8 +33,19 @@ export async function recordExchange(args: {
   try {
     const { error } = await db()
       .from('web_chat_messages')
+      // Both rows carry every column. A multi-row insert sends the union of
+      // the rows' keys and fills a key a row lacks with null, not the column
+      // default -- so leaving `escalated` off the patient's row made it null,
+      // the not-null constraint rejected the whole insert, and no transcript
+      // was ever written.
       .insert([
-        { phone: args.phone, role: 'patient', content: args.question },
+        {
+          phone: args.phone,
+          role: 'patient',
+          content: args.question,
+          escalated: false,
+          blocked_rule: null,
+        },
         {
           phone: args.phone,
           role: 'assistant',
