@@ -5,6 +5,8 @@ import { addDays, format } from 'date-fns'
 import type { Procedure, Profile } from '@/domain/prep'
 import type { Progress } from '@/lib/progress'
 import { UNMEASURED, signalsFromInput, type Signals } from '@/domain/progress'
+import { patientSource } from '@/lib/source'
+import { logDbError, patientScope } from '@/lib/supabase'
 
 /**
  * Where a patient record comes from.
@@ -13,9 +15,10 @@ import { UNMEASURED, signalsFromInput, type Signals } from '@/domain/progress'
  * dataset for the hospital's own system is a change in this file and nowhere
  * else. The screens never reach for a database.
  *
- * Today it answers from a fixture keyed by phone number, which is what lets the
- * whole flow be demonstrated end to end without a Supabase project or a
- * hospital integration. `PATIENT_SOURCE=supabase` is where the real lookup goes.
+ * There are two sources. The demo cohort below is a fixture keyed by phone
+ * number, which is what lets the whole flow be demonstrated end to end without
+ * a Supabase project. `PATIENT_SOURCE=supabase` reads the `web_patients` and
+ * `web_procedures` tables from `supabase/migrations/0001_web_portal.sql`.
  */
 
 export type Patient = {
@@ -27,12 +30,17 @@ export type Patient = {
   readonly completed: readonly string[]
 }
 
+// ---------------------------------------------------------------------------
+// The demo cohort
+// ---------------------------------------------------------------------------
+
 /**
- * The demo cohort.
- *
  * Three patients at three points in the run-up, because the interesting bugs in
  * a date-derived plan only show up at the boundaries. Dates are relative to
  * today so the fixture never goes stale.
+ *
+ * The seed half of `supabase/migrations/0001_web_portal.sql` is the same three,
+ * as rows.
  */
 function demoCohort(today = new Date()): Patient[] {
   const iso = (days: number) => format(addDays(today, days), 'yyyy-MM-dd')
@@ -108,19 +116,118 @@ function demoCohort(today = new Date()): Patient[] {
   ]
 }
 
-export async function findPatient(phone: string, today = new Date()): Promise<Patient | null> {
-  if (process.env.PATIENT_SOURCE === 'supabase') {
-    // The hospital lookup goes here. Deliberately not stubbed with something
-    // that half-works: an unconfigured source should fail loudly, not quietly
-    // hand back an empty patient.
-    throw new Error('PATIENT_SOURCE=supabase is not wired up yet.')
+// ---------------------------------------------------------------------------
+// Supabase
+// ---------------------------------------------------------------------------
+
+type PatientRow = {
+  phone: string
+  display_name: string
+  language: string
+  reader: string
+}
+
+type ProcedureRow = {
+  scheduled_for: string
+  arrive_at: string | null
+  hospital: string
+  location: string
+  department_phone: string
+}
+
+const LANGUAGES = ['en', 'zh', 'ms', 'ta'] as const
+
+/** Postgres hands back `08:30:00`; the plan and the letter both say `08:30`. */
+function wallClock(time: string | null): string {
+  return (time ?? '08:00').slice(0, 5)
+}
+
+/**
+ * The patient as the department knows them.
+ *
+ * Two reads rather than a join, because they answer different questions and
+ * fail differently: no patient row means "nothing is booked against this
+ * number", which is a legitimate answer given to anyone who proves they hold
+ * the phone. A patient row with no procedure means the same thing to the
+ * reader, so both return null and the caller shows the empty plan.
+ *
+ * The four signals come back `UNMEASURED`. That is not a gap -- the portal
+ * derives every one of them from what the patient recorded, and `livePatient`
+ * below folds that in. The demo fixture carries pre-filled signals only because
+ * it has nowhere else to put them.
+ */
+async function fromSupabase(phone: string): Promise<Patient | null> {
+  const scope = patientScope(phone)
+
+  const [patientResult, procedureResult] = await Promise.all([
+    scope.select<PatientRow>('web_patients', 'phone, display_name, language, reader').maybeSingle(),
+    scope
+      .select<ProcedureRow>(
+        'web_procedures',
+        'scheduled_for, arrive_at, hospital, location, department_phone',
+      )
+      // The most recent booking, so a patient whose scope has passed keeps
+      // reading "Afterwards" until the next one is entered.
+      .order('scheduled_for', { ascending: false })
+      .limit(1)
+      .maybeSingle(),
+  ])
+
+  // A read that failed is not the same as a patient who does not exist. Throw,
+  // so Next.js shows the error boundary: a patient told "nothing is booked"
+  // because the database was briefly unreachable would reasonably conclude
+  // their appointment was cancelled, and not turn up.
+  if (patientResult.error) {
+    logDbError('web_patients', patientResult.error)
+    throw new Error('Could not read the patient record.')
   }
+  if (procedureResult.error) {
+    logDbError('web_procedures', procedureResult.error)
+    throw new Error('Could not read the procedure.')
+  }
+
+  const row = patientResult.data
+  const procedure = procedureResult.data
+  if (!row || !procedure) return null
+
+  const language = (LANGUAGES as readonly string[]).includes(row.language)
+    ? (row.language as Profile['language'])
+    : 'en'
+
+  return {
+    phone: row.phone,
+    profile: {
+      displayName: row.display_name,
+      language,
+      reader: row.reader === 'caregiver' ? 'caregiver' : 'patient',
+    },
+    procedure: {
+      date: procedure.scheduled_for,
+      hospital: procedure.hospital,
+      location: procedure.location,
+      arriveAt: wallClock(procedure.arrive_at),
+      departmentPhone: procedure.department_phone,
+    },
+    signals: {
+      dietCompliance: UNMEASURED,
+      prepTiming: UNMEASURED,
+      fluidIntake: UNMEASURED,
+      bowelOutput: UNMEASURED,
+    },
+    completed: [],
+  }
+}
+
+// ---------------------------------------------------------------------------
+
+export async function findPatient(phone: string, today = new Date()): Promise<Patient | null> {
+  if (patientSource() === 'supabase') return fromSupabase(phone)
   return demoCohort(today).find((p) => p.phone === phone) ?? null
 }
 
-/** Every demo number, for the sign-in hint. Never exported to a real build. */
+/** Every demo number, for the sign-in hint. Empty once a database is in play. */
 export function demoNumbers(): { phone: string; name: string; where: string }[] {
-  if (process.env.PATIENT_SOURCE === 'supabase') return []
+  if (patientSource() === 'supabase') return []
   return demoCohort().map((p) => ({
     phone: p.phone,
     name: p.profile.displayName,
@@ -134,8 +241,8 @@ export function demoNumbers(): { phone: string; name: string; where: string }[] 
 /**
  * The patient, with what they have actually recorded folded in.
  *
- * The fixture is the department's view -- what was prescribed, and whatever the
- * hospital already knows. `readProgress` is the patient's own record. This
+ * `findPatient` is the department's view -- what was prescribed, and whatever
+ * the hospital already knows. `readProgress` is the patient's own record. This
  * merges them in one place so no screen has to remember to do it, and so the
  * tracker on `/doses` and the flag on `/progress` can never disagree.
  */
@@ -149,8 +256,8 @@ export async function livePatient(
   const patient = await findPatient(phone)
   if (!patient) return null
 
-  // Anything the patient recorded overrides the fixture: their own log is the
-  // more recent fact. Anything they have not recorded keeps the fixture's value,
+  // Anything the patient recorded overrides the source: their own log is the
+  // more recent fact. Anything they have not recorded keeps the source's value,
   // so an untouched signal stays UNMEASURED rather than becoming a zero.
   const reported = signalsFromInput({
     fluidGlasses: progress.fluidGlasses,
