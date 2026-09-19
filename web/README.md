@@ -33,6 +33,43 @@ That is deliberate — see *Not leaking bookings* below.
 
 Copy `.env.example` to `.env.local`.
 
+### Enabling medication photo reading
+
+Create `web/.env.local` (inside this web app, not the repository root) and set
+`OPENAI_API_KEY` to your API key. Optionally set `OPENAI_MEDICATION_MODEL`; the
+default is `gpt-4o-mini`. Restart `npm run dev` after changing configuration.
+For a hosted build, set these server environment variables on the hosting
+service and restart/redeploy it. Never use a `NEXT_PUBLIC_` prefix for the key.
+
+“Photo reading is not switched on in this build” means the running server has
+no `OPENAI_API_KEY`. It is not a restriction on demo patients. Without the key,
+the preparation plan and its original calendar export still work.
+
+On the Plan page, choose **Add medication instructions**, upload up to three
+department instruction photos, and read them. Review each transcription against
+the original photo, then confirm individual entries. For **Do not take**, enter
+the instructed start day/time and a separate daily reminder time. On the first
+day, a reminder earlier than the hold starts is moved to the hold's start time.
+For **Take**, enter a start day and one dose-and-time row for each daily dose;
+these times also set the reminders. There are no duplicate clock-time fields.
+Reminders run through procedure day unless an earlier last day is provided in
+the optional last-day field. This calendar boundary does not prescribe an end
+or restart date. Confirmed take/hold instructions appear in the
+timeline and calendar download. Ambiguous or conflicting instructions cannot
+be added; use a clearer department sheet. Medication alerts occur at the chosen
+time, in Singapore time. Post-procedure scheduling is excluded.
+
+This is a prototype: photos and instructions live only for the current page
+visit. Leaving or refreshing clears them, and a procedure-date change requires
+review again. Downloads do not update previously imported calendar events.
+Clarity does not persist photos or instructions, but photos are sent to OpenAI
+for processing, subject to that service's data controls. No clinician approval
+workflow, database persistence, or prescription inference is included.
+
+Run `npm run test:medications` for scheduling, upload validation, and mocked
+provider tests. Real extraction requires a configured API key; test with
+synthetic instruction sheets before trying actual patient documents.
+
 | Variable                     | Purpose                                              |
 | ---------------------------- | ---------------------------------------------------- |
 | `SESSION_SECRET`             | Signs the session and cooldown cookies. **Required in production.** `openssl rand -base64 32` |

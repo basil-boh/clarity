@@ -4,20 +4,23 @@ import { useState } from 'react'
 
 import { exportPlanCalendar } from '@/domain/calendar-export'
 import type { PlanDay, Procedure } from '@/domain/prep'
+import type { MedicationOccurrence } from '@/domain/medications'
 
 import { Icon } from './Icon'
 
 export function CalendarExportButton({
   procedure,
   plan,
+  medications = [],
 }: {
   procedure: Procedure
   plan: readonly PlanDay[]
+  medications?: readonly MedicationOccurrence[]
 }) {
   const [downloaded, setDownloaded] = useState(false)
 
   function downloadCalendar() {
-    const calendar = exportPlanCalendar({ procedure, plan })
+    const calendar = exportPlanCalendar({ procedure, plan, medications })
     const blob = new Blob([calendar.content], { type: 'text/calendar;charset=utf-8' })
     const url = URL.createObjectURL(blob)
     const link = document.createElement('a')
@@ -26,7 +29,8 @@ export function CalendarExportButton({
     document.body.appendChild(link)
     link.click()
     link.remove()
-    URL.revokeObjectURL(url)
+    // Let the browser begin the download before releasing the URL.
+    setTimeout(() => URL.revokeObjectURL(url), 1000)
     setDownloaded(true)
   }
 
@@ -49,8 +53,8 @@ export function CalendarExportButton({
       </button>
       {downloaded ? (
         <p role="status" className="mt-3 border-l-2 border-blue pl-3 text-[15px] leading-relaxed text-ink">
-          Your calendar file is ready. If your procedure date changed, delete earlier Clarity events
-          before importing this new plan.
+          Your calendar file is ready. A new download does not update previously imported events.
+          If your instructions or procedure date changed, delete earlier Clarity events before importing this new plan.
         </p>
       ) : null}
     </div>

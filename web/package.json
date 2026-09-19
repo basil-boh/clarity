@@ -8,6 +8,7 @@
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "test:calendar": "node --experimental-strip-types --test src/domain/calendar-export.test.mjs",
+    "test:medications": "node --experimental-strip-types --test src/domain/medications.test.mjs src/lib/medication-extraction.test.mjs",
     "test:guardrails": "node src/app/api/ask/guardrails.test.mjs",
     "lint": "next lint"
   },

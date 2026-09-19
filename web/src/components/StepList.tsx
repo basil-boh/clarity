@@ -87,7 +87,7 @@ export function StepList({
                 {step.title}
               </p>
               {step.detail ? (
-                <p className="mt-1 text-[15px] leading-relaxed text-ink-muted">{step.detail}</p>
+                <p className="mt-1 whitespace-pre-line text-[15px] leading-relaxed text-ink-muted">{step.detail}</p>
               ) : null}
               {done ? (
                 <p className="mt-1.5 font-mono text-[11px] uppercase tracking-[0.1em] text-ink-faint">
