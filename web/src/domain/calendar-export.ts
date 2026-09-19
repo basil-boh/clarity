@@ -1,4 +1,5 @@
 import type { PlanDay, Procedure } from './prep'
+import type { MedicationOccurrence } from './medications'
 
 /**
  * Calendar export is deliberately a pure transformation: the Plan page already
@@ -17,6 +18,7 @@ export type CalendarExportEvent = {
   readonly location?: string
   readonly allDay: boolean
   readonly blocksCalendar: boolean
+  readonly alarmAtStart?: boolean
 }
 
 export type CalendarExport = {
@@ -28,9 +30,11 @@ export type CalendarExport = {
 export function calendarEventsForPlan({
   procedure,
   plan,
+  medications = [],
 }: {
   procedure: Procedure
   plan: readonly PlanDay[]
+  medications?: readonly MedicationOccurrence[]
 }): CalendarExportEvent[] {
   const reminderFooter = `Clarity reminder. Follow instructions from ${procedure.hospital} if they differ.`
 
@@ -66,6 +70,11 @@ export function calendarEventsForPlan({
     })
   }
 
+  events.push(...medications.map(m => ({
+    uid: `clarity-${procedure.date}-${m.uid}@clarity.local`,
+    title: `Clarity: ${m.title}`, description: m.description, date: m.date,
+    time: m.time, allDay: false, blocksCalendar: false, alarmAtStart: true,
+  })))
   return events
 }
 
@@ -73,12 +82,14 @@ export function exportPlanCalendar({
   procedure,
   plan,
   generatedAt = new Date(),
+  medications = [],
 }: {
   procedure: Procedure
   plan: readonly PlanDay[]
   generatedAt?: Date
+  medications?: readonly MedicationOccurrence[]
 }): CalendarExport {
-  const events = calendarEventsForPlan({ procedure, plan })
+  const events = calendarEventsForPlan({ procedure, plan, medications })
   return {
     filename: `clarity-prep-${procedure.date}.ics`,
     events,
@@ -125,13 +136,13 @@ function eventLines(event: CalendarExportEvent, generatedAt: Date): string[] {
     ...(event.location ? [`LOCATION:${escapeText(event.location)}`] : []),
     ...timing,
     `TRANSP:${event.blocksCalendar ? 'OPAQUE' : 'TRANSPARENT'}`,
-    ...alarmLines(event, start),
+    ...alarmLines(event),
     'END:VEVENT',
   ]
 }
 
-function alarmLines(event: CalendarExportEvent, start: string): string[] {
-  const trigger = event.allDay
+function alarmLines(event: CalendarExportEvent): string[] {
+  const trigger = event.alarmAtStart ? 'TRIGGER:PT0S' : event.allDay
     // All-day DTSTART is local midnight; this relative alarm therefore rings
     // at 9am in whichever calendar imports the file, without a non-standard
     // timezone parameter on the VALARM trigger.
