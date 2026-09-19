@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
 import { Button, Field, Input, Notice } from '@/components/ui'
+import { formatPhone } from '@/lib/phone'
 
 /**
  * Sign in, in two steps on one page.
@@ -16,7 +17,19 @@ import { Button, Field, Input, Notice } from '@/components/ui'
 
 type Step = 'phone' | 'code'
 
-export function SignInForm({ demo, resendSeconds }: { demo: boolean; resendSeconds: number }) {
+export type DemoState = 'off' | 'all' | 'some'
+
+export function SignInForm({
+  demo,
+  demoNumbers,
+  resendSeconds,
+}: {
+  /** 'all' = no Twilio at all. 'some' = DEMO_PHONES, everyone else gets a real text. */
+  demo: DemoState
+  /** E.164 numbers that take the console-code path, for the hint below. */
+  demoNumbers: string[]
+  resendSeconds: number
+}) {
   const router = useRouter()
   const [step, setStep] = useState<Step>('phone')
   const [phone, setPhone] = useState('')
@@ -119,18 +132,33 @@ export function SignInForm({ demo, resendSeconds }: { demo: boolean; resendSecon
           We will text you a 6-digit code. Standard message rates apply.
         </p>
 
-        {demo ? (
+        {demo !== 'off' ? (
           <Notice>
-            <strong className="font-semibold">Demo mode.</strong> No SMS is sent — the code is
-            printed in the server console. Try{' '}
-            <button
-              type="button"
-              className="underline underline-offset-2"
-              onClick={() => setPhone('9876 5432')}
-            >
-              9876 5432
-            </button>
-            .
+            <strong className="font-semibold">
+              {demo === 'all' ? 'Demo mode.' : 'Demo numbers.'}
+            </strong>{' '}
+            {demo === 'all'
+              ? 'No SMS is sent — the code is printed in the server console.'
+              : 'These numbers skip the SMS and print their code in the server console. Any other number gets a real text.'}
+            {demoNumbers.length > 0 ? (
+              <>
+                {' '}
+                Try{' '}
+                {demoNumbers.map((number, i) => (
+                  <span key={number}>
+                    {i > 0 ? (i === demoNumbers.length - 1 ? ' or ' : ', ') : null}
+                    <button
+                      type="button"
+                      className="underline underline-offset-2"
+                      onClick={() => setPhone(formatPhone(number))}
+                    >
+                      {formatPhone(number)}
+                    </button>
+                  </span>
+                ))}
+                .
+              </>
+            ) : null}
           </Notice>
         ) : null}
       </form>

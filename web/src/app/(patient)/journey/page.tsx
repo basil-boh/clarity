@@ -3,12 +3,12 @@ import { NoRecord } from '@/components/NoRecord'
 import { Timeline } from '@/components/Timeline'
 import { PHASE_COPY, offsetFor, phaseFor } from '@/domain/prep'
 import { findPatient } from '@/lib/patients'
-import { readSession } from '@/lib/session'
+import { requireSession } from '@/lib/session'
 
 export const metadata = { title: 'Journey — Clarity' }
 
 export default async function Journey() {
-  const session = (await readSession())!
+  const session = await requireSession()
   const patient = await findPatient(session.phone)
   if (!patient) return <NoRecord phone={session.phone} />
 

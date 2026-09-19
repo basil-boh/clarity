@@ -3,7 +3,7 @@ import { NoRecord } from '@/components/NoRecord'
 import { Icon, type IconName } from '@/components/Icon'
 import { DIET_RULES, FOOD_GROUPS, RED_NOTE } from '@/domain/diet'
 import { findPatient } from '@/lib/patients'
-import { readSession } from '@/lib/session'
+import { requireSession } from '@/lib/session'
 
 export const metadata = { title: 'Diet — Clarity' }
 
@@ -15,7 +15,7 @@ export const metadata = { title: 'Diet — Clarity' }
  * "can I have this", asked while standing in front of it.
  */
 export default async function Diet() {
-  const session = (await readSession())!
+  const session = await requireSession()
   const patient = await findPatient(session.phone)
   if (!patient) return <NoRecord phone={session.phone} />
 

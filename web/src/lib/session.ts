@@ -1,6 +1,7 @@
 import 'server-only'
 
 import { cookies } from 'next/headers'
+import { redirect } from 'next/navigation'
 import { SignJWT, jwtVerify } from 'jose'
 
 /**
@@ -57,6 +58,20 @@ export async function readSession(): Promise<Session | null> {
   } catch {
     return null
   }
+}
+
+/**
+ * The session, or a redirect to sign-in -- for pages, not only the layout.
+ *
+ * Next.js renders a layout and its page in parallel, so the redirect in the
+ * `(patient)` layout does not stop the page from running. Pages that assumed
+ * the layout had already checked ran with no session and threw on every
+ * signed-out visit; each one now checks for itself.
+ */
+export async function requireSession(): Promise<Session> {
+  const session = await readSession()
+  if (!session) redirect('/sign-in')
+  return session
 }
 
 export async function clearSession(): Promise<void> {

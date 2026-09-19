@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 
+import { recordExchange } from '@/lib/chat'
 import { findPatient } from '@/lib/patients'
 import { readSession } from '@/lib/session'
 
@@ -123,10 +124,46 @@ export async function POST(request: Request) {
   const patient = await findPatient(session.phone)
   const key = process.env.OPENAI_API_KEY
 
+  /** The question this exchange is an answer to: the patient's latest turn. */
+  const question = [...(turns as Turn[])]
+    .reverse()
+    .find((t) => t?.role === 'patient' && typeof t.content === 'string')?.content
+
+  /**
+   * Answer, and log the exchange for the ward.
+   *
+   * Every reply goes through here rather than only the successful one, because
+   * the replies worth auditing are precisely the refusals and the fallbacks.
+   * Nothing is written for a number with no record: `web_chat_messages` is keyed
+   * on a patient, and a transcript with no patient is not evidence of anything.
+   *
+   * `payload` is the wire format, unchanged, and `escalated` on it is what the
+   * screen paints in the alert colour -- reserved for a reply that was replaced
+   * or failed. The stored flag is broader: any reply that sent the patient to a
+   * person counts, because "did the assistant escalate when it should have" is
+   * the question the ward is asking of the transcript. Conflating the two would
+   * mean either a half-empty audit or every ordinary answer painted as an alarm.
+   */
+  async function answer(
+    payload: { reply: string; escalated?: boolean; breach?: string; unconfigured?: boolean },
+    auditEscalated = Boolean(payload.escalated),
+  ) {
+    if (patient && question) {
+      await recordExchange({
+        phone: session!.phone,
+        question,
+        reply: payload.reply,
+        escalated: auditEscalated,
+        blockedRule: payload.breach ?? null,
+      })
+    }
+    return NextResponse.json(payload)
+  }
+
   if (!key) {
     // No key configured: say so plainly rather than inventing an answer, and
     // still give the escalation route, which is the useful half of any reply.
-    return NextResponse.json({
+    return answer({
       reply:
         'The assistant is not switched on in this build, so I cannot answer that here. ' +
         (patient
@@ -166,22 +203,22 @@ export async function POST(request: Request) {
     if (!completion.ok) {
       const detail = await completion.text()
       console.error('[clarity] openai error', completion.status, detail.slice(0, 500))
-      return NextResponse.json({ reply: SAFE_FALLBACK, escalated: true })
+      return answer({ reply: SAFE_FALLBACK, escalated: true })
     }
 
     const data = await completion.json()
     const reply: string = data?.choices?.[0]?.message?.content?.trim() ?? ''
-    if (!reply) return NextResponse.json({ reply: SAFE_FALLBACK, escalated: true })
+    if (!reply) return answer({ reply: SAFE_FALLBACK, escalated: true })
 
     const breach = breachedRule(reply)
     if (breach) {
       console.warn('[clarity] reply replaced, breached', breach)
-      return NextResponse.json({ reply: SAFE_FALLBACK, escalated: true, breach })
+      return answer({ reply: SAFE_FALLBACK, escalated: true, breach })
     }
 
-    return NextResponse.json({ reply })
+    return answer({ reply }, /\b995\b|call (your |the )?department/i.test(reply))
   } catch (err) {
     console.error('[clarity] ask failed', err)
-    return NextResponse.json({ reply: SAFE_FALLBACK, escalated: true })
+    return answer({ reply: SAFE_FALLBACK, escalated: true })
   }
 }

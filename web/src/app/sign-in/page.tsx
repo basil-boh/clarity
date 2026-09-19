@@ -1,7 +1,8 @@
 import { redirect } from 'next/navigation'
 
 import { InstitutionBar, Wordmark } from '@/components/brand'
-import { isDemoMode, resendSeconds } from '@/lib/otp'
+import { demoPhoneList, isDemoMode, resendSeconds } from '@/lib/otp'
+import { demoNumbers } from '@/lib/patients'
 import { readSession } from '@/lib/session'
 
 import { SignInForm } from './SignInForm'
@@ -10,6 +11,13 @@ export const metadata = { title: 'Sign in — Clarity' }
 
 export default async function SignIn() {
   if (await readSession()) redirect('/today')
+
+  // Three states, and the copy has to be honest about which one it is in.
+  // "Demo mode" printed over a build that texts every other number for real
+  // would be a lie that costs someone an SMS bill.
+  const bypass = demoPhoneList()
+  const demo = bypass.length > 0 ? 'some' : isDemoMode() ? 'all' : 'off'
+  const numbers = bypass.length > 0 ? bypass : isDemoMode() ? demoNumbers().map((n) => n.phone) : []
 
   return (
     <div className="min-h-dvh">
@@ -25,7 +33,7 @@ export default async function SignIn() {
         </p>
       </header>
 
-      <SignInForm demo={isDemoMode()} resendSeconds={resendSeconds()} />
+      <SignInForm demo={demo} demoNumbers={numbers} resendSeconds={resendSeconds()} />
 
       <footer className="mt-12 border-t border-hairline pt-5 text-[15px] leading-relaxed text-ink-faint">
         This app supports your preparation. It does not replace your care team. In an emergency,

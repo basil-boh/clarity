@@ -7,12 +7,15 @@
     "build": "next build",
     "start": "next start",
     "typecheck": "tsc --noEmit",
+    "test:prep": "TZ=UTC node --experimental-strip-types --test src/domain/prep.test.mjs",
+    "test:progress": "node --experimental-strip-types --test src/domain/progress.test.mjs",
     "test:calendar": "node --experimental-strip-types --test src/domain/calendar-export.test.mjs",
     "test:medications": "node --experimental-strip-types --test src/domain/medications.test.mjs src/lib/medication-extraction.test.mjs",
     "test:guardrails": "node src/app/api/ask/guardrails.test.mjs",
     "lint": "next lint"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.116.0",
     "date-fns": "^4.1.0",
     "jose": "^5.9.6",
     "next": "^15.5.4",

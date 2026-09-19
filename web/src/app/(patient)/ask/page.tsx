@@ -1,13 +1,13 @@
 import { NoRecord } from '@/components/NoRecord'
 import { findPatient } from '@/lib/patients'
-import { readSession } from '@/lib/session'
+import { requireSession } from '@/lib/session'
 
 import { AskChat } from './AskChat'
 
 export const metadata = { title: 'Ask — Clarity' }
 
 export default async function Ask() {
-  const session = (await readSession())!
+  const session = await requireSession()
   const patient = await findPatient(session.phone)
   if (!patient) return <NoRecord phone={session.phone} />
 

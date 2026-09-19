@@ -15,10 +15,15 @@ npm install
 npm run dev          # http://localhost:3000
 ```
 
-With no Twilio credentials set it runs in **demo mode**: no SMS is sent, and the
-6-digit code is printed to the server console. Three demo patients exist, each
-at a different point in the run-up — the boundaries are where a date-derived
-plan breaks, so they are what you want to look at:
+With nothing configured it runs entirely on fixtures: no SMS is sent, the
+6-digit code is printed to the server console, patient records come from an
+in-memory cohort, and what the patient records is kept in a signed cookie.
+Setting Twilio and Supabase replaces those three one at a time — see
+*Configuration* and *The database* below.
+
+Three demo patients exist, each at a different point in the run-up — the
+boundaries are where a date-derived plan breaks, so they are what you want to
+look at:
 
 | Number      | Patient      | Where they are                   |
 | ----------- | ------------ | -------------------------------- |
@@ -59,12 +64,14 @@ timeline and calendar download. Ambiguous or conflicting instructions cannot
 be added; use a clearer department sheet. Medication alerts occur at the chosen
 time, in Singapore time. Post-procedure scheduling is excluded.
 
-This is a prototype: photos and instructions live only for the current page
-visit. Leaving or refreshing clears them, and a procedure-date change requires
-review again. Downloads do not update previously imported calendar events.
-Clarity does not persist photos or instructions, but photos are sent to OpenAI
-for processing, subject to that service's data controls. No clinician approval
-workflow, database persistence, or prescription inference is included.
+Photos are never stored. With Supabase configured, the instructions a patient
+confirms are saved to their record (`web_medications`), so they survive a reload
+and staff see them in `/admin`; entries still being reviewed are not saved. On
+the demo source there is nowhere to keep them, and leaving or refreshing clears
+them as before. A procedure-date change requires review again. Downloads do not
+update previously imported calendar events. Photos are sent to OpenAI for
+processing, subject to that service's data controls. No clinician approval
+workflow or prescription inference is included.
 
 Run `npm run test:medications` for scheduling, upload validation, and mocked
 provider tests. Real extraction requires a configured API key; test with
@@ -73,23 +80,109 @@ synthetic instruction sheets before trying actual patient documents.
 | Variable                     | Purpose                                              |
 | ---------------------------- | ---------------------------------------------------- |
 | `SESSION_SECRET`             | Signs the session and cooldown cookies. **Required in production.** `openssl rand -base64 32` |
+| `SUPABASE_URL`               | Project URL. Blank runs on the demo fixture.          |
+| `SUPABASE_SERVICE_ROLE_KEY`  | **Bypasses RLS entirely.** Server-only, never `NEXT_PUBLIC_`. See *The database*. |
+| `PATIENT_SOURCE`             | `demo` or `supabase`. Blank follows whether the two above are set. |
 | `TWILIO_ACCOUNT_SID`         | Twilio account                                        |
 | `TWILIO_AUTH_TOKEN`          | Twilio auth token                                     |
 | `TWILIO_VERIFY_SERVICE_SID`  | A Twilio **Verify** service (`VA…`)                   |
 | `OTP_RESEND_SECONDS`         | Resend cooldown. Defaults to 60.                      |
+| `DEMO_PHONES`                | Numbers that skip Twilio and print their code. Ignored in production. |
 | `OPENAI_API_KEY`             | The Ask assistant. Without it Ask says so and gives the escalation route. |
 | `OPENAI_MODEL`               | Defaults to `gpt-4o-mini`. Pick for latency — this runs at 1am. |
 | `NEXT_PUBLIC_SITE_URL`       | Public origin; the QR code at `/qr` points here.      |
 
 Production refuses to start the sign-in flow without Twilio configured, rather
-than silently falling back to demo mode and accepting any code.
+than silently falling back to demo mode and accepting any code. It refuses to
+start at all without a patient source, for the same reason: three fictional
+Singaporeans served to a real patient is worse than an error page.
+
+## The database
+
+Paste `supabase/migrations/0001_web_portal.sql` into the project's SQL editor
+and run it once. It is schema *and* demo cohort in one transaction, so it is one
+paste rather than two, and it is safe to re-run: the schema uses `if not exists`
+throughout and the cohort is upserted, so running it again repairs a
+half-applied state and puts the three demo patients back on their date
+boundaries.
+
+Then `supabase/migrations/0002_medications_and_fluid_days.sql`, the same way.
+It adds `web_progress.fluid_days` (clear fluid per day) and `web_medications`
+(the medication instructions a patient confirmed — never the photographs), and
+is also safe to re-run. Until it has run the app keeps working on the old
+behaviour and logs which file to apply.
+
+`../supabase/migrations/0001_init.sql` is the **Expo app's** schema and is left
+alone. Every table there is keyed on `auth.users` and every policy on
+`auth.uid()`, because the device holds a Supabase JWT. This app does not — a
+patient proves they hold a mobile number via Twilio Verify and gets a signed
+cookie from the Next.js server, so there is no Supabase user for a policy to key
+on. Merging the two would mean one of them lying about who a row belongs to. The
+`web_` prefix says which app owns a row.
+
+`supabase/seed_local.sql` is gitignored and optional: it adds one more patient
+for a real mobile number. On a Twilio **trial** account an SMS only reaches a
+number verified in the Twilio console, so the fictional demo numbers can be
+typed into the sign-in form but the code never arrives. Testing the real SMS
+path means making the verified number a patient.
+
+### Adding patients from `/admin`
+
+Set `ADMIN_PASSWORD` and open `/admin`. It lists every patient with their
+procedure date and the phase they are in today, and adds, edits and deletes
+them. Each patient's page shows everything held for them — booking and stage,
+the readiness flag and its four signals, what they recorded, the medication
+instructions they confirmed, their assistant chat and sign-in codes — with
+editing one step away behind **Edit details**. The stage shortcuts on the form set the date so the patient lands in a
+given phase — the purge night, say — which is the quickest way to see a screen
+at a boundary. "Clear recorded progress" wipes what a patient logged and keeps
+their booking, for running the same number through again.
+
+With `ADMIN_PASSWORD` unset every `/admin` route is a 404. It is one shared
+password, not staff accounts; the cookie it sets is separate from the patient
+session, scoped to `/admin`, and invalidated by changing the password. The
+admin reads the whole ward, so it uses the service role client directly rather
+than `patientScope()` — `requireAdmin()` in `src/lib/admin.ts` is what stands in
+front of every page and server action there instead.
+
+### Where the authorisation actually is
+
+Since RLS cannot do it, the boundary moves rather than disappearing:
+
+- The `web_*` tables have RLS **enabled with no policies**, which in Postgres
+  means deny, and `anon`/`authenticated` are revoked on top. Nothing reaches
+  them but the service role.
+- **No Supabase credential reaches the browser.** Nothing client-side imports
+  `lib/supabase.ts`, `server-only` makes that a build error rather than a code
+  review, and there is no `NEXT_PUBLIC_` Supabase variable to leak.
+- **Every query filters by the phone number in the verified session.** That is
+  now the authorisation, and it is load-bearing — a query that forgets its
+  `.eq('phone', …)` returns the whole ward. `patientScope(phone).select(…)`
+  exists so the filter is applied by construction rather than remembered.
+
+The cost is honest and worth stating: a leaked service role key is every
+patient's record. The Expo app's anon key is not, and `.env.local` is the thing
+to protect here.
+
+### What the schema still guarantees
+
+Both rules from `0001` carry over. **No photograph is stored** — there is no
+bytea column, no bucket reference and no URL in either file. **The plan is
+derived, never stored** — only the procedure date is in the table, so a
+rescheduled patient is not left following the old plan.
+
+One new constraint is worth naming: `web_doses_within_prescription` rejects any
+row where `consumed_ml > prescribed_ml`. The clamp in `recordDose` is the first
+line of that and the constraint is the one that cannot be bypassed — the app
+must never help a patient past the prescribed volume, and the database must
+never accept a row that says it did.
 
 ## Structure
 
 ```
 src/
   domain/      the clinical model -- dates, phases, steps, the four signals
-  lib/         phone, otp, session, patient lookup   (server only)
+  lib/         phone, otp, session, patient lookup, supabase, source   (server only)
   components/  the interface kit
   app/         routes
 ```
@@ -147,9 +240,18 @@ states the cluster twice. Pass `cluster` to show both.
 
 ### Where things are decided
 
-- **`lib/patients.ts` is the only place a patient record comes from.** Swapping
-  the demo cohort for the hospital's own system is a change in that one file.
-  Screens never reach for a database.
+- **`lib/patients.ts` is the only place a patient record comes from.** It now
+  answers from either the demo cohort or Supabase, and that is the whole extent
+  of the change — screens never reach for a database, and the next swap, to the
+  hospital's own system, is the same one file.
+- **`lib/supabase.ts` is the only place the service role key is held**, and the
+  only place a query is built without a phone number already attached to it.
+- **`lib/source.ts` is one switch, not three.** Demo or database is a single
+  decision covering the patient record, what they record, and the assistant's
+  transcript. Splitting it looks harmless and is not: with patients coming from
+  the fixture and progress going to Postgres, the first glass a demo patient logs
+  is a write against a `web_patients` row that does not exist, and the patient is
+  told their prep could not be saved.
 - **The plan is derived from the procedure date, never stored against it.**
   Patients get rescheduled, and a stored plan would leave them following the old
   one.
@@ -170,7 +272,7 @@ got through". It **clamps at the prescribed volume**: a counter that runs on to
 
 | Signal | Asked as | Derivation |
 | --- | --- | --- |
-| Fluids | glasses, against a target of 8 | `glasses / 8`, capped at 1 |
+| Fluids | glasses per day, against a target of 8 | the latest day's `glasses / 8`, capped at 1 |
 | Bowel output | the department's own 1–5 scale | `(point − 1) / 4` |
 | Diet | Stuck to it / Mostly / Slipped, per day | mean of the days answered |
 
@@ -180,6 +282,19 @@ told "you want 4 or above" can check that claim against the same words the
 department uses; its swatches are the clarity ramp off the CW12 deck's cover.
 Recording a point raises a flag and says so on the same screen — it does not
 decide whether the scope goes ahead, which is `NEVER[1]`.
+
+Fluid is counted per Singapore date, so the "today" counter starts again at
+zero each day. The flag reads the most recent day anything was recorded — on
+procedure morning, before a glass is poured, that is the purge night.
+
+"Today" is always the Singapore date, whatever zone the server runs in
+(`domain/prep.ts:todayIn`). Most hosts run on UTC, eight hours behind, which
+would otherwise put the whole plan a day late from midnight to 8am.
+
+Steps are ticked off on Today and the Plan: today's and earlier ones, never a
+day ahead. Medication instructions a patient confirms on the Plan are kept in
+`web_medications` (`lib/medications-store.ts`) and shown to staff in `/admin`;
+the photographs they were read from are not kept anywhere.
 
 Prep timing is the odd one out: it is *measured* from dose volume rather than
 self-reported, which is why it lives in `lib/progress.ts` and the other three
@@ -191,10 +306,21 @@ merges the department's fixture with the patient's own record in one place, so
 no two screens can disagree. A signal left alone keeps the fixture's value and
 stays `UNMEASURED` rather than becoming a zero.
 
-Progress lives in a signed cookie (`lib/progress.ts`), same reasoning as the OTP
-cooldown: no database yet, and module state does not survive a cold start or
-reach a second instance. It is per-device, which is wrong for a ward and fine for
-a prototype — that module is the one seam to move.
+Where it is kept is `lib/progress-store.ts`; `lib/progress.ts` keeps the rules
+and does not know. With Supabase configured it is a row per patient in
+`web_progress` and a row per dose in `web_doses`, keyed on the verified phone
+number, so it survives a new browser, a cleared cache, and the patient moving
+from their phone to their daughter's laptop. Without one it falls back to the
+signed cookie, which is per-device and capped at 4KB: fine for a demo, wrong for
+a ward.
+
+The two backends differ on one point deliberately. **A failed read degrades; a
+failed write does not.** A read that fails shows "not recorded" for something the
+patient did record, which they can see and re-enter — better than falling over on
+the purge night, when the thing they came to do is log a glass. A write that
+fails says so, because a tracker that says "saved" and did not is worse than one
+that admits it: the patient stops counting in their head, and the ward reads a
+prep that never happened.
 
 ## The assistant
 
@@ -214,8 +340,22 @@ ported matcher:
   same thing and adds the escalation route, whereas skipping anything near a
   negator would let "Do not worry, take another dose" through.
 
-Conversation history is component state only. It is not persisted — writing a
-medical conversation into a cookie would put it on disk on a shared family phone.
+Conversation history is component state only and is never sent back to the
+browser: it is not restored on reload, because writing a medical conversation
+into a cookie would put it on disk on a shared family phone.
+
+It *is* written server-side, to `web_chat_messages`, and that is for the ward
+rather than the patient. `escalated` is how a department finds out whether the
+assistant actually told someone to call when it should have, and `blocked_rule`
+records which of the two `NEVER` rules replaced a reply. A guardrail nobody can
+audit is a claim, not a control. The stored flag is deliberately broader than the
+one on the wire — any reply that sent the patient to a person counts, whereas the
+screen paints only a replaced or failed reply in the alert colour. Conflating
+them would mean either a half-empty audit or every ordinary answer painted as an
+alarm.
+
+The write is the one in this app allowed to fail quietly: a transcript is an
+audit trail, and it must not cost a patient the answer they are waiting on.
 
 ## Auth
 
@@ -236,27 +376,81 @@ would turn sign-in into a way to ask whether a given mobile number has a
 colonoscopy booked, which is a medical fact about a named person. Unknown
 numbers get in and are shown an empty plan.
 
-### Known limitation: the resend cooldown is per device
+### Demoing on a Twilio trial account
 
-The 1-per-minute limit is enforced with a signed cookie, so it survives a cold
-start or a different serverless instance — but clearing cookies asks for another
-code. Twilio Verify's own per-number limits are the backstop against someone
-deliberately hammering a number.
+A trial account only delivers an SMS to a number verified in the Twilio console
+— usually one phone, the developer's. Every other number can be typed into the
+sign-in form but the code never arrives, and a correct code is the only way past
+the form. So a demo runs on one number, or Twilio gets switched off entirely and
+the real send path stops being exercised at all.
 
-A true per-number limit needs shared storage. `checkCooldown` in `lib/otp.ts` is
-the only function that changes when a database exists; nothing else does.
+`DEMO_PHONES` is the way out: a comma-separated list that takes the demo path —
+code printed to the server console, no SMS — while every other number still goes
+through Twilio for real. One build demonstrates both halves.
+
+```
+DEMO_PHONES="9123 4567, 9876 5432, 9000 1111"
+```
+
+Entries are normalised with the same function the sign-in form uses, so
+`9123 4567` matches a patient who typed `+65 91234567`. An entry that cannot be
+normalised is dropped with a warning rather than silently never matching.
+
+Three things keep it from being a back door:
+
+- **It does not exist in production.** The list is empty when
+  `NODE_ENV=production`, whatever the variable says, so a deploy carrying it by
+  accident is not a deploy with a bypass in it. A production build asked for a
+  `DEMO_PHONES` number refuses outright and prints no code.
+- **It is opt-in and explicit.** No number takes this path unless someone typed
+  it into an environment variable. There is no default list.
+- **The code is still a real code** — the same HMAC-derived rotating 6 digits as
+  full demo mode, checked the same way. This skips the *carrier*, not the
+  verification: a wrong code is still refused, so the flow being demonstrated is
+  the flow that ships.
+
+The sign-in screen says which of the three states it is in — off, `all` (no
+Twilio at all), or `some` (these numbers only). Printing "Demo mode" over a build
+that texts every other number for real would be a lie that costs someone an SMS
+bill.
+
+### The resend cooldown
+
+Two limits, and only the second one really holds.
+
+A signed cookie limits the **device**. It costs one HMAC, works with no database
+at all, and stops the ordinary double-tap before a round trip — but clearing
+cookies asks for another code.
+
+A row per number in `web_otp_sends` limits the **number**, which is the one that
+matters: a private window, a second phone and a cleared cache all land on the
+same row. It is a *claim* rather than a question — `web_otp_claim` does the check
+and the write in one statement, because reading and then writing would let two
+taps a few milliseconds apart both see an expired window and both send.
+
+Two deliberate choices in there:
+
+- **The slot is claimed before Twilio is called**, so a Twilio failure still
+  costs the patient the cooldown. A failing Twilio will fail again immediately,
+  and releasing the claim would turn an outage into an unbounded retry loop
+  against a paid API.
+- **A database error fails open** onto the cookie. Twilio Verify's own per-number
+  limits are the backstop for the abuse case; the alternative is a patient locked
+  out of their prep instructions at 1am because a database blipped.
 
 ## What is not built
 
 Carried over from the Expo app but not yet ported: the meal-photograph check,
 the stool-scale reading, and onboarding.
 
-All four signals behind the flag are now writable. What is still missing is the
+All four signals behind the flag are writable and all four now persist against
+the patient's number rather than their browser. What is still missing is the
 *automatic* half of two of them: the meal photograph check and the stool
 photograph reading, which in the Expo app inferred diet compliance and bowel
 output from a picture. Here both are self-reported instead, which is honest but
 asks more of the patient.
 
-Steps in the plan still cannot be ticked off — `toggleStep` exists in
-`lib/progress.ts` with no UI on it. Fluids are recorded as a single running
-count rather than per day, so the figure is "today" only in name.
+**Patients are entered one at a time.** `/admin` adds and edits them and shows
+everything held for each one, but there is no import from a hospital system, and
+no ward view across patients — which of tomorrow's list is amber or red, whose
+assistant chat escalated — only one patient at a time.

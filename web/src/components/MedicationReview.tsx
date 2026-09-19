@@ -13,10 +13,12 @@ function initialTimes(d: MedicationDraft): string[] {
   return d.action === 'hold' ? [''] : Array.from({ length: d.frequency ?? Math.max(1, d.times.length) }, (_, i) => d.times[i] ?? '')
 }
 
-export function MedicationReview({ procedure, entries, onChange }: {
+export function MedicationReview({ procedure, entries, onChange, persisted = false }: {
   procedure: Procedure
   entries: ReviewedMedication[]
   onChange: (entries: ReviewedMedication[]) => void
+  /** Whether confirmed entries are being kept against the patient's record. */
+  persisted?: boolean
 }) {
   const [open, setOpen] = useState(false)
   const [photos, setPhotos] = useState<Photo[]>([])
@@ -41,7 +43,8 @@ export function MedicationReview({ procedure, entries, onChange }: {
     resources.current.filter(photo => !next.includes(photo)).forEach(photo => URL.revokeObjectURL(photo.url))
     resources.current = next
     setPhotos(next)
-    onChange([])
+    // Entries already added to the plan are the patient's, not the photos'.
+    onChange(entries.filter(entry => entry.confirmed))
     setError('')
     setMessage('')
   }
@@ -73,7 +76,7 @@ export function MedicationReview({ procedure, entries, onChange }: {
       const drafts = parseMedicationExtraction(data, photos.length)
       if (!drafts.length) throw new Error('No medication instructions were readable. Try a clearer photo of the department’s instructions.')
       if (controller.signal.aborted) return
-      onChange(drafts.map(draft => ({ id: crypto.randomUUID(), draft: { ...draft, frequency: draft.action === 'take' ? initialTimes(draft).length : null }, reminderTimes: initialTimes(draft), doseAmounts: initialTimes(draft).map(() => draft.amount || draft.quantity || ''), confirmed: false, procedureDate: procedure.date })))
+      onChange([...entries.filter(entry => entry.confirmed), ...drafts.map(draft => ({ id: crypto.randomUUID(), draft: { ...draft, frequency: draft.action === 'take' ? initialTimes(draft).length : null }, reminderTimes: initialTimes(draft), doseAmounts: initialTimes(draft).map(() => draft.amount || draft.quantity || ''), confirmed: false, procedureDate: procedure.date }))])
       setMessage('Instructions read. Check each entry against your sheet before adding it.')
       requestAnimationFrame(() => reviewHeading.current?.focus())
     } catch (err) {
@@ -88,19 +91,23 @@ export function MedicationReview({ procedure, entries, onChange }: {
     setMessage('Changes need confirmation before they appear in your plan.')
   }
 
+  const added = entries.filter(entry => entry.confirmed).length
+
   return (
     <section className="mt-5 border-y border-hairline py-5" aria-label="Medication instructions">
       <button type="button" aria-expanded={open} aria-controls="medication-upload" onClick={() => setOpen(!open)}
         className="flex min-h-[52px] w-full items-center gap-3 text-left text-blue-deep">
         <Icon name="camera" size={24} className="shrink-0" />
         <span className="flex-1"><span className="block text-[17px] font-semibold">{open ? 'Your medication instructions' : 'Add medication instructions'}</span>
-          <span className="mt-1 block text-[14px] text-ink-muted">Optional · from your department’s preparation sheet</span></span>
+          <span className="mt-1 block text-[14px] text-ink-muted">{added > 0 ? `${added} added to your plan` : 'Optional · from your department’s preparation sheet'}</span></span>
         <span className="text-[24px]" aria-hidden="true">{open ? '−' : '+'}</span>
       </button>
 
       {open && <div id="medication-upload" className="mt-4 space-y-5">
         <p className="text-[15px] leading-relaxed text-ink-muted">Photograph the instructions that say which medicines to take or hold before your colonoscopy. A usual prescription list alone is not enough.</p>
-        <Notice>Photos are sent to OpenAI for automated reading. Check the result against your sheet. Photos and reviewed instructions are not saved by Clarity; leaving or refreshing this page clears them.</Notice>
+        <Notice>{persisted
+          ? 'Photos are sent to OpenAI for automated reading and are not stored by Clarity. Check the result against your sheet. Instructions you add to your plan are saved to your record, so they are still here next time, and your department can see them.'
+          : 'Photos are sent to OpenAI for automated reading. Check the result against your sheet. Photos and reviewed instructions are not saved by Clarity; leaving or refreshing this page clears them.'}</Notice>
         <input ref={camera} type="file" accept="image/jpeg,image/png,image/webp" capture="environment" className="hidden" aria-label="Take medication photo"
           onChange={event => { addPhotos(event.target.files); event.target.value = '' }} />
         <input ref={gallery} type="file" accept="image/jpeg,image/png,image/webp" multiple className="hidden" aria-label="Choose medication photos"
@@ -109,7 +116,7 @@ export function MedicationReview({ procedure, entries, onChange }: {
           <Button variant="secondary" onClick={() => camera.current?.click()}><Icon name="camera" size={19} />Take a photo</Button>
           <Button variant="secondary" onClick={() => gallery.current?.click()}>Choose from gallery</Button>
         </div>
-        <p className="text-[13px] text-ink-muted">Up to 3 photos · JPEG, PNG or WebP · 5 MB each. Changing photos clears reviewed entries.</p>
+        <p className="text-[13px] text-ink-muted">Up to 3 photos · JPEG, PNG or WebP · 5 MB each. Changing photos clears entries you have not added yet.</p>
         {photos.length > 0 && <ol className="grid grid-cols-3 gap-3">
           {photos.map((photo, i) => <li key={photo.url} className="min-w-0">
             <a href={photo.url} target="_blank" rel="noreferrer" aria-label={`Enlarge photo ${i + 1}`}>
@@ -120,7 +127,7 @@ export function MedicationReview({ procedure, entries, onChange }: {
             <button type="button" className="min-h-[44px] text-[13px] text-blue-deep underline" onClick={() => changePhotos(photos.filter(p => p !== photo))}>Remove photo {i + 1}</button>
           </li>)}
         </ol>}
-        <Button disabled={!photos.length || busy} onClick={readPhotos}>{busy ? 'Reading your instructions…' : entries.length ? 'Read photos again' : 'Read these photos'}</Button>
+        <Button disabled={!photos.length || busy} onClick={readPhotos}>{busy ? 'Reading your instructions…' : entries.some(entry => !entry.confirmed) ? 'Read photos again' : 'Read these photos'}</Button>
         {busy && <button type="button" className="min-h-[44px] text-blue-deep underline" onClick={() => { request.current?.abort(); request.current = null; setBusy(false) }}>Cancel reading</button>}
         {error && <div role="alert"><Notice tone="alert">{error}</Notice></div>}
         <p role="status" className="text-[15px] text-ink-muted">{message}</p>
@@ -143,7 +150,7 @@ export function MedicationReview({ procedure, entries, onChange }: {
               </div>
               <blockquote className="mb-4 border-l-2 border-hairline-strong pl-3 text-[15px] leading-relaxed text-ink-muted">
                 “{d.sourceText || 'No readable source text'}”
-                <span className="mt-1 block text-[12px]">Photo {d.sources.join(', ')}</span>
+                {photos.length > 0 && <span className="mt-1 block text-[12px]">Photo {d.sources.join(', ')}</span>}
               </blockquote>
               {entry.confirmed && !issues.length ? <div>
                 <p className="text-[15px] text-blue-deep">Added to your plan · {d.action === 'hold' ? 'hold reminders' : 'doses'} at {entry.reminderTimes.join(', ')}</p>
