@@ -15,6 +15,7 @@
     "lint": "next lint",
     "import:diet": "python3 scripts/import-diet.py",
     "telegram:dev": "node scripts/telegram-dev.mjs",
+    "reminder:test": "node scripts/reminder-test.mjs",
     "test:diet": "node --experimental-strip-types --test src/domain/diet.test.mjs",
     "test:registration": "node --experimental-strip-types --test src/domain/registration.test.mjs",
     "test:reminders": "node --experimental-strip-types --test src/domain/reminders.test.mjs",

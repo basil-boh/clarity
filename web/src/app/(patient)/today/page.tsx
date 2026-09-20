@@ -209,12 +209,9 @@ export default async function Today() {
       <section>
         <SectionTitle>How your prep is going</SectionTitle>
         <Card>
-          <div className="flex items-end justify-between gap-4">
-            <FlagRule colour={flag.colour} label={FLAG_LABEL[flag.colour]} width="short" />
-            <Link href="/verify" className="pb-0.5 text-[15px] font-semibold text-blue">
-              See details
-            </Link>
-          </div>
+          {/* No "See details" any more: /verify is the photograph check and
+              nothing else, so the link led to a page with no details on it. */}
+          <FlagRule colour={flag.colour} label={FLAG_LABEL[flag.colour]} width="short" />
         </Card>
       </section>
 

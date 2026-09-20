@@ -1,176 +1,69 @@
-import { Card, SectionTitle } from '@/components/ui'
-import { FlagRule, SignalMeter } from '@/components/signal'
-import { BowelInput, DietInput, FluidInput } from '@/components/SignalInputs'
-import { Icon } from '@/components/Icon'
+import { Card } from '@/components/ui'
 import { NoPatient } from '@/components/NoPatient'
-import { buildPlan, offsetFor } from '@/domain/prep'
-import {
-  FLAG_LABEL,
-  FLAG_MEANING,
-  SIGNAL_NAMES,
-  WEIGHTS,
-  computeFlag,
-  type Signals,
-  type BowelScalePoint,
-  type DietAnswer,
-} from '@/domain/progress'
-import { livePatient } from '@/lib/patients'
-import {
-  fluidToday,
-  prepTimingFrom,
-  readProgress,
-  recordDietDay,
-  recordFluid,
-  recordStool,
-} from '@/lib/progress'
-import { requireSession } from '@/lib/session'
 import { StoolPhotoCheck } from '@/components/StoolPhotoCheck'
+import { offsetFor } from '@/domain/prep'
+import type { BowelScalePoint } from '@/domain/progress'
+import { livePatient } from '@/lib/patients'
+import { prepTimingFrom, readProgress, recordStool } from '@/lib/progress'
+import { requireSession } from '@/lib/session'
 import { acceptVerification } from '@/lib/verification-store'
 
 export const metadata = { title: 'Verify — Clarity' }
 
 /**
- * Checking how the preparation is going, and the tracker underneath it.
+ * One question, on the morning of the procedure: does this look clear yet?
  *
- * The photograph check sits on top because it is what a patient opens this
- * page for at 1am. Below it is the same four-signal summary the ward sees on
- * the morning, weighted the same way: a patient who can see which signal is
- * dragging can still fix it, and a tracker that reported a different number
- * from the ward's would be worse than no tracker at all.
+ * The page does nothing else on purpose. It used to carry the whole tracker --
+ * fluids, diet days, the step count, the four signals -- and all of that is now
+ * gone from here. Someone opening this at 6am, an hour before they leave for
+ * the hospital, is answering one question, and a page that also asks them to
+ * log yesterday's glasses of water is a page they have to read past.
  *
- * Both write to the same place. A reading that came from a photograph and one
- * that came from a swatch are the same value in `web_progress`, so nothing
- * downstream has to know which it was.
+ * What it records is unchanged: a point on the department's 1-5 scale, written
+ * through the same `recordStool` the tracker used, so the ward's summary and
+ * the flag in /admin still move exactly as they did.
  */
 export default async function Verify() {
   const session = await requireSession()
   const progress = await readProgress()
-  const patient = await livePatient(
-    session.phone,
-    progress,
-    prepTimingFrom(progress.doses),
-  )
+  const patient = await livePatient(session.phone, progress, prepTimingFrom(progress.doses))
   if (!patient) return <NoPatient phone={session.phone} />
 
-  const flag = computeFlag(patient.signals)
-
-  const plan = buildPlan(patient.procedure.date)
   const offset = offsetFor(patient.procedure.date)
-  const allSteps = plan.filter((d) => d.offset <= offset).flatMap((d) => d.steps)
-  const doneCount = allSteps.filter((s) => patient.completed.includes(s.uid)).length
-
-  const keys = Object.keys(WEIGHTS) as (keyof Signals)[]
-
-  async function saveFluid(glasses: number): Promise<number> {
-    'use server'
-    return fluidToday(await recordFluid(glasses))
-  }
-
-  async function saveStool(point: BowelScalePoint | null): Promise<BowelScalePoint | null> {
-    'use server'
-    return (await recordStool(point)).stoolPoint
-  }
+  // The purge night counts too. The doses are at 18:00 and 2am and people do
+  // check between them; telling someone at 3am that this is a morning page
+  // would be pedantry at the exact moment they are most worried.
+  const inWindow = offset === 0 || offset === -1
 
   async function acceptReading(id: string, point: BowelScalePoint): Promise<void> {
     'use server'
     const { phone } = await requireSession()
-    // Recorded through the same path the swatches use, so the signal, the flag
-    // and the ward's summary all move exactly as they would have.
     await recordStool(point)
     await acceptVerification(phone, id, point)
-  }
-
-  async function saveDiet(dayOffset: number, answer: DietAnswer): Promise<DietAnswer> {
-    'use server'
-    const next = await recordDietDay(dayOffset, answer)
-    return next.dietDays[String(dayOffset)]
   }
 
   return (
     <>
       <header className="mb-7">
         <h1 className="text-[30px] font-bold leading-[1.1] tracking-[-0.03em] text-ink">
-          Check your preparation
+          {offset === 0 ? 'Check before you go' : 'Check your preparation'}
         </h1>
         <p className="mt-2 text-[17px] leading-relaxed text-ink-muted">
-          Photograph the bowl and we will read it against your hospital&rsquo;s scale, or pick from
-          the scale yourself. Your team sees the number either way.
+          Photograph the bowl and we will read it against your hospital&rsquo;s scale. Your team
+          sees the result.
         </p>
       </header>
 
-      <section className="mb-6">
-        <SectionTitle>Read a photograph</SectionTitle>
-        <StoolPhotoCheck onAccept={acceptReading} />
-      </section>
-
-      <Card className="mb-5">
-        <FlagRule colour={flag.colour} label={FLAG_LABEL[flag.colour]} />
-        <p className="mt-3 text-[17px] leading-relaxed text-ink">{FLAG_MEANING[flag.colour]}</p>
-      </Card>
-
-      <section className="mb-6">
-        <SectionTitle>Record today</SectionTitle>
-        <Card className="space-y-5">
-          <FluidInput glasses={fluidToday(progress)} onRecord={saveFluid} />
-          <BowelInput point={progress.stoolPoint} onRecord={saveStool} />
-          <DietInput
-            offset={offset}
-            answer={progress.dietDays[String(offset)]}
-            onRecord={saveDiet}
-          />
-        </Card>
-      </section>
-
-      <section className="mb-5">
-        <SectionTitle>Steps done so far</SectionTitle>
-        <Card>
-          <p className="text-[26px] font-bold tabular-nums tracking-[-0.02em] text-ink">
-            <span className="font-mono">{doneCount}</span>{' '}
-            <span className="font-mono text-ink-faint">/ {allSteps.length || 0}</span>
-          </p>
-          <p className="mt-1 text-[15px] text-ink-muted">
-            Counted from the start of your run-up to today.
+      {!inWindow ? (
+        <Card className="mb-5">
+          <p className="text-[16px] leading-relaxed text-ink-muted">
+            This is for the night of your preparation and the morning of your procedure. You can
+            use it now, but there will be nothing to see until the preparation has started working.
           </p>
         </Card>
-      </section>
-
-      <section className="mb-5">
-        <SectionTitle>The four signals</SectionTitle>
-        <Card>
-          <ul className="space-y-6">
-            {keys.map((key) => (
-              <li key={key}>
-                <SignalMeter
-                  label={SIGNAL_NAMES[key]}
-                  value={patient.signals[key]}
-                  weight={WEIGHTS[key]}
-                />
-              </li>
-            ))}
-          </ul>
-        </Card>
-      </section>
-
-      {flag.reasons.length > 0 ? (
-        <section>
-          <SectionTitle>Why it says that</SectionTitle>
-          <Card>
-            <ul className="list-none space-y-2">
-              {flag.reasons.map((reason) => (
-                <li key={reason} className="flex gap-2.5 text-[16px] leading-relaxed text-ink-muted">
-                  <span aria-hidden className="mt-2.5 h-px w-3 shrink-0 bg-ink-faint" />
-                  <span>{reason}</span>
-                </li>
-              ))}
-            </ul>
-          </Card>
-        </section>
       ) : null}
 
-      <p className="mt-7 text-[15px] leading-relaxed text-ink-faint">
-        A signal that was never recorded is not a failure. It is shown as &ldquo;not
-        recorded&rdquo; and left out of the summary rather than counted as zero.
-      </p>
+      <StoolPhotoCheck onAccept={acceptReading} />
     </>
   )
 }

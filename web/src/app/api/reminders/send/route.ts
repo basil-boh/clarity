@@ -98,7 +98,25 @@ export async function POST(request: Request) {
   }
 
   const now = overrideNow(request) ?? new Date()
-  const recipients = await reminderRecipients()
+
+  // `?phone=` narrows the run to one patient. Allowed in production, unlike the
+  // clock override: it only ever sends what was genuinely due anyway, and
+  // "re-run tonight for this one patient" is a real thing to need at 1am when
+  // someone rings the department saying they got nothing.
+  const only = new URL(request.url).searchParams.get('phone')
+  const all = await reminderRecipients()
+  const recipients = only ? all.filter((r) => r.phone === only) : all
+
+  if (only && recipients.length === 0) {
+    return NextResponse.json({
+      ok: true,
+      at: now.toISOString(),
+      note: `No connected recipient for ${only}.`,
+      recipients: 0,
+      sent: 0,
+      failed: 0,
+    })
+  }
 
   let sent = 0
   let failed = 0
