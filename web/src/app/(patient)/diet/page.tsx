@@ -1,3 +1,5 @@
+import Link from 'next/link'
+
 import { Card } from '@/components/ui'
 import { NoRecord } from '@/components/NoRecord'
 import { findPatient } from '@/lib/patients'
@@ -24,15 +26,23 @@ export default async function Diet() {
       <Card className="mt-6">
         <h3 className="text-[17px] font-semibold text-ink">Not on the list?</h3>
         <p className="mt-1.5 text-[15px] leading-relaxed text-ink-muted">
-          Guidance differs between hospitals, so when it matters your department&rsquo;s answer is
+          Guidance differs between hospitals, so when it matters your hospital&rsquo;s answer is
           the one that applies to you.
         </p>
-        <a
-          href={`tel:${patient.procedure.departmentPhone}`}
-          className="mt-4 inline-flex min-h-[48px] w-full items-center justify-center rounded-lg border border-hairline-strong px-4 text-[16px] font-semibold text-ink"
-        >
-          Call the department
-        </a>
+        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+          <a
+            href={`tel:${patient.procedure.departmentPhone}`}
+            className="inline-flex min-h-[48px] w-full items-center justify-center rounded-lg border border-hairline-strong px-4 text-[16px] font-semibold text-ink hover:bg-paper-sunken"
+          >
+            Call the hospital
+          </a>
+          <Link
+            href="/ask"
+            className="inline-flex min-h-[48px] w-full items-center justify-center rounded-lg bg-blue px-4 text-[16px] font-semibold text-white hover:bg-blue-deep"
+          >
+            Ask in chat
+          </Link>
+        </div>
       </Card>
     </>
   )
