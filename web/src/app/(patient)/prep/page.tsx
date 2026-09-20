@@ -1,7 +1,7 @@
 import { Card } from '@/components/ui'
 import { PreparationPlan } from '@/components/PreparationPlan'
-import { NoRecord } from '@/components/NoRecord'
-import { buildPlan, offsetFor } from '@/domain/prep'
+import { NoPatient } from '@/components/NoPatient'
+import { buildPlan, offsetFor, hasDepartmentPhone } from '@/domain/prep'
 import { loadMedications } from '@/lib/medications-store'
 import { livePatient } from '@/lib/patients'
 import { readProgress, prepTimingFrom, usingDatabase } from '@/lib/progress'
@@ -26,7 +26,7 @@ export default async function Prep() {
     progress,
     prepTimingFrom(progress.doses),
   )
-  if (!patient) return <NoRecord phone={session.phone} />
+  if (!patient) return <NoPatient phone={session.phone} />
 
   const offset = offsetFor(patient.procedure.date)
   const plan = buildPlan(patient.procedure.date)
@@ -52,12 +52,14 @@ export default async function Prep() {
             Guidance differs between hospitals. When in doubt, your department&rsquo;s answer is
             the one that applies to you.
           </p>
-          <a
-            href={`tel:${patient.procedure.departmentPhone}`}
-            className="mt-4 inline-flex min-h-[48px] w-full items-center justify-center rounded-lg bg-blue px-4 text-[16px] font-semibold text-white"
-          >
-            Call the department
-          </a>
+          {hasDepartmentPhone(patient.procedure) ? (
+            <a
+              href={`tel:${patient.procedure.departmentPhone}`}
+              className="mt-4 inline-flex min-h-[48px] w-full items-center justify-center rounded-lg bg-blue px-4 text-[16px] font-semibold text-white"
+            >
+              Call the department
+            </a>
+          ) : null}
         </Card>
       </section>
     </>

@@ -7,3 +7,4 @@ next-env.d.ts
 
 # Holds a real mobile number; see the header in that file.
 supabase/seed_local.sql
+.vercel

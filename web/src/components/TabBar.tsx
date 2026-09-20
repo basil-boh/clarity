@@ -8,18 +8,24 @@ import { usePathname } from 'next/navigation'
  *
  * Five is the ceiling at 390px with 44px tap targets, so every label is one
  * short word. Journey lost its tab to Diet and Ask -- it is read once, early,
- * and reached from Today's "All stages" link, whereas these two are opened
+ * and reached from Home's "All stages" link, whereas these two are opened
  * repeatedly and at speed.
  */
 const TABS = [
-  { href: '/today', label: 'Today' },
-  { href: '/prep', label: 'Plan' },
-  { href: '/diet', label: 'Diet' },
-  { href: '/ask', label: 'Ask' },
-  { href: '/progress', label: 'Progress' },
+  { href: '/today', key: 'home' },
+  { href: '/prep', key: 'plan' },
+  { href: '/diet', key: 'diet' },
+  { href: '/ask', key: 'ask' },
+  { href: '/verify', key: 'verify' },
 ] as const
 
-export function TabBar() {
+/**
+ * Labels come from the server rather than a lookup in here, so the tabs are
+ * already in the right language in the first paint -- the bar is the one part
+ * of the app on screen for every page, and it flickering through English on
+ * each navigation would be worse than not translating it at all.
+ */
+export function TabBar({ labels }: { labels: Record<(typeof TABS)[number]['key'], string> }) {
   const path = usePathname()
 
   return (
@@ -44,7 +50,7 @@ export function TabBar() {
                   aria-hidden
                   className={`h-[3px] w-7 rounded-full ${active ? 'bg-blue' : 'bg-transparent'}`}
                 />
-                <span className="text-center">{tab.label}</span>
+                <span className="text-center">{labels[tab.key]}</span>
               </Link>
             </li>
           )

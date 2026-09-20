@@ -87,7 +87,8 @@ synthetic instruction sheets before trying actual patient documents.
 | `TWILIO_AUTH_TOKEN`          | Twilio auth token                                     |
 | `TWILIO_VERIFY_SERVICE_SID`  | A Twilio **Verify** service (`VA…`)                   |
 | `OTP_RESEND_SECONDS`         | Resend cooldown. Defaults to 60.                      |
-| `DEMO_PHONES`                | Numbers that skip Twilio and print their code. Ignored in production. |
+| `DEMO_PHONES`                | Numbers that skip Twilio and show their code on screen. Public — fictional numbers only. |
+| `ALLOW_DEMO_PHONES_IN_PRODUCTION` | `true` lets `DEMO_PHONES` work in production, for a hosted prototype. |
 | `OPENAI_API_KEY`             | The Ask assistant. Without it Ask says so and gives the escalation route. |
 | `OPENAI_MODEL`               | Defaults to `gpt-4o-mini`. Pick for latency — this runs at 1am. |
 | `NEXT_PUBLIC_SITE_URL`       | Public origin; the QR code at `/qr` points here.      |
@@ -111,6 +112,40 @@ It adds `web_progress.fluid_days` (clear fluid per day) and `web_medications`
 (the medication instructions a patient confirmed — never the photographs), and
 is also safe to re-run. Until it has run the app keeps working on the old
 behaviour and logs which file to apply.
+
+Then `supabase/migrations/0003_questionnaire.sql`, for the first-sign-in
+questions below. Until it has run, nobody is asked and the Diet page shows the
+standard lists.
+
+### The first-sign-in questions
+
+The first time a booked patient signs in, `/welcome` asks four things: age
+range, gender, ethnicity, and whether they eat halal, vegetarian, vegan, no pork
+or no beef. Every question has "Prefer not to say", and the whole page can be
+skipped — the prep instructions are what they came for, and nothing stands in
+front of them. Answers are kept in `web_questionnaire` and can be changed from
+the Diet page at any time.
+
+Only diet and ethnicity change what is shown, in `domain/diet.ts:dietFor`:
+
+- **Diet** removes what it rules out — no pork for halal, no meat or fish for
+  vegetarian, no eggs or dairy either for vegan — and says so at the top of the
+  page.
+- **Ethnicity** adds everyday Chinese, Malay or Indian food to both sides of the
+  list: plain bubur nasi or fish soup bee hoon to eat; chapati, dhal or bandung
+  to leave out this week.
+
+Nothing added is a new rule. Each "yes" is an allowed food in a local dish and
+each "not this week" is an existing rule — whole grains, beans and lentils,
+seeds, raw or leafy vegetables, red or purple — applied to one; `test:diet`
+checks that no answer ever moves a food the standard list avoids onto the
+allowed side. Age and gender are kept for the department and change nothing on
+screen, because there is no basis for a different low-residue diet by either.
+As with the rest of the diet, this is scaffold content for the department to
+check, not clinical guidance.
+
+Staff see the answers on the patient's page in `/admin`. "Clear recorded
+progress" clears them too, so a demo number is asked again at its next sign-in.
 
 `../supabase/migrations/0001_init.sql` is the **Expo app's** schema and is left
 alone. Every table there is keyed on `auth.users` and every policy on
@@ -385,8 +420,14 @@ the form. So a demo runs on one number, or Twilio gets switched off entirely and
 the real send path stops being exercised at all.
 
 `DEMO_PHONES` is the way out: a comma-separated list that takes the demo path —
-code printed to the server console, no SMS — while every other number still goes
-through Twilio for real. One build demonstrates both halves.
+no SMS, and the code shown on the sign-in screen (and printed to the server
+console) — while every other number still goes through Twilio for real. One
+build demonstrates both halves. Demo numbers skip the resend cooldown: it exists
+to limit SMS spend, nothing is sent, and a shared demo number would otherwise
+make testers wait on each other.
+
+**Every number on the list is public.** The sign-in page offers them and shows
+their code to whoever types one, so list fictional demo patients only.
 
 ```
 DEMO_PHONES="9123 4567, 9876 5432, 9000 1111"
@@ -398,10 +439,11 @@ normalised is dropped with a warning rather than silently never matching.
 
 Three things keep it from being a back door:
 
-- **It does not exist in production.** The list is empty when
-  `NODE_ENV=production`, whatever the variable says, so a deploy carrying it by
-  accident is not a deploy with a bypass in it. A production build asked for a
-  `DEMO_PHONES` number refuses outright and prints no code.
+- **It does not exist in production unless asked for twice.** The list is
+  empty when `NODE_ENV=production` unless `ALLOW_DEMO_PHONES_IN_PRODUCTION=true`
+  is also set, so a deploy carrying `DEMO_PHONES` by accident is not a deploy
+  with a bypass in it. The second switch is for a hosted prototype, whose
+  testers have no server console and no verified Twilio number.
 - **It is opt-in and explicit.** No number takes this path unless someone typed
   it into an environment variable. There is no default list.
 - **The code is still a real code** — the same HMAC-derived rotating 6 digits as
@@ -440,8 +482,9 @@ Two deliberate choices in there:
 
 ## What is not built
 
-Carried over from the Expo app but not yet ported: the meal-photograph check,
-the stool-scale reading, and onboarding.
+Carried over from the Expo app but not yet ported: the meal-photograph check and
+the stool-scale reading. Onboarding is the four questions above; there is no
+walkthrough of the app itself.
 
 All four signals behind the flag are writable and all four now persist against
 the patient's number rather than their browser. What is still missing is the
@@ -454,6 +497,72 @@ asks more of the patient.
 everything held for each one, but there is no import from a hospital system, and
 no ward view across patients — which of tomorrow's list is amber or red, whose
 assistant chat escalated — only one patient at a time.
+
+## Dose reminders
+
+The calendar export (`Add to calendar`) writes a `VALARM` half an hour before
+each dose, so a patient's own phone alarms them offline, with no signal and no
+server. It is free and it is the more reliable of the two channels — but it only
+works for a patient who tapped download, and the people least likely to do that
+are the people most likely to sleep through the 2am dose.
+
+So there is a second channel that needs nothing from them on the night: a
+Telegram bot messages them half an hour before each dose, in the language they
+chose. Telegram rather than SMS because it costs nothing per message — an SMS
+pilot is rationed by a budget, and nobody should be deciding whether tonight's
+patient is worth four cents. The price is that the patient taps a link once, on
+the Home page, during the run-up.
+
+**Only the purgative is reminded about.** A reminder that also fires for
+"arrange your escort" teaches a patient to ignore the one that decides the
+outcome.
+
+### Setting it up
+
+1. Message `@BotFather` on Telegram, `/newbot`, and put the token in
+   `TELEGRAM_BOT_TOKEN` and the bot's name in `TELEGRAM_BOT_USERNAME`. Without a
+   username the connect card is not shown at all — an offer that leads nowhere
+   is worse than no offer.
+2. Apply `supabase/migrations/0004_reminders.sql`. Until it has run, nobody is
+   offered the connect card and the reminder endpoint finds no recipients.
+3. Point Telegram at the webhook, once per deployment URL:
+
+   ```
+   curl -X POST "https://api.telegram.org/bot$TELEGRAM_BOT_TOKEN/setWebhook" \
+     -H 'Content-Type: application/json' \
+     -d '{"url":"https://YOUR-APP/api/telegram/webhook",
+          "secret_token":"YOUR TELEGRAM_WEBHOOK_SECRET",
+          "allowed_updates":["message"]}'
+   ```
+
+4. Schedule the run. The SQL is at the bottom of `0004_reminders.sql`: Supabase
+   Cron every fifteen minutes, calling `/api/reminders/send` with
+   `REMINDER_CRON_SECRET` in the `x-reminder-key` header. Supabase rather than
+   Vercel Cron because the Hobby plan fires once a day and "within the hour",
+   which is useless for a 01:30 send.
+5. Leave `REMINDERS_ENABLED=false` and watch a purge night go past in the logs
+   first. Each run logs exactly who it *would* have messaged, about which dose.
+   Turn it on when the log looks right.
+
+### Why it polls
+
+Every fifteen minutes, not two scheduled sends at 17:30 and 01:30. A reminder
+stays due from half an hour before its dose until the dose itself, so a late or
+missed cron run still catches the patient — missing the 2am reminder is the
+whole failure this exists to prevent. Nothing is sent *after* a dose time: a
+message at 03:00 about the 02:00 dose can only tell someone they have failed, at
+an hour when they can do nothing about it.
+
+Sending twice is prevented by `web_reminders_sent`, which is claimed *before*
+the message goes out — two overlapping runs would otherwise both read an empty
+log and both message a patient in the middle of the night. A transient Telegram
+failure releases the claim so the next run retries; a patient who has blocked
+the bot is marked stopped and not retried, because that is a withdrawal of
+consent rather than an error.
+
+`npm run test:reminders` covers the timing, including that a server running on
+UTC reminds at the same Singapore moment — the bug that would otherwise fire
+these eight hours out.
 
 ## Meal list data
 

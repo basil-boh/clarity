@@ -7,9 +7,11 @@ import { FlagRule } from '@/components/signal'
 import { StepList } from '@/components/StepList'
 import {
   PHASE_COPY,
+  type Phase,
   buildPlan,
   currentDay,
   headingFor,
+  hasDepartmentPhone,
   offsetFor,
   phaseFor,
 } from '@/domain/prep'
@@ -17,22 +19,59 @@ import { FLAG_LABEL, computeFlag } from '@/domain/progress'
 import { livePatient } from '@/lib/patients'
 import { formatPhone } from '@/lib/phone'
 import { readProgress, prepTimingFrom } from '@/lib/progress'
+import { translation } from '@/lib/language'
 import { requireSession } from '@/lib/session'
-import { NoRecord } from '@/components/NoRecord'
+import { NoPatient } from '@/components/NoPatient'
+import { CalendarExportButton } from '@/components/CalendarExportButton'
+import { TelegramConnect } from '@/components/TelegramConnect'
 
 import { tickStep } from '../actions'
 
-export const metadata = { title: 'Today — Clarity' }
+export const metadata = { title: 'Home — Clarity' }
+
+/**
+ * When to offer the calendar download.
+ *
+ * Only near the procedure, because the .ics is a **snapshot**: it is written
+ * once, from the date as it stands, and nothing updates it afterwards. A
+ * patient who downloads it a year out and is then rescheduled -- and they
+ * frequently are -- ends up with alarms for the wrong night and no reason to
+ * suspect it.
+ */
+const CALENDAR_PHASES = new Set<Phase>(['week_before', 'diet_day', 'purge_night'])
+
+/**
+ * When to offer Telegram. Any time before the procedure.
+ *
+ * The opposite of the calendar, because the link is **live**: the reminders are
+ * worked out from the procedure date at send time, so connecting early is
+ * always correct and a reschedule fixes itself.
+ *
+ * And connecting early is the whole point. `waiting` is the phase this app
+ * exists for -- the sheet is handed over at the referral and not looked at
+ * again for up to two years -- so the visit where a patient is most likely to
+ * set something up is precisely the one that used to hide this card. Someone
+ * who opens the app once, months ahead, should leave with their reminders
+ * already working.
+ */
+const REMINDER_PHASES = new Set<Phase>([
+  'waiting',
+  'week_before',
+  'diet_day',
+  'purge_night',
+  'procedure_day',
+])
 
 export default async function Today() {
   const session = await requireSession()
+  const { t } = await translation()
   const progress = await readProgress()
   const patient = await livePatient(
     session.phone,
     progress,
     prepTimingFrom(progress.doses),
   )
-  if (!patient) return <NoRecord phone={session.phone} />
+  if (!patient) return <NoPatient phone={session.phone} />
 
   const { procedure, profile, signals, completed } = patient
   const offset = offsetFor(procedure.date)
@@ -68,15 +107,27 @@ export default async function Today() {
         <Stat
           label="Your appointment"
           value={format(date, 'EEEE d MMMM yyyy')}
-          sub={`Arrive ${procedure.arriveAt} · ${procedure.hospital}`}
+          // Blank where the patient entered their own date and nobody filled in
+          // a hospital, rather than "Arrive 08:00 · " trailing into nothing.
+          sub={[`Arrive ${procedure.arriveAt}`, procedure.hospital].filter(Boolean).join(' · ')}
         />
-        <p className="mt-3 text-[15px] leading-relaxed text-ink-muted">{procedure.location}</p>
-        <a
-          href={`tel:${procedure.departmentPhone}`}
+        {procedure.location ? (
+          <p className="mt-3 text-[15px] leading-relaxed text-ink-muted">{procedure.location}</p>
+        ) : null}
+        {hasDepartmentPhone(procedure) ? (
+          <a
+            href={`tel:${procedure.departmentPhone}`}
+            className="mt-4 inline-flex min-h-[48px] w-full items-center justify-center rounded-lg border border-hairline-strong px-4 text-[16px] font-semibold text-ink"
+          >
+            Call the department
+          </a>
+        ) : null}
+        <Link
+          href="/welcome"
           className="mt-4 inline-flex min-h-[48px] w-full items-center justify-center rounded-lg border border-hairline-strong px-4 text-[16px] font-semibold text-ink"
         >
-          Call the department
-        </a>
+          {t.common.changeDetails}
+        </Link>
       </Card>
 
       <section className="mb-5">
@@ -95,6 +146,33 @@ export default async function Today() {
           </p>
         </Card>
       </section>
+
+      {/*
+        The doses are the outcome and the second is at 2am, so there are two
+        ways to be reminded and a patient wants both. This one needs nothing
+        from them on the night -- it is why it comes first, and why it is
+        offered from the very first visit.
+      */}
+      {REMINDER_PHASES.has(phase) ? <TelegramConnect phone={session.phone} t={t} /> : null}
+
+      {/*
+        And this one needs no server, no signal and no account: the alarm lives
+        on the patient's own phone once it is downloaded. Belt and braces, for
+        the one night where being woken actually decides the outcome.
+      */}
+      {CALENDAR_PHASES.has(phase) ? (
+        <section className="mb-5">
+          <SectionTitle>Alarms for your doses</SectionTitle>
+          <Card>
+            <p className="text-[16px] leading-relaxed text-ink-muted">
+              The second dose is at 2am, and it is the one most often missed. Add the prep to your
+              phone&rsquo;s calendar and it will alarm you half an hour before each dose — even
+              with no signal.
+            </p>
+            <CalendarExportButton procedure={procedure} plan={plan} />
+          </Card>
+        </section>
+      ) : null}
 
       {phase === 'purge_night' ? (
         <section className="mb-5">
@@ -133,7 +211,7 @@ export default async function Today() {
         <Card>
           <div className="flex items-end justify-between gap-4">
             <FlagRule colour={flag.colour} label={FLAG_LABEL[flag.colour]} width="short" />
-            <Link href="/progress" className="pb-0.5 text-[15px] font-semibold text-blue">
+            <Link href="/verify" className="pb-0.5 text-[15px] font-semibold text-blue">
               See details
             </Link>
           </div>

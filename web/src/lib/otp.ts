@@ -54,15 +54,22 @@ export function isDemoMode(): boolean {
  * demo runs on exactly one number, or Twilio has to be switched off entirely and
  * the real send path stops being exercised at all.
  *
- * `DEMO_PHONES` is a comma-separated list that takes the demo path — code
- * printed to the server console, no SMS — while every other number still goes
- * through Twilio for real. One build demonstrates both halves.
+ * `DEMO_PHONES` is a comma-separated list that takes the demo path — no SMS,
+ * and the code is shown on the sign-in screen as well as printed to the server
+ * console — while every other number still goes through Twilio for real. One
+ * build demonstrates both halves.
+ *
+ * **Every number on the list is public.** The sign-in page offers them, and
+ * anyone who types one is shown its code. List fictional demo patients only,
+ * never a real person's number.
  *
  * ── Three things keep this from becoming a back door ───────────────────────
  *
- * 1. **It does not exist in production.** The list is empty when
- *    `NODE_ENV === 'production'`, whatever the variable says, so a deploy that
- *    carries the variable by accident is not a deploy with a bypass in it.
+ * 1. **It does not exist in production unless asked for twice.** In
+ *    production the list is empty unless `ALLOW_DEMO_PHONES_IN_PRODUCTION=true`
+ *    is also set -- for a hosted prototype whose testers have no server console
+ *    and no verified Twilio number. A deploy that carries `DEMO_PHONES` by
+ *    accident is still not a deploy with a bypass in it.
  * 2. **It is opt-in and explicit.** No number is on this path unless someone
  *    typed it into an environment variable. There is no default list.
  * 3. **The code is still a real code.** It is the same HMAC-derived, rotating
@@ -73,7 +80,12 @@ export function isDemoMode(): boolean {
  * It is still a bypass, and it is still logged loudly every time it fires.
  */
 export function demoPhoneList(): string[] {
-  if (process.env.NODE_ENV === 'production') return []
+  if (
+    process.env.NODE_ENV === 'production' &&
+    process.env.ALLOW_DEMO_PHONES_IN_PRODUCTION !== 'true'
+  ) {
+    return []
+  }
 
   const raw = process.env.DEMO_PHONES
   if (!raw) return []
@@ -272,7 +284,8 @@ async function twilio(): Promise<TwilioClient> {
 }
 
 export type SendResult =
-  | { ok: true; demo: boolean; sentTo: string }
+  /** `code` only on the demo path, where no SMS is sent and the screen shows it. */
+  | { ok: true; demo: boolean; sentTo: string; code?: string }
   | { ok: false; error: string; retryAfter?: number }
 
 export async function sendCode(phone: string): Promise<SendResult> {
@@ -283,6 +296,20 @@ export async function sendCode(phone: string): Promise<SendResult> {
     return { ok: false, error: 'Sign-in is unavailable right now. Please call the department.' }
   }
 
+  if (usesDemoCode(phone)) {
+    // Loud, and names which of the two reasons applies: a line saying no SMS was
+    // sent is the only thing standing between "the demo works" and "sign-in is
+    // broken for this number and nobody noticed".
+    //
+    // No cooldown here. It exists to stop codes being sent faster than an SMS
+    // bill should allow, and nothing is sent -- while a demo number is shared by
+    // everyone trying the prototype, who would otherwise wait on each other.
+    const why = isDemoMode() ? 'DEMO MODE' : 'DEMO NUMBER (DEMO_PHONES) -- no SMS sent'
+    const code = currentDemoCode(phone)
+    console.info(`\n  [clarity] ${why} -- code for ${phone} is ${code}\n`)
+    return { ok: true, demo: true, sentTo: phoneTail(phone), code }
+  }
+
   const cooldown = await claimSend(phone)
   if (!cooldown.ok) {
     return {
@@ -290,15 +317,6 @@ export async function sendCode(phone: string): Promise<SendResult> {
       retryAfter: cooldown.retryAfter,
       error: `Please wait ${cooldown.retryAfter}s before asking for another code.`,
     }
-  }
-
-  if (usesDemoCode(phone)) {
-    // Loud, and names which of the two reasons applies: a line saying no SMS was
-    // sent is the only thing standing between "the demo works" and "sign-in is
-    // broken for this number and nobody noticed".
-    const why = isDemoMode() ? 'DEMO MODE' : 'DEMO NUMBER (DEMO_PHONES) -- no SMS sent'
-    console.info(`\n  [clarity] ${why} -- code for ${phone} is ${currentDemoCode(phone)}\n`)
-    return { ok: true, demo: true, sentTo: phoneTail(phone) }
   }
 
   try {

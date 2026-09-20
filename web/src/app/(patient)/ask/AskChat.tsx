@@ -153,10 +153,18 @@ export function AskChat({ departmentPhone }: { departmentPhone: string }) {
       <p className="mt-4 text-[14px] leading-relaxed text-ink-faint">
         This assistant supports your preparation and cannot change your dose or decide whether your
         procedure goes ahead. For anything urgent call{' '}
-        <a href={`tel:${departmentPhone}`} className="font-semibold text-blue underline">
-          your department
-        </a>
-        , or 995 if it is severe.
+        {departmentPhone ? (
+          <>
+            <a href={`tel:${departmentPhone}`} className="font-semibold text-blue underline">
+              your department
+            </a>
+            , or 995 if it is severe.
+          </>
+        ) : (
+          // No number on file -- this app has no department behind it unless a
+          // patient was given one. 995 is the part that always applies.
+          <>your department, or 995 if it is severe.</>
+        )}
       </p>
     </>
   )

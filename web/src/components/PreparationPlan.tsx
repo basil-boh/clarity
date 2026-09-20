@@ -68,9 +68,13 @@ export function PreparationPlan({ procedure, plan, offset, completed, onToggleSt
         const day = plan.find(d => d.date === date)
         const isToday = day?.offset === offset
         const added: Step[] = medications.filter(m => m.date === date).map(m => ({
-          id: m.uid, uid: m.uid, kind: 'medicine', title: m.title, detail: m.description, at: m.time, weight: 'advised',
+          id: m.uid, uid: m.uid, kind: 'medicine', title: m.title, detail: m.description, at: m.time, weight: 'advised', date: m.date,
         }))
-        const steps = [...day?.steps ?? [], ...added].sort((a, b) => (a.at ?? '').localeCompare(b.at ?? ''))
+        // Ordered by the instant each step actually happens, not by its clock
+        // face: the 2am second dose reads "02:00" but comes after the 18:00
+        // first dose, and sorting on the time alone listed it above.
+        const steps = [...day?.steps ?? [], ...added].sort((a, b) =>
+          `${a.date} ${a.at ?? ''}`.localeCompare(`${b.date} ${b.at ?? ''}`))
         return <section key={date}>
           <SectionTitle>{format(parseISO(date), 'EEEE d MMMM')}{isToday ? ' · Today' : ''}</SectionTitle>
           <Card className={isToday ? 'border-blue' : undefined}>

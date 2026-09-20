@@ -1,7 +1,8 @@
 import Link from 'next/link'
 
 import { Card } from '@/components/ui'
-import { NoRecord } from '@/components/NoRecord'
+import { NoPatient } from '@/components/NoPatient'
+import { hasDepartmentPhone } from '@/domain/prep'
 import { findPatient } from '@/lib/patients'
 import { requireSession } from '@/lib/session'
 import { MealList } from './MealList'
@@ -11,7 +12,7 @@ export const metadata = { title: 'Meal list — Clarity' }
 export default async function Diet() {
   const session = await requireSession()
   const patient = await findPatient(session.phone)
-  if (!patient) return <NoRecord phone={session.phone} />
+  if (!patient) return <NoPatient phone={session.phone} />
 
   return (
     <>
@@ -30,12 +31,14 @@ export default async function Diet() {
           the one that applies to you.
         </p>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
-          <a
-            href={`tel:${patient.procedure.departmentPhone}`}
-            className="inline-flex min-h-[48px] w-full items-center justify-center rounded-lg border border-hairline-strong px-4 text-[16px] font-semibold text-ink hover:bg-paper-sunken"
-          >
-            Call the hospital
-          </a>
+          {hasDepartmentPhone(patient.procedure) ? (
+            <a
+              href={`tel:${patient.procedure.departmentPhone}`}
+              className="inline-flex min-h-[48px] w-full items-center justify-center rounded-lg border border-hairline-strong px-4 text-[16px] font-semibold text-ink hover:bg-paper-sunken"
+            >
+              Call the hospital
+            </a>
+          ) : null}
           <Link
             href="/ask"
             className="inline-flex min-h-[48px] w-full items-center justify-center rounded-lg bg-blue px-4 text-[16px] font-semibold text-white hover:bg-blue-deep"

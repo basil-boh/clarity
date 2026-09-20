@@ -24,7 +24,15 @@ export type Profile = {
   readonly reader: Reader
 }
 
-/** Where to be, when, and who to call. All of it comes from the department. */
+/**
+ * Where to be, when, and who to call.
+ *
+ * All of it used to come from the department. In this app the patient enters
+ * their own date, and there is no one to supply the rest -- so the hospital,
+ * the location and the department's number are routinely blank, and every
+ * screen that shows them has to cope with that rather than render an empty
+ * line or a `tel:` link that dials nothing. See `hasDepartmentPhone`.
+ */
 export type Procedure = {
   /** ISO date, `yyyy-MM-dd`. The whole plan is derived from this one value. */
   readonly date: string
@@ -69,6 +77,19 @@ export type StepSpec = {
    * are `critical`; everything else is `advised`.
    */
   readonly weight: 'critical' | 'advised'
+  /**
+   * The clock has passed midnight: this time falls on the day *after* the one
+   * the step is listed under.
+   *
+   * The second dose is at 2am. To the patient that is still "tonight" -- they
+   * are awake, mid-prep, and the app says "Tonight is the prep" -- so it is
+   * listed under the purge night and must stay there. But the calendar date has
+   * already rolled over, and anything that turns a step into a real instant
+   * (the .ics export, any reminder) has to know that. Without this the 2am dose
+   * was stamped 24 hours early: the alarm fired the night *before* the prep
+   * began and never fired for the dose itself.
+   */
+  readonly nextDay?: boolean
 }
 
 /**
@@ -79,7 +100,16 @@ export type StepSpec = {
  * progress off `id` alone meant ticking Monday's meal struck through Tuesday's
  * and inflated the denominator with repeats.
  */
-export type Step = StepSpec & { readonly uid: string }
+export type Step = StepSpec & {
+  readonly uid: string
+  /**
+   * The calendar date this step's clock time actually falls on, `yyyy-MM-dd`.
+   *
+   * Usually the date of the day it is listed under, but not for a `nextDay`
+   * step. Anything building a real instant reads this, never the day's date.
+   */
+  readonly date: string
+}
 
 export type PlanDay = {
   /** Days until the procedure. 0 is the morning of; negatives are the run-up. */
@@ -94,6 +124,19 @@ export type PlanDay = {
 export const DIET_DAYS = 3
 /** The purge begins the evening before. */
 export const PURGE_OFFSET = -1
+
+/**
+ * Whether there is a number to call.
+ *
+ * "Call the department" is the escape hatch every screen offers when the app
+ * cannot answer something, and it is the one link a worried patient at 1am will
+ * press. An `href="tel:"` with nothing after it looks identical and does
+ * nothing, which is worse than not offering it -- so where this is false, the
+ * offer is withheld rather than shown broken.
+ */
+export function hasDepartmentPhone(procedure: Procedure): boolean {
+  return procedure.departmentPhone.trim().length > 0
+}
 
 export function phaseFor(offset: number): Phase {
   if (offset > 0) return 'done'
@@ -225,8 +268,9 @@ function step(
   at: string | null,
   weight: StepSpec['weight'],
   detail?: string,
+  nextDay = false,
 ): StepSpec {
-  return { id, kind, title, at, weight, detail }
+  return { id, kind, title, at, weight, detail, nextDay }
 }
 
 /**
@@ -280,6 +324,7 @@ function stepsFor(offset: number): StepSpec[] {
           'Finish the whole volume. Keep drinking clear fluid alongside it.',
         ),
         step('fluid-after-1', 'fluid', 'Clear fluid after the first dose', '19:00', 'critical'),
+        // 2am, which is the following calendar date -- see `nextDay`.
         step(
           'dose-2',
           'purgative',
@@ -287,6 +332,7 @@ function stepsFor(offset: number): StepSpec[] {
           '02:00',
           'critical',
           'The second dose is what clears the right side of the colon. It is the one most often skipped.',
+          true,
         ),
       ]
 
@@ -316,12 +362,19 @@ export function buildPlan(procedureDate: string, now = new Date()): PlanDay[] {
     const offset = i - 7
     const date = new Date(procedure)
     date.setDate(date.getDate() + offset)
+    const iso = format(date, 'yyyy-MM-dd')
     return {
       offset,
-      date: format(date, 'yyyy-MM-dd'),
+      date: iso,
       phase: phaseFor(offset),
       heading: headingFor(offset),
-      steps: stepsFor(offset).map((spec) => ({ ...spec, uid: `${offset}:${spec.id}` })),
+      steps: stepsFor(offset).map((spec) => ({
+        ...spec,
+        uid: `${offset}:${spec.id}`,
+        // `uid` stays keyed to the day the step is listed under, so a tick
+        // recorded against the purge night is still a tick against it.
+        date: spec.nextDay ? format(addDays(date, 1), 'yyyy-MM-dd') : iso,
+      })),
     } satisfies PlanDay
   }).filter((day) => day.steps.length > 0 || day.offset === here)
 }

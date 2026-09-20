@@ -1,6 +1,9 @@
 import type { Metadata, Viewport } from 'next'
 import { DM_Mono, Inter } from 'next/font/google'
 
+import { HTML_LANG } from '@/domain/i18n'
+import { readLanguage } from '@/lib/language'
+
 import './globals.css'
 
 /**
@@ -38,9 +41,19 @@ export const viewport: Viewport = {
   themeColor: '#ffffff',
 }
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+/**
+ * `lang` is set from the patient's choice, not fixed to English.
+ *
+ * It is what tells the browser to reach for a Chinese or Tamil face instead of
+ * rendering tofu in Inter, which only carries Latin here, and what tells a
+ * screen reader which voice to use. Getting it wrong is not cosmetic: a Tamil
+ * sentence read aloud by an English voice is not readable at all.
+ */
+export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const language = await readLanguage()
+
   return (
-    <html lang="en" className={`${inter.variable} ${dmMono.variable}`}>
+    <html lang={HTML_LANG[language]} className={`${inter.variable} ${dmMono.variable}`}>
       <body>
         <a
           href="#main"

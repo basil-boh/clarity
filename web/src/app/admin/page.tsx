@@ -9,6 +9,7 @@ import { formatPhone } from '@/lib/phone'
 import { usingDatabase } from '@/lib/source'
 
 import { AdminHeader, NoDatabase } from './AdminShell'
+import { FlaggedReadings } from './FlaggedReadings'
 import { AdminSignInForm } from './SignInForm'
 
 export const metadata = { title: 'Patients — Clarity admin' }
@@ -44,6 +45,8 @@ export default async function Admin({
           <Notice>{DONE[done]}</Notice>
         </div>
       ) : null}
+
+      <FlaggedReadings />
 
       <Link
         href="/admin/patients/new"
