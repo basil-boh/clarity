@@ -444,11 +444,22 @@ export async function deletePatient(phone: string): Promise<void> {
 export async function resetRecorded(phone: string): Promise<void> {
   const client = db()
   const results = await Promise.all(
-    ['web_progress', 'web_doses', 'web_chat_messages', 'web_questionnaire'].map((table) =>
-      client.from(table).delete().eq('phone', phone),
-    ),
+    [
+      'web_progress',
+      'web_doses',
+      'web_chat_messages',
+      'web_questionnaire',
+      // Photograph readings, and any flag raised off them. Without this a
+      // cleared patient kept a red "needs a look" in /admin against progress
+      // that no longer exists, and no way to clear it short of SQL.
+      'web_verifications',
+      // What has been messaged about, so a reset patient is reminded again
+      // rather than silently skipped for doses they have not now had.
+      'web_reminders_sent',
+    ].map((table) => client.from(table).delete().eq('phone', phone)),
   )
-  // Before 0003 there is no questionnaire table, which is nothing to clear.
+  // Before 0003, 0004 and 0005 these tables do not exist, which is nothing to
+  // clear rather than a failure.
   const missingTable = (code?: string) => code === '42P01' || code === 'PGRST205'
   const failed = results.find((r) => r.error && !missingTable(r.error.code))
   if (failed?.error) {
