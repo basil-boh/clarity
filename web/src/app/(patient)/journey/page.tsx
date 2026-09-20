@@ -1,5 +1,5 @@
 import { Card, SectionTitle } from '@/components/ui'
-import { NoRecord } from '@/components/NoRecord'
+import { NoPatient } from '@/components/NoPatient'
 import { Timeline } from '@/components/Timeline'
 import { PHASE_COPY, offsetFor, phaseFor } from '@/domain/prep'
 import { findPatient } from '@/lib/patients'
@@ -10,7 +10,7 @@ export const metadata = { title: 'Journey — Clarity' }
 export default async function Journey() {
   const session = await requireSession()
   const patient = await findPatient(session.phone)
-  if (!patient) return <NoRecord phone={session.phone} />
+  if (!patient) return <NoPatient phone={session.phone} />
 
   const offset = offsetFor(patient.procedure.date)
   const here = phaseFor(offset)

@@ -35,6 +35,8 @@ export function SignInForm({
   const [phone, setPhone] = useState('')
   const [code, setCode] = useState('')
   const [sentTo, setSentTo] = useState('')
+  /** A demo number's code, which the screen shows because no SMS carries it. */
+  const [demoCode, setDemoCode] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
   const [cooldown, setCooldown] = useState(0)
@@ -71,7 +73,8 @@ export function SignInForm({
       setSentTo(data.sentTo ?? '')
       setCooldown(resendSeconds)
       setStep('code')
-      setCode('')
+      setDemoCode(typeof data.code === 'string' ? data.code : null)
+      setCode(typeof data.code === 'string' ? data.code : '')
     } catch {
       setError('No connection. Check your signal and try again.')
     } finally {
@@ -94,7 +97,7 @@ export function SignInForm({
         setError(data.error ?? 'That code is not right.')
         return
       }
-      router.replace('/today')
+      router.replace(data.next === '/welcome' ? '/welcome' : '/today')
       router.refresh()
     } catch {
       setError('No connection. Check your signal and try again.')
@@ -138,8 +141,8 @@ export function SignInForm({
               {demo === 'all' ? 'Demo mode.' : 'Demo numbers.'}
             </strong>{' '}
             {demo === 'all'
-              ? 'No SMS is sent — the code is printed in the server console.'
-              : 'These numbers skip the SMS and print their code in the server console. Any other number gets a real text.'}
+              ? 'No text message is sent — your code is shown on the next screen.'
+              : 'These numbers skip the text message and show their code on the next screen. Any other number gets a real text.'}
             {demoNumbers.length > 0 ? (
               <>
                 {' '}
@@ -167,6 +170,13 @@ export function SignInForm({
 
   return (
     <form onSubmit={verify} className="space-y-5" noValidate>
+      {demoCode ? (
+        <Notice>
+          <strong className="font-semibold">Demo number, so no text was sent.</strong> Your code
+          is <span className="font-mono font-semibold">{demoCode}</span>, filled in below.
+        </Notice>
+      ) : null}
+
       <Field
         label="Enter your code"
         hint={

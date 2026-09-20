@@ -2,6 +2,7 @@ import { NextResponse } from 'next/server'
 
 import { checkCode } from '@/lib/otp'
 import { findPatient } from '@/lib/patients'
+import { writeLanguage } from '@/lib/language'
 import { normalisePhone } from '@/lib/phone'
 import { createSession } from '@/lib/session'
 
@@ -35,5 +36,15 @@ export async function POST(request: Request) {
   await createSession(phone.e164)
 
   const patient = await findPatient(phone.e164)
-  return NextResponse.json({ ok: true, known: patient !== null })
+
+  // A patient who has been here before gets the app in the language they chose,
+  // on whatever phone they are holding -- the cookie may be new, the preference
+  // is not.
+  if (patient) await writeLanguage(patient.profile.language)
+
+  // Nothing on file means the details have not been entered yet, so that is
+  // where they go. It is no longer a dead end: this app has no department
+  // behind it, and the welcome form is how a record comes to exist at all.
+  const next = patient ? '/today' : '/welcome'
+  return NextResponse.json({ ok: true, known: patient !== null, next })
 }

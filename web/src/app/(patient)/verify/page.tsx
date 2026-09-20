@@ -2,7 +2,7 @@ import { Card, SectionTitle } from '@/components/ui'
 import { FlagRule, SignalMeter } from '@/components/signal'
 import { BowelInput, DietInput, FluidInput } from '@/components/SignalInputs'
 import { Icon } from '@/components/Icon'
-import { NoRecord } from '@/components/NoRecord'
+import { NoPatient } from '@/components/NoPatient'
 import { buildPlan, offsetFor } from '@/domain/prep'
 import {
   FLAG_LABEL,
@@ -24,18 +24,25 @@ import {
   recordStool,
 } from '@/lib/progress'
 import { requireSession } from '@/lib/session'
+import { StoolPhotoCheck } from '@/components/StoolPhotoCheck'
+import { acceptVerification } from '@/lib/verification-store'
 
-export const metadata = { title: 'Progress — Clarity' }
+export const metadata = { title: 'Verify — Clarity' }
 
 /**
- * The tracker.
+ * Checking how the preparation is going, and the tracker underneath it.
  *
- * Shows the same four signals the ward sees on the morning of the procedure,
- * weighted the same way. A patient who can see which signal is dragging can
- * still fix it; a tracker that reported a different number from the ward's
- * would be worse than no tracker at all.
+ * The photograph check sits on top because it is what a patient opens this
+ * page for at 1am. Below it is the same four-signal summary the ward sees on
+ * the morning, weighted the same way: a patient who can see which signal is
+ * dragging can still fix it, and a tracker that reported a different number
+ * from the ward's would be worse than no tracker at all.
+ *
+ * Both write to the same place. A reading that came from a photograph and one
+ * that came from a swatch are the same value in `web_progress`, so nothing
+ * downstream has to know which it was.
  */
-export default async function Progress() {
+export default async function Verify() {
   const session = await requireSession()
   const progress = await readProgress()
   const patient = await livePatient(
@@ -43,7 +50,7 @@ export default async function Progress() {
     progress,
     prepTimingFrom(progress.doses),
   )
-  if (!patient) return <NoRecord phone={session.phone} />
+  if (!patient) return <NoPatient phone={session.phone} />
 
   const flag = computeFlag(patient.signals)
 
@@ -64,6 +71,15 @@ export default async function Progress() {
     return (await recordStool(point)).stoolPoint
   }
 
+  async function acceptReading(id: string, point: BowelScalePoint): Promise<void> {
+    'use server'
+    const { phone } = await requireSession()
+    // Recorded through the same path the swatches use, so the signal, the flag
+    // and the ward's summary all move exactly as they would have.
+    await recordStool(point)
+    await acceptVerification(phone, id, point)
+  }
+
   async function saveDiet(dayOffset: number, answer: DietAnswer): Promise<DietAnswer> {
     'use server'
     const next = await recordDietDay(dayOffset, answer)
@@ -74,12 +90,18 @@ export default async function Progress() {
     <>
       <header className="mb-7">
         <h1 className="text-[30px] font-bold leading-[1.1] tracking-[-0.03em] text-ink">
-          Your progress
+          Check your preparation
         </h1>
         <p className="mt-2 text-[17px] leading-relaxed text-ink-muted">
-          This is the same summary your nurse sees on the morning.
+          Photograph the bowl and we will read it against your hospital&rsquo;s scale, or pick from
+          the scale yourself. Your team sees the number either way.
         </p>
       </header>
+
+      <section className="mb-6">
+        <SectionTitle>Read a photograph</SectionTitle>
+        <StoolPhotoCheck onAccept={acceptReading} />
+      </section>
 
       <Card className="mb-5">
         <FlagRule colour={flag.colour} label={FLAG_LABEL[flag.colour]} />

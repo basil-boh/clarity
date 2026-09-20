@@ -19,6 +19,8 @@ export type CalendarExportEvent = {
   readonly allDay: boolean
   readonly blocksCalendar: boolean
   readonly alarmAtStart?: boolean
+  /** Minutes of warning before a timed event. Defaults to 15. */
+  readonly alarmLeadMinutes?: number
 }
 
 export type CalendarExport = {
@@ -43,10 +45,16 @@ export function calendarEventsForPlan({
       uid: `clarity-${procedure.date}-${step.uid}@clarity.local`,
       title: `Clarity: ${step.title}`,
       description: [step.detail, reminderFooter].filter(Boolean).join('\n\n'),
-      date: day.date,
+      // The step's own date, not the day's: a 2am dose is listed under the
+      // purge night but happens on the date after it.
+      date: step.date,
       time: step.at,
       allDay: step.at === null,
       blocksCalendar: false,
+      // The purgative is the one thing that decides the outcome, and the 2am
+      // dose is the one most often missed. It gets a longer run-up than the
+      // default quarter of an hour.
+      alarmLeadMinutes: step.kind === 'purgative' ? 30 : undefined,
     })),
   )
 
@@ -141,13 +149,22 @@ function eventLines(event: CalendarExportEvent, generatedAt: Date): string[] {
   ]
 }
 
+/**
+ * When to ring.
+ *
+ * A timed event gets one alarm, `alarmLeadMinutes` before it. The purgative
+ * asks for a longer run-up than the rest: the dose has to be *drunk*, not
+ * merely noticed, and the second one lands at 2am on someone who has to be
+ * woken by it.
+ */
 function alarmLines(event: CalendarExportEvent): string[] {
+  const lead = event.alarmLeadMinutes ?? 15
   const trigger = event.alarmAtStart ? 'TRIGGER:PT0S' : event.allDay
     // All-day DTSTART is local midnight; this relative alarm therefore rings
     // at 9am in whichever calendar imports the file, without a non-standard
     // timezone parameter on the VALARM trigger.
     ? 'TRIGGER:PT9H'
-    : 'TRIGGER:-PT15M'
+    : `TRIGGER:-PT${lead}M`
 
   return ['BEGIN:VALARM', trigger, 'ACTION:DISPLAY', `DESCRIPTION:${escapeText(event.title)}`, 'END:VALARM']
 }

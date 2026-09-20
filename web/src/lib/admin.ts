@@ -8,6 +8,7 @@ import { SignJWT, jwtVerify } from 'jose'
 import type { ReviewedMedication } from '@/domain/medications'
 import type { Language, Reader } from '@/domain/prep'
 import { medicationsOf } from '@/lib/medications-store'
+import { questionnaireOf, type Stored } from '@/lib/questionnaire-store'
 import { livePatient, type LivePatient } from '@/lib/patients'
 import { prepTimingFrom } from '@/lib/progress'
 import { progressOf, type Progress } from '@/lib/progress-store'
@@ -264,6 +265,8 @@ export type PatientDetails = {
   readonly codes: { readonly sends: number; readonly lastSentAt: string } | null
   /** Medication instructions the patient checked and added to their plan. */
   readonly medications: readonly ReviewedMedication[]
+  /** The first-sign-in questionnaire: null if never asked. */
+  readonly questionnaire: Stored | null
 }
 
 const CHAT_LIMIT = 200
@@ -283,23 +286,25 @@ export async function patientDetails(phone: string): Promise<PatientDetails | nu
   if (!patient) return null
 
   const client = db()
-  const [progress, medications, progressStamp, doseStamps, chat, codes] = await Promise.all([
-    progressOf(phone),
-    medicationsOf(phone),
-    client.from('web_progress').select('updated_at').eq('phone', phone).maybeSingle(),
-    client.from('web_doses').select('updated_at').eq('phone', phone),
-    client
-      .from('web_chat_messages')
-      .select('id, role, content, escalated, blocked_rule, created_at')
-      .eq('phone', phone)
-      // Both halves of an exchange are one insert and share a timestamp, so
-      // role breaks the tie: reversed below, the question comes before its reply.
-      .order('created_at', { ascending: false })
-      .order('role', { ascending: true })
-      .limit(CHAT_LIMIT)
-      .returns<ChatRow[]>(),
-    client.from('web_otp_sends').select('sends, last_sent_at').eq('phone', phone).maybeSingle(),
-  ])
+  const [progress, medications, questionnaire, progressStamp, doseStamps, chat, codes] =
+    await Promise.all([
+      progressOf(phone),
+      medicationsOf(phone),
+      questionnaireOf(phone),
+      client.from('web_progress').select('updated_at').eq('phone', phone).maybeSingle(),
+      client.from('web_doses').select('updated_at').eq('phone', phone),
+      client
+        .from('web_chat_messages')
+        .select('id, role, content, escalated, blocked_rule, created_at')
+        .eq('phone', phone)
+        // Both halves of an exchange are one insert and share a timestamp, so
+        // role breaks the tie: reversed below, the question comes before its reply.
+        .order('created_at', { ascending: false })
+        .order('role', { ascending: true })
+        .limit(CHAT_LIMIT)
+        .returns<ChatRow[]>(),
+      client.from('web_otp_sends').select('sends, last_sent_at').eq('phone', phone).maybeSingle(),
+    ])
 
   for (const [where, result] of [
     ['web_progress', progressStamp],
@@ -336,6 +341,7 @@ export async function patientDetails(phone: string): Promise<PatientDetails | nu
     })),
     codes: codes.data ? { sends: codes.data.sends, lastSentAt: codes.data.last_sent_at } : null,
     medications,
+    questionnaire,
   }
 }
 
@@ -431,16 +437,20 @@ export async function deletePatient(phone: string): Promise<void> {
 
 /**
  * Wipes what the patient recorded and keeps who they are and when they are
- * booked -- for running the same number through the prep again.
+ * booked -- for running the same number through the prep again. Their
+ * questionnaire goes too, so the next sign-in asks it again, as a first one
+ * would.
  */
 export async function resetRecorded(phone: string): Promise<void> {
   const client = db()
   const results = await Promise.all(
-    ['web_progress', 'web_doses', 'web_chat_messages'].map((table) =>
+    ['web_progress', 'web_doses', 'web_chat_messages', 'web_questionnaire'].map((table) =>
       client.from(table).delete().eq('phone', phone),
     ),
   )
-  const failed = results.find((r) => r.error)
+  // Before 0003 there is no questionnaire table, which is nothing to clear.
+  const missingTable = (code?: string) => code === '42P01' || code === 'PGRST205'
+  const failed = results.find((r) => r.error && !missingTable(r.error.code))
   if (failed?.error) {
     logDbError('admin reset', failed.error)
     throw new Error('Could not reset what the patient recorded.')

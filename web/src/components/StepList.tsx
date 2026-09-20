@@ -117,6 +117,14 @@ export function StepList({
                     {step.at ?? '—'}
                   </span>
                 )}
+                {/* "02:00" under a heading that says tonight is ambiguous at a
+                    glance -- and this is the dose most often missed. Say which
+                    side of midnight it falls on. */}
+                {step.nextDay ? (
+                  <span className="mt-1 block text-center font-mono text-[10.5px] uppercase tracking-[0.08em] text-flag-amber">
+                    after midnight
+                  </span>
+                ) : null}
                 <span className="mt-1.5 flex items-center gap-1.5 font-mono text-[10.5px] uppercase tracking-[0.1em] text-ink-faint">
                   <Icon name={KIND_ICON[step.kind]} size={13} className="shrink-0" />
                   {KIND_LABEL[step.kind]}

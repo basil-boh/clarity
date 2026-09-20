@@ -14,6 +14,7 @@ import {
   phaseFor,
 } from '@/domain/prep'
 import { resolveMedicationDate } from '@/domain/medications'
+import { describeAnswers } from '@/domain/questionnaire'
 import {
   BOWEL_SCALE,
   DIET_ANSWERS,
@@ -103,6 +104,7 @@ export default async function PatientPage({
 
       <div className="space-y-5">
         <Booking details={details} digits={digits} />
+        <About details={details} />
         {details.live ? <Readiness live={details.live} /> : null}
         <Recorded details={details} />
         <Medications details={details} />
@@ -163,6 +165,48 @@ function Booking({ details, digits }: { details: PatientDetails; digits: string 
         <dt className="text-ink-faint">Department</dt>
         <dd className="font-mono text-ink">{formatPhone(procedure.departmentPhone)}</dd>
       </dl>
+    </Card>
+  )
+}
+
+/** The first-sign-in questionnaire, as the patient answered it. */
+function About({ details }: { details: PatientDetails }) {
+  const { questionnaire } = details
+  const described = questionnaire ? describeAnswers(questionnaire.answers) : null
+  const unsaid = <span className="text-ink-faint">Not said</span>
+
+  return (
+    <Card>
+      <div className="flex flex-wrap items-baseline justify-between gap-x-4">
+        <SectionTitle>About the patient</SectionTitle>
+        {questionnaire ? (
+          <span className="mb-3 text-[14px] text-ink-faint">
+            {questionnaire.skipped ? 'Skipped' : 'Answered'} {stamp(questionnaire.answeredAt)}
+          </span>
+        ) : null}
+      </div>
+      {!questionnaire ? (
+        <p className="text-[17px] text-ink-muted">
+          Not asked yet. They will see the questions at their next sign-in.
+        </p>
+      ) : questionnaire.skipped ? (
+        <p className="text-[17px] text-ink-muted">
+          Skipped the questions. They can answer from the Diet page at any time.
+        </p>
+      ) : (
+        <dl className="grid grid-cols-[auto_1fr] gap-x-6 gap-y-2 text-[16px]">
+          <dt className="text-ink-faint">Age</dt>
+          <dd className="text-ink">{described?.age ?? unsaid}</dd>
+          <dt className="text-ink-faint">Gender</dt>
+          <dd className="text-ink">{described?.gender ?? unsaid}</dd>
+          <dt className="text-ink-faint">Ethnicity</dt>
+          <dd className="text-ink">{described?.ethnicity ?? unsaid}</dd>
+          <dt className="text-ink-faint">Diet</dt>
+          <dd className="text-ink">
+            {described && described.diets.length > 0 ? described.diets.join(', ') : 'No restrictions'}
+          </dd>
+        </dl>
+      )}
     </Card>
   )
 }
@@ -483,14 +527,14 @@ function Codes({ codes }: { codes: PatientDetails['codes'] }) {
 function Reset({ details }: { details: PatientDetails }) {
   const { patient } = details
   const hasChat = details.chat.length > 0
-  const anything = patient.recorded || hasChat
+  const anything = patient.recorded || hasChat || details.questionnaire !== null
 
   return (
     <Card>
       <SectionTitle>Start the prep again</SectionTitle>
       <p className="text-[17px] leading-relaxed text-ink-muted">
         {anything
-          ? 'Clears the doses, fluids, diet answers, bowel scale, ticked steps and assistant chat above. Their details and procedure stay.'
+          ? 'Clears the doses, fluids, diet answers, bowel scale, ticked steps and assistant chat above, and their questionnaire, so they are asked it again at their next sign-in. Their details, procedure and medication instructions stay.'
           : 'There is nothing recorded to clear.'}
       </p>
       <form action={resetPatient} className="mt-4">

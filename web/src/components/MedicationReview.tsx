@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import type { Procedure } from '@/domain/prep'
+import { hasDepartmentPhone, type Procedure } from '@/domain/prep'
 import { IMAGE_TYPES, MAX_IMAGE_BYTES, MAX_IMAGES, medicationIssues, parseMedicationExtraction, resolveMedicationDate, type MedicationDraft, type ReviewedMedication } from '@/domain/medications'
 import { Button, Field, Input, Notice } from './ui'
 import { Icon } from './Icon'
@@ -211,7 +211,7 @@ export function MedicationReview({ procedure, entries, onChange, persisted = fal
               </div>}
             </article>
           })}
-          <a className="inline-flex min-h-[48px] items-center text-blue-deep underline" href={`tel:${procedure.departmentPhone}`}>Questions about your medicines? Call the department</a>
+          {hasDepartmentPhone(procedure) && <a className="inline-flex min-h-[48px] items-center text-blue-deep underline" href={`tel:${procedure.departmentPhone}`}>Questions about your medicines? Call the department</a>}
         </div>}
       </div>}
     </section>

@@ -1,7 +1,7 @@
 import { Card, Notice, SectionTitle } from '@/components/ui'
-import { NoRecord } from '@/components/NoRecord'
+import { NoPatient } from '@/components/NoPatient'
 import { DoseTracker } from '@/components/DoseTracker'
-import { dosesFor } from '@/domain/prep'
+import { dosesFor, hasDepartmentPhone } from '@/domain/prep'
 import { findPatient } from '@/lib/patients'
 import { readProgress, recordDose } from '@/lib/progress'
 import { requireSession } from '@/lib/session'
@@ -15,7 +15,7 @@ export const metadata = { title: 'The preparation — Clarity' }
 export default async function Doses() {
   const session = await requireSession()
   const patient = await findPatient(session.phone)
-  if (!patient) return <NoRecord phone={session.phone} />
+  if (!patient) return <NoPatient phone={session.phone} />
 
   const progress = await readProgress()
 
@@ -55,12 +55,14 @@ export default async function Doses() {
         ))}
       </Card>
 
-      <a
-        href={`tel:${patient.procedure.departmentPhone}`}
-        className="mt-6 inline-flex min-h-[52px] w-full items-center justify-center rounded-lg border border-hairline-strong px-4 text-[17px] font-semibold text-ink"
-      >
-        Call the department
-      </a>
+      {hasDepartmentPhone(patient.procedure) ? (
+        <a
+          href={`tel:${patient.procedure.departmentPhone}`}
+          className="mt-6 inline-flex min-h-[52px] w-full items-center justify-center rounded-lg border border-hairline-strong px-4 text-[17px] font-semibold text-ink"
+        >
+          Call the department
+        </a>
+      ) : null}
     </>
   )
 }

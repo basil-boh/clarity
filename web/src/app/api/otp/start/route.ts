@@ -36,5 +36,5 @@ export async function POST(request: Request) {
     )
   }
 
-  return NextResponse.json({ ok: true, sentTo: sent.sentTo, demo: sent.demo })
+  return NextResponse.json({ ok: true, sentTo: sent.sentTo, demo: sent.demo, code: sent.code })
 }

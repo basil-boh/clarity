@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation'
 
 import { TabBar } from '@/components/TabBar'
+import { translation } from '@/lib/language'
 import { readSession } from '@/lib/session'
 
 /**
@@ -14,12 +15,14 @@ export default async function PatientLayout({ children }: { children: React.Reac
   const session = await readSession()
   if (!session) redirect('/sign-in')
 
+  const { t } = await translation()
+
   return (
     <div className="min-h-dvh pb-[84px]">
       <main id="main" className="mx-auto w-full max-w-[560px] px-5 pb-8 pt-7">
         {children}
       </main>
-      <TabBar />
+      <TabBar labels={t.tabs} />
     </div>
   )
 }
