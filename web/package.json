@@ -12,7 +12,9 @@
     "test:calendar": "node --experimental-strip-types --test src/domain/calendar-export.test.mjs",
     "test:medications": "node --experimental-strip-types --test src/domain/medications.test.mjs src/lib/medication-extraction.test.mjs",
     "test:guardrails": "node src/app/api/ask/guardrails.test.mjs",
-    "lint": "next lint"
+    "lint": "next lint",
+    "import:diet": "python3 scripts/import-diet.py",
+    "test:diet": "node --experimental-strip-types --test src/domain/diet.test.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.116.0",

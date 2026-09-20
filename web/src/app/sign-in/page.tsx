@@ -1,6 +1,6 @@
 import { redirect } from 'next/navigation'
 
-import { InstitutionBar, Wordmark } from '@/components/brand'
+import { Wordmark } from '@/components/brand'
 import { demoPhoneList, isDemoMode, resendSeconds } from '@/lib/otp'
 import { demoNumbers } from '@/lib/patients'
 import { readSession } from '@/lib/session'
@@ -21,7 +21,6 @@ export default async function SignIn() {
 
   return (
     <div className="min-h-dvh">
-      <InstitutionBar />
       <main id="main" className="mx-auto w-full max-w-[520px] px-5 pb-16 pt-9">
       <header className="mb-9">
         <Wordmark width={148} />

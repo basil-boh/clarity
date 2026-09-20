@@ -454,3 +454,21 @@ asks more of the patient.
 everything held for each one, but there is no import from a hospital system, and
 no ward view across patients — which of tomorrow's list is amber or red, whose
 assistant chat escalated — only one patient at a time.
+
+## Meal list data
+
+The Diet page reads `src/domain/diet-foods.ts`, a checked-in dataset originally
+generated from `colonoscopy_diet_food_guide.xlsx` (`Food Guide` sheet). The workbook
+is not included in the repository. Excel and Python are not needed to run, test,
+or build the app. Food data can be maintained directly in the TypeScript dataset.
+
+If you retain a workbook copy, run `npm run import:diet -- --source /path/to/file.xlsx`
+from `web/`, review the generated diff, and rebuild the app. Add `--check` to verify
+that the dataset matches that workbook without changing it. Importing overwrites
+any direct edits to the dataset. Without `--source`, the importer looks for the
+original filename at the repository root.
+
+Run `npm run test:diet` to check all six prep-day/diet combinations. Check statuses
+are hidden based on the selected diet column. Clear-liquid allowed foods also
+appear on low-residue days; clear-liquid-only avoid rows do not. Low-residue-only
+foods move to Avoid on clear-liquid days. Both-phase rows retain their diet status.

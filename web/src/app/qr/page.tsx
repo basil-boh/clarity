@@ -1,6 +1,6 @@
 import QRCode from 'qrcode'
 
-import { InstitutionBar, Wordmark } from '@/components/brand'
+import { Wordmark } from '@/components/brand'
 
 /**
  * The square the patient scans.
@@ -23,7 +23,6 @@ export default async function Qr() {
 
   return (
     <div>
-      <InstitutionBar />
       <main id="main" className="mx-auto w-full max-w-[520px] px-6 pb-14 pt-10 text-center">
       <div className="flex justify-center">
         <Wordmark width={160} />

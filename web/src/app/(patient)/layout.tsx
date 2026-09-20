@@ -1,6 +1,5 @@
 import { redirect } from 'next/navigation'
 
-import { InstitutionBar } from '@/components/brand'
 import { TabBar } from '@/components/TabBar'
 import { readSession } from '@/lib/session'
 
@@ -17,7 +16,6 @@ export default async function PatientLayout({ children }: { children: React.Reac
 
   return (
     <div className="min-h-dvh pb-[84px]">
-      <InstitutionBar />
       <main id="main" className="mx-auto w-full max-w-[560px] px-5 pb-8 pt-7">
         {children}
       </main>
