@@ -253,25 +253,24 @@ Two colour rules are load-bearing:
   split, not a severity scale. Diet decides the experience, the purgative decides
   the outcome.
 
-#### The hospital marks are licensed artwork, and are not cleared
+#### There are no hospital marks
 
-`public/brand/sgh.png` and `singhealth.png` were copied from the Expo app. They
-are **derived from official colour artwork, not issued by either brand team**,
-and the originals came from English Wikipedia, where they are hosted as
-*non-free* files under a fair-use rationale that does not extend to an app.
-`public/brand/README.md` carries the full note. Before this goes in front of a
-patient: get the official reversed lockups from both brand teams, and get
-permission in writing.
+There were: `public/brand/sgh.png` and `singhealth.png`, copied from the Expo
+app and shown in a dark bar above the welcome form. They are gone, along with
+the `InstitutionBar` and `InstitutionLockup` components that rendered them.
 
-They are also the **reversed** variant — the type is white, with no dark pixels
-at all — which is why `InstitutionLockup` renders them on a dark panel. That is
-not a style choice; on light paper they would be invisible. Re-deriving a light
-variant means generating another modification of someone else's trademark, so it
-is deliberately not done here.
+Two reasons, and the second is the one that mattered. They were **derived from
+official colour artwork rather than issued by either brand team**, and the
+originals came from English Wikipedia, where they are hosted as *non-free* files
+under a fair-use rationale that does not extend to an app. And this app is not
+run by SGH or SingHealth: their marks at the top of it state an endorsement that
+nobody gave.
 
-`cluster` defaults to `false`: the SGH file is the *endorsed* lockup and already
-carries "SingHealth" under a rule, so showing the corporate logo beneath it
-states the cluster twice. Pass `cluster` to show both.
+If a department does adopt this, that is the point to ask them for their own
+reversed lockup and permission in writing — not to reinstate these.
+
+Clarity's own wordmark is unaffected; it is drawn in `components/brand.tsx` and
+owes nothing to anyone.
 
 ### Where things are decided
 

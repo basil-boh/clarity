@@ -1,4 +1,4 @@
-import { InstitutionBar, Wordmark } from '@/components/brand'
+import { Wordmark } from '@/components/brand'
 import { DEFAULT_LANGUAGE } from '@/domain/i18n'
 import { findPatient } from '@/lib/patients'
 import { readLanguagePreference, translation } from '@/lib/language'
@@ -35,7 +35,6 @@ export default async function Welcome() {
 
   return (
     <div className="min-h-dvh">
-      <InstitutionBar />
       <main id="main" className="mx-auto w-full max-w-[560px] px-5 pb-16 pt-8">
         <header className="mb-7">
           <Wordmark width={116} />
