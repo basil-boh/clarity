@@ -13,6 +13,7 @@ import {
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { useAskController } from '@/controllers/useAskController';
+import { CHAT_SUGGESTIONS } from '@/models/chat/chat.suggestions';
 import type { ChatMessage } from '@/models/chat/chat.types';
 import { BrandMark, Overline, Text } from '@/views/components/ui';
 import { colors, MIN_TOUCH, radius, spacing } from '@/theme';
@@ -44,20 +45,6 @@ import { colors, MIN_TOUCH, radius, spacing } from '@/theme';
  * 3. **It must refuse to authorise more purgative**, in every language, however
  *    the question is phrased. See `NEVER` in `features/flag/rules`.
  */
-
-/**
- * The openers.
- *
- * These are the questions patients actually asked in the CW12 interviews, in
- * their own framing, not a tidy FAQ. An empty chat box at 1am is its own kind
- * of barrier.
- */
-const SUGGESTIONS = [
-  'Can I still drink kopi?',
-  'I vomited some of the prep. What now?',
-  'How do I know it is working?',
-  'I am still passing solid stool at 1am',
-];
 
 export default function AskScreen() {
   const insets = useSafeAreaInsets();
@@ -102,7 +89,7 @@ export default function AskScreen() {
 
         {messages.length === 0 ? (
           <View style={styles.suggestions}>
-            {SUGGESTIONS.map((suggestion) => (
+            {CHAT_SUGGESTIONS.map((suggestion) => (
               <Pressable
                 key={suggestion}
                 onPress={() => submit(suggestion)}

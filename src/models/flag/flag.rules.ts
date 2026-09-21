@@ -28,6 +28,26 @@ export const NEVER = [
   },
 ] as const;
 
+type NeverRuleId = (typeof NEVER)[number]['id'];
+
+/** Detects affirmative suggestions that breach either product safety rule. */
+const FORBIDDEN_SUGGESTIONS: ReadonlyArray<{ id: NeverRuleId; pattern: RegExp }> = [
+  {
+    id: 'no-extra-dose',
+    pattern:
+      /(?:^|[.!?]\s*)(?:please\s+)?(?:take|drink|have)\b[^.?!]{0,60}\b(?:another|extra|more|repeat)\b[^.?!]{0,40}\b(?:dose|prep|preparation|laxative)\b/i,
+  },
+  {
+    id: 'no-photo-verdict',
+    pattern:
+      /\b(?:photo|photograph|picture|image)\b[^.?!]{0,80}\b(?:means?|shows?|confirms?|decides?)\b[^.?!]{0,40}\b(?:cancel(?:led|s|ling)?|postpone[ds]?|proceed|go ahead)\b/i,
+  },
+];
+
+export function breachedNeverRule(text: string): NeverRuleId | null {
+  return FORBIDDEN_SUGGESTIONS.find(({ pattern }) => pattern.test(text))?.id ?? null;
+}
+
 /**
  * How much each signal counts.
  *
