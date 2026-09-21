@@ -127,7 +127,7 @@ function normalise(raw: Partial<Progress> | null | undefined): Progress {
 // The cookie backend
 // ---------------------------------------------------------------------------
 
-const COOKIE = 'clarity_progress'
+const COOKIE = 'colonaid_progress'
 const MAX_AGE = 60 * 60 * 24 * 14 // the run-up is a week; a fortnight covers a reschedule
 
 function secret(): string {
@@ -136,7 +136,7 @@ function secret(): string {
     if (process.env.NODE_ENV === 'production') {
       throw new Error('SESSION_SECRET is not set. Generate one: openssl rand -base64 32')
     }
-    return 'clarity-dev-secret-not-for-production-use'
+    return 'colonaid-dev-secret-not-for-production-use'
   }
   return raw
 }

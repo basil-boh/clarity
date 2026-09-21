@@ -33,7 +33,7 @@ const dmMono = DM_Mono({
 export async function generateMetadata(): Promise<Metadata> {
   const { tx } = await getI18n()
   return {
-  title: tx('Clarity — your colonoscopy preparation'),
+  title: tx('Colonaid — your colonoscopy preparation'),
   description:
     tx('Your appointment, what to do and when, and how your preparation is going. From your endoscopy hospital/clinic.'),
   }

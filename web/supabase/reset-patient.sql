@@ -1,5 +1,5 @@
 -- ═══════════════════════════════════════════════════════════════════════════
--- Clarity web portal · resetting one patient
+-- Colonaid web portal · resetting one patient
 -- ═══════════════════════════════════════════════════════════════════════════
 --
 -- Not a migration. Paste one of the blocks below into the Supabase SQL editor,

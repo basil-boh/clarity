@@ -6,7 +6,7 @@ import { clearSession } from '@/lib/session'
 
 export async function generateMetadata() {
   const { tx } = await getI18n()
-  return { title: tx('Sign out — Clarity') }
+  return { title: tx('Sign out — Colonaid') }
 }
 
 /**
@@ -27,7 +27,7 @@ export default async function SignOut() {
 
   return (
     <main id="main" className="mx-auto min-h-dvh w-full max-w-[520px] px-5 pt-16">
-      <h1 className="text-[28px] font-bold leading-[1.12] tracking-[-0.03em] text-ink">{tx("Sign out of Clarity?")}</h1>
+      <h1 className="text-[28px] font-bold leading-[1.12] tracking-[-0.03em] text-ink">{tx("Sign out of Colonaid?")}</h1>
       <p className="mt-3 text-[17px] leading-relaxed text-ink-muted">{tx("You will need your mobile number and a new code to get back in.")}</p>
       <form action={out} className="mt-7 space-y-3">
         <Button type="submit">{tx("Sign out")}</Button>

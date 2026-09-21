@@ -1,5 +1,5 @@
 -- ═══════════════════════════════════════════════════════════════════════════
--- Clarity web portal · dose reminders over Telegram
+-- Colonaid web portal · dose reminders over Telegram
 -- ═══════════════════════════════════════════════════════════════════════════
 --
 -- Paste into the Supabase SQL editor and run once, after 0003. Safe to re-run.
@@ -81,7 +81,7 @@ notify pgrst, 'reload schema';
 --   create extension if not exists pg_net;
 --
 --   select cron.schedule(
---     'clarity-dose-reminders',
+--     'colonaid-dose-reminders',
 --     '*/15 * * * *',
 --     $$
 --       select net.http_post(
@@ -96,4 +96,4 @@ notify pgrst, 'reload schema';
 --   );
 --
 -- To watch it:      select * from cron.job_run_details order by start_time desc limit 20;
--- To change it:     select cron.unschedule('clarity-dose-reminders');  then schedule again.
+-- To change it:     select cron.unschedule('colonaid-dose-reminders');  then schedule again.

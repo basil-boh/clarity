@@ -1,5 +1,5 @@
 -- ═══════════════════════════════════════════════════════════════════════════
--- Clarity web portal · the first-sign-in questionnaire
+-- Colonaid web portal · the first-sign-in questionnaire
 -- ═══════════════════════════════════════════════════════════════════════════
 --
 -- Paste into the Supabase SQL editor and run once, after 0002. Safe to re-run.

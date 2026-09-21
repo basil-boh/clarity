@@ -4,7 +4,7 @@ import { spacing } from '@/theme';
 
 /**
  * The hospital's marks, in the brand column down the right of the Today hero,
- * under Clarity's own wordmark.
+ * under Colonaid's own wordmark.
  *
  * ── About the artwork ──────────────────────────────────────────────────────
  *

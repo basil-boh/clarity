@@ -47,11 +47,11 @@ export const ms: Dictionary = {
       'Tersambung. Saya akan menghantar mesej setengah jam sebelum setiap dos penyediaan usus anda. Hantar /stop bila-bila masa untuk mematikannya.',
     botStopped: 'Peringatan dimatikan. Anda tidak akan menerima mesej lagi daripada saya.',
     botUnknown:
-      'Saya tidak mengenali pautan itu. Buka aplikasi Clarity, log masuk, dan tekan Sambungkan Telegram.',
+      'Saya tidak mengenali pautan itu. Buka aplikasi Colonaid, log masuk, dan tekan Sambungkan Telegram.',
     titleFirst: 'Dos pertama pada {time}',
     titleSecond: 'Dos kedua pada {time}',
     lead: 'Penyediaan usus anda bermula dalam 30 minit.',
-    body: 'Buka Clarity untuk langkah penuh.',
+    body: 'Buka Colonaid untuk langkah penuh.',
     footer: 'Hantar /stop untuk mematikan peringatan',
   },
   tabs: {

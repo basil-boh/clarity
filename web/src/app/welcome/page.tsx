@@ -10,7 +10,7 @@ import { WelcomeForm, WelcomeIntro } from './WelcomeForm'
 
 export async function generateMetadata() {
   const { tx } = await getI18n()
-  return { title: tx('Before you start — Clarity') }
+  return { title: tx('Before you start — Colonaid') }
 }
 
 /**

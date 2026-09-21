@@ -17,7 +17,7 @@ import { dictionary, type Dictionary } from '@/messages'
  * chose Tamil last year still gets Tamil on a new phone.
  */
 
-const COOKIE = 'clarity_lang'
+const COOKIE = 'colonaid_lang'
 // A preference, not a session: it should outlive the 12-hour sign-in.
 const MAX_AGE = 60 * 60 * 24 * 365
 

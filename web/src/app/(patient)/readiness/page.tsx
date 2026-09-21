@@ -17,7 +17,7 @@ import { requireSession } from '@/lib/session'
 
 export async function generateMetadata() {
   const { tx } = await getI18n()
-  return { title: tx('Readiness — Clarity') }
+  return { title: tx('Readiness — Colonaid') }
 }
 const DIET_OFFSETS = [-3, -2, -1]
 const actionStyle = 'inline-flex min-h-[48px] items-center justify-center rounded-lg border px-3 py-2 text-[15px] font-semibold'

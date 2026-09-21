@@ -110,8 +110,8 @@ export function MedicationReview({ procedure, entries, onChange, persisted = fal
       {open && <div id="medication-upload" className="mt-4 space-y-5">
         <p className="text-[15px] leading-relaxed text-ink-muted">{tx("Photograph the instructions that say which medicines to take or hold before your colonoscopy. A usual prescription list alone is not enough.")}</p>
         <Notice>{tx(persisted
-          ? 'Photos are sent to OpenAI for automated reading and are not stored by Clarity. Check the result against your sheet. Instructions you add to your plan are saved to your record, so they are still here next time, and your hospital/clinic can see them.'
-          : 'Photos are sent to OpenAI for automated reading. Check the result against your sheet. Photos and reviewed instructions are not saved by Clarity; leaving or refreshing this page clears them.')}</Notice>
+          ? 'Photos are sent to OpenAI for automated reading and are not stored by Colonaid. Check the result against your sheet. Instructions you add to your plan are saved to your record, so they are still here next time, and your hospital/clinic can see them.'
+          : 'Photos are sent to OpenAI for automated reading. Check the result against your sheet. Photos and reviewed instructions are not saved by Colonaid; leaving or refreshing this page clears them.')}</Notice>
         <input ref={camera} type="file" accept="image/jpeg,image/png,image/webp" capture="environment" className="hidden" aria-label={tx("Take medication photo")}
           onChange={event => { addPhotos(event.target.files); event.target.value = '' }} />
         <input ref={gallery} type="file" accept="image/jpeg,image/png,image/webp" multiple className="hidden" aria-label={tx("Choose medication photos")}

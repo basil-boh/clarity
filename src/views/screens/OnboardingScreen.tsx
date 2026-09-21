@@ -198,7 +198,7 @@ export default function OnboardingScreen() {
 
       <View style={[styles.topBar, { paddingTop: insets.top + spacing.sm }]}>
         {/* The same logotype the title page draws, held static and small.
-            Previously this was the mark beside "Clarity" set in Inter, which
+            Previously this was the mark beside "Colonaid" set in Inter, which
             put a second, blacker version of the name on the one screen where
             the drawn one is the whole point.
 

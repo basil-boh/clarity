@@ -10,7 +10,7 @@ import { SignInForm } from './SignInForm'
 
 export async function generateMetadata() {
   const { tx } = await getI18n()
-  return { title: tx('Sign in — Clarity') }
+  return { title: tx('Sign in — Colonaid') }
 }
 
 export default async function SignIn() {

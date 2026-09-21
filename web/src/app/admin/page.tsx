@@ -12,7 +12,7 @@ import { AdminHeader, NoDatabase } from './AdminShell'
 import { FlaggedReadings } from './FlaggedReadings'
 import { AdminSignInForm } from './SignInForm'
 
-export const metadata = { title: 'Patients — Clarity admin' }
+export const metadata = { title: 'Patients — Colonaid admin' }
 
 const DONE: Record<string, string> = {
   deleted: 'Patient deleted.',
@@ -80,7 +80,7 @@ function SignIn() {
     <div className="mx-auto max-w-[420px] pt-6">
       <Wordmark width={132} />
       <h1 className="mt-6 text-[28px] font-bold leading-[1.12] tracking-[-0.03em] text-ink">
-        Clarity admin
+        Colonaid admin
       </h1>
       <p className="mb-7 mt-3 text-[17px] leading-relaxed text-ink-muted">
         For adding patients and setting their procedure dates.

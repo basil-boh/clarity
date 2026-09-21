@@ -1,11 +1,11 @@
-# Clarity: colonoscopy preparation
+# Colonaid: colonoscopy preparation
 
 Scaffold for the CW12 / HackitRX 2026 colonoscopy-preparation app. Built to the
 brief in `../cw12-deck.html`, on the conventions of the Catholic+ codebase
 (`~/Desktop/Catholic+`): Expo Router, a closed design-token set, one shared UI
 kit, and motion primitives that every screen borrows its rhythm from.
 
-**"Clarity" survives a rename** with a find of `clarity`.
+**"Colonaid" survives a rename** with a find of `colonaid`.
 
 ```bash
 npm install

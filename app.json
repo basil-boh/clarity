@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "Clarity",
-    "slug": "clarity",
+    "name": "Colonaid",
+    "slug": "colonaid",
     "version": "0.1.0",
     "orientation": "portrait",
-    "scheme": "clarity",
+    "scheme": "colonaid",
     "userInterfaceStyle": "light",
     "ios": {
       "supportsTablet": false,
-      "bundleIdentifier": "sg.hackitrx.cw12.clarity",
+      "bundleIdentifier": "sg.hackitrx.cw12.colonaid",
       "infoPlist": {
         "ITSAppUsesNonExemptEncryption": false,
         "NSCameraUsageDescription": "Photograph a meal to check whether it fits your prep diet, or photograph the toilet bowl so the app can compare it against the hospital's bowel-prep scale. Photographs are analysed and then discarded; they are never attached to your record."
@@ -16,7 +16,7 @@
       "icon": "./assets/app-icon.png"
     },
     "android": {
-      "package": "sg.hackitrx.cw12.clarity",
+      "package": "sg.hackitrx.cw12.colonaid",
       "permissions": [
         "android.permission.CAMERA"
       ],

@@ -46,11 +46,11 @@ export const zh: Dictionary = {
       '已连接。我会在您每一剂肠道清洁剂前半小时提醒您。随时发送 /stop 即可关闭。',
     botStopped: '提醒已关闭。我不会再发送任何消息。',
     botUnknown:
-      '无法识别该链接。请打开 Clarity 应用登录，然后点击「连接 Telegram」。',
+      '无法识别该链接。请打开 Colonaid 应用登录，然后点击「连接 Telegram」。',
     titleFirst: '第一剂 {time}',
     titleSecond: '第二剂 {time}',
     lead: '您的肠道准备将在 30 分钟后开始。',
-    body: '请打开 Clarity 查看详细步骤。',
+    body: '请打开 Colonaid 查看详细步骤。',
     footer: '发送 /stop 可关闭提醒',
   },
   tabs: {

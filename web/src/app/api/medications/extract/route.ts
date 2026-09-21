@@ -25,7 +25,7 @@ export async function POST(request: Request) {
     return json({ medications, procedureDate: patient.procedure.date })
   } catch (error) {
     const failure = extractionFailure(error)
-    console.warn('[clarity] medication extraction failed', failure.diagnostic)
+    console.warn('[colonaid] medication extraction failed', failure.diagnostic)
     return json({ error: failure.message, code: failure.diagnostic.kind }, failure.status)
   }
 }

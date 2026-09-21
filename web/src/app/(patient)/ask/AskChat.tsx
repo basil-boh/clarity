@@ -148,7 +148,7 @@ export function AskChat({ departmentPhone }: { departmentPhone: string }) {
         </div>
       </form>
 
-      <p className="mt-4 text-[14px] leading-relaxed text-ink-faint">{tx("This assistant supports your preparation and cannot change your dose or decide whether your procedure goes ahead. For anything urgent call")}{tx(' ')}
+      <p className="mt-4 text-[14px] leading-relaxed text-ink-faint">{tx("This assistant supports your preparation and cannot change your dose or decide whether your procedure goes ahead. This is an AI-powered chatbot for guidance only and AI can make mistakes. For anything urgent call")}{tx(' ')}
         {departmentPhone ? (
           <>
             <a href={`tel:${departmentPhone}`} className="font-semibold text-blue underline">{tx("your hospital/clinic")}</a>{tx(", or 995 if it is severe.")}</>

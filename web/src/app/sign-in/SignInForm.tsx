@@ -115,7 +115,6 @@ export function SignInForm({
       <form onSubmit={send} className="space-y-5" noValidate>
         <Field
           label={tx("Your mobile number")}
-          hint={tx("The number your endoscopy hospital/clinic has on file.")}
           error={tx(error)}
         >
           <Input

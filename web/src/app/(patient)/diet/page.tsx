@@ -11,7 +11,7 @@ import { MealList } from './MealList'
 
 export async function generateMetadata() {
   const { tx } = await getI18n()
-  return { title: tx('Meal list — Clarity') }
+  return { title: tx('Meal list — Colonaid') }
 }
 
 export default async function Diet() {

@@ -102,7 +102,7 @@ const targets = [
   { file: 'favicon.png', px: 64, ground: null, color: BLUE, variant: 'compact', cover: 0.74 },
 ];
 
-const scratch = mkdtempSync(join(tmpdir(), 'clarity-icons-'));
+const scratch = mkdtempSync(join(tmpdir(), 'colonaid-icons-'));
 
 for (const target of targets) {
   const svg = join(scratch, `${target.file}.svg`);

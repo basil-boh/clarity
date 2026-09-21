@@ -236,7 +236,7 @@ export const PHASE_COPY: Readonly<Record<Phase, { name: string; blurb: string }>
   },
   diet_day: {
     name: 'Diet days',
-    blurb: 'Low-residue meals only. Photograph anything you are unsure about.',
+    blurb: 'Low-residue meals only. Clarify dishes you are unsure about in the Ask tab.',
   },
   purge_night: {
     name: 'The purge night',
@@ -331,7 +331,7 @@ function stepsFor(offset: number): StepSpec[] {
           'Second dose',
           '02:00',
           'critical',
-          'The second dose is what clears the right side of the colon. It is the one most often skipped.',
+          'The second dose of purgative is what clears the right side of the colon. It is the one most often skipped.',
           true,
         ),
       ]

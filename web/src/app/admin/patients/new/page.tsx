@@ -6,7 +6,7 @@ import { usingDatabase } from '@/lib/source'
 import { ALL_PATIENTS, AdminHeader, NoDatabase } from '../../AdminShell'
 import { PatientForm } from '../../PatientForm'
 
-export const metadata = { title: 'Add a patient — Clarity admin' }
+export const metadata = { title: 'Add a patient — Colonaid admin' }
 
 export default async function NewPatient() {
   await requireAdmin()

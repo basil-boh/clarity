@@ -61,12 +61,12 @@ export const en = {
       'Connected. I will message you half an hour before each dose of your bowel preparation. Send /stop at any time to turn this off.',
     botStopped: 'Reminders are off. You will get no more messages from me.',
     botUnknown:
-      'I do not recognise that link. Open the Clarity app, sign in, and tap Connect Telegram.',
+      'I do not recognise that link. Open the Colonaid app, sign in, and tap Connect Telegram.',
     /** The reminder itself. {time} is the dose time. */
     titleFirst: 'First dose at {time}',
     titleSecond: 'Second dose at {time}',
     lead: 'Your bowel preparation starts in 30 minutes.',
-    body: 'Open Clarity for what to do.',
+    body: 'Open Colonaid for what to do.',
     footer: 'Send /stop to turn these reminders off',
   },
   tabs: {

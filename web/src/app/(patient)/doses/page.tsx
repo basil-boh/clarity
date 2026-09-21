@@ -9,7 +9,7 @@ import { requireSession } from '@/lib/session'
 
 export async function generateMetadata() {
   const { tx } = await getI18n()
-  return { title: tx('The preparation — Clarity') }
+  return { title: tx('The preparation — Colonaid') }
 }
 
 /**

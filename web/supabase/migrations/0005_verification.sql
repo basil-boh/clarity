@@ -1,5 +1,5 @@
 -- ═══════════════════════════════════════════════════════════════════════════
--- Clarity web portal · photograph readings, and what staff should look at
+-- Colonaid web portal · photograph readings, and what staff should look at
 -- ═══════════════════════════════════════════════════════════════════════════
 --
 -- Paste into the Supabase SQL editor and run once, after 0004. Safe to re-run.

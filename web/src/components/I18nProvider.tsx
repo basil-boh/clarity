@@ -19,8 +19,8 @@ export function I18nProvider({ language: initial, children }: { language: Langua
       document.documentElement.lang = HTML_LANG[next]
       router.refresh()
     }
-    window.addEventListener('clarity-language', change)
-    return () => window.removeEventListener('clarity-language', change)
+    window.addEventListener('colonaid-language', change)
+    return () => window.removeEventListener('colonaid-language', change)
   }, [router])
   return <LanguageContext.Provider value={language}>{children}</LanguageContext.Provider>
 }
@@ -31,6 +31,6 @@ export function useI18n() {
 }
 
 export function chooseAppLanguage(language: Language) {
-  document.cookie = `clarity_lang=${language}; path=/; max-age=${60 * 60 * 24 * 365}; samesite=lax`
-  window.dispatchEvent(new CustomEvent('clarity-language', { detail: language }))
+  document.cookie = `colonaid_lang=${language}; path=/; max-age=${60 * 60 * 24 * 365}; samesite=lax`
+  window.dispatchEvent(new CustomEvent('colonaid-language', { detail: language }))
 }

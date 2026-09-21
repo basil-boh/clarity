@@ -5,7 +5,7 @@ not artwork issued by SGH or SingHealth. Each symbol keeps its brand colour
 (SGH's green, SingHealth's orange); only the near-black type under it reverses to
 white, because that is the part that disappears on `palette.night`. They are used
 by `src/views/components/ui/institution.tsx`, in the brand column down the right
-of the Today hero, beneath Clarity's own wordmark.
+of the Today hero, beneath Colonaid's own wordmark.
 
 Regenerate them from scratch with:
 
@@ -65,7 +65,7 @@ the dark panel.
 
 ## Placement
 
-They sit under Clarity's wordmark in the brand column down the right of the Today
+They sit under Colonaid's wordmark in the brand column down the right of the Today
 hero, left-aligned to each other so the stack has a spine. That column is real
 layout, not an overlay: it takes width out of everything beside it, which is why
 the hero's appointment details moved to a full-width `footer` slot underneath

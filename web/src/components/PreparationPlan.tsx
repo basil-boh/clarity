@@ -64,7 +64,7 @@ export function PreparationPlan({ procedure, plan, offset, completed, onToggleSt
       {saveFailed && <div className="mt-4"><Notice tone="alert">{tx("Your medication reminders could not be saved, so they last only until you leave this page. Please try saving them again before leaving.")}</Notice></div>}
       {medications.length > 0 && <p className="mt-3 text-[14px] text-blue-deep">{tx('Includes {0} medication reminders.', { 0: medications.length })}</p>}
     </header>
-    <div className="mb-6"><Notice tone="alert">{tx("The second dose is the one most often skipped, and it is the one that clears the right side of the colon. Finish both.")}</Notice></div>
+    <div className="mb-6"><Notice tone="alert">{tx("The second dose of purgative is the one most often skipped, and it is the one that clears the right side of the colon. Finish both.")}</Notice></div>
     <div className="space-y-5">
       {dates.map(date => {
         const day = plan.find(d => d.date === date)

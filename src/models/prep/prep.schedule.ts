@@ -108,7 +108,7 @@ function stepsFor(offset: number): Step[] {
           'Low-residue meals only',
           null,
           'advised',
-          'No skins, seeds, nuts or wholegrains. Photograph anything you are unsure about.',
+          'No skins, seeds, nuts or wholegrains. Clarify dishes you are unsure about in the Ask tab.',
 ),
         step('fluids-day', 'fluid', 'Drink through the day', null, 'advised', 'Aim for 8 glasses.'),
       ];
@@ -129,7 +129,7 @@ function stepsFor(offset: number): Step[] {
           'Second dose',
           '02:00',
           'critical',
-          'The second dose is what clears the right side of the colon. It is the one most often skipped.',
+          'The second dose of purgative is what clears the right side of the colon. It is the one most often skipped.',
 ),
       ];
 

@@ -100,7 +100,7 @@ export function demoPhoneList(): string[] {
     // rather than silently never matching.
     const parsed = normalisePhone(trimmed)
     if (parsed.ok) out.push(parsed.e164)
-    else console.warn(`[clarity] DEMO_PHONES: ignoring "${trimmed}" — ${parsed.error}`)
+    else console.warn(`[colonaid] DEMO_PHONES: ignoring "${trimmed}" — ${parsed.error}`)
   }
   return out
 }
@@ -129,7 +129,7 @@ function secret(): string {
     if (process.env.NODE_ENV === 'production') {
       throw new Error('SESSION_SECRET is not set. Generate one: openssl rand -base64 32')
     }
-    return 'clarity-dev-secret-not-for-production-use'
+    return 'colonaid-dev-secret-not-for-production-use'
   }
   return raw
 }
@@ -138,7 +138,7 @@ function secret(): string {
 // Resend cooldown
 // ---------------------------------------------------------------------------
 
-const COOLDOWN_COOKIE = 'clarity_otp_sent'
+const COOLDOWN_COOKIE = 'colonaid_otp_sent'
 
 function sign(value: string): string {
   return createHmac('sha256', secret()).update(value).digest('base64url')
@@ -292,7 +292,7 @@ export async function sendCode(phone: string): Promise<SendResult> {
   // Refuse before claiming a slot: a misconfigured deployment should not be
   // burning cooldowns for codes it was never going to send.
   if (misconfigured()) {
-    console.error('[clarity] Twilio is not configured; refusing to send a code.')
+    console.error('[colonaid] Twilio is not configured; refusing to send a code.')
     return { ok: false, error: 'Sign-in is unavailable right now. Please call the hospital/clinic.' }
   }
 
@@ -306,7 +306,7 @@ export async function sendCode(phone: string): Promise<SendResult> {
     // everyone trying the prototype, who would otherwise wait on each other.
     const why = isDemoMode() ? 'DEMO MODE' : 'DEMO NUMBER (DEMO_PHONES) -- no SMS sent'
     const code = currentDemoCode(phone)
-    console.info(`\n  [clarity] ${why} -- code for ${phone} is ${code}\n`)
+    console.info(`\n  [colonaid] ${why} -- code for ${phone} is ${code}\n`)
     return { ok: true, demo: true, sentTo: phoneTail(phone), code }
   }
 
@@ -333,7 +333,7 @@ export async function sendCode(phone: string): Promise<SendResult> {
       return { ok: false, error: 'Too many codes requested. Try again in a few minutes.' }
     }
     if (code === 60205) return { ok: false, error: 'That number cannot receive SMS.' }
-    console.error('[clarity] Twilio send failed', err)
+    console.error('[colonaid] Twilio send failed', err)
     return { ok: false, error: 'We could not send the code. Please try again.' }
   }
 }
@@ -367,7 +367,7 @@ export async function checkCode(phone: string, code: string): Promise<CheckResul
     if (code === 60202) {
       return { ok: false, error: 'Too many wrong attempts. Ask for a new code.' }
     }
-    console.error('[clarity] Twilio check failed', err)
+    console.error('[colonaid] Twilio check failed', err)
     return { ok: false, error: 'We could not check the code. Please try again.' }
   }
 }

@@ -18,6 +18,7 @@ android/
 .env
 .env.local
 .env.*.local
+/web/env.local
 
 # macOS
 .DS_Store

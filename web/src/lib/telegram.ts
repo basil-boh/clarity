@@ -61,7 +61,7 @@ export async function sendMessage(chatId: number, text: string): Promise<SendRes
   if (!remindersEnabled()) {
     // The dry run. Loud, and says exactly what would have happened, because a
     // silent no-op here looks identical to a working reminder system.
-    console.info(`[clarity] REMINDERS DISABLED — would send to chat ${chatId}:\n  ${text}`)
+    console.info(`[colonaid] REMINDERS DISABLED — would send to chat ${chatId}:\n  ${text}`)
     return { ok: true }
   }
 

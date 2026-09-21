@@ -6,10 +6,10 @@
  * These translations share the unreviewed status documented in messages/en.ts.
  */
 export const PATIENT_COPY: Readonly<Record<string, readonly [string, string, string]>> = {
-  "Sign out of Clarity?": [
-    "要退出 Clarity 吗？",
-    "Log keluar daripada Clarity?",
-    "Clarity-இலிருந்து வெளியேற வேண்டுமா?"
+  "Sign out of Colonaid?": [
+    "要退出 Colonaid 吗？",
+    "Log keluar daripada Colonaid?",
+    "Colonaid-இலிருந்து வெளியேற வேண்டுமா?"
   ],
   "You will need your mobile number and a new code to get back in.": [
     "再次登录时，您需要使用手机号码和新的验证码。",
@@ -126,14 +126,14 @@ export const PATIENT_COPY: Readonly<Record<string, readonly [string, string, str
     "Ambil foto arahan tentang ubat yang perlu diambil atau dihentikan sebelum kolonoskopi. Senarai preskripsi biasa sahaja tidak mencukupi.",
     "பெருங்குடல் நோக்கிப் பரிசோதனைக்கு முன் எந்த மருந்துகளை எடுக்க அல்லது நிறுத்த வேண்டும் என்ற அறிவுறுத்தல்களைப் படம் எடுக்கவும். வழக்கமான மருந்துப் பட்டியல் மட்டும் போதாது."
   ],
-  "Photos are sent to OpenAI for automated reading and are not stored by Clarity. Check the result against your sheet. Instructions you add to your plan are saved to your record, so they are still here next time, and your hospital/clinic can see them.": [
-    "照片会发送至 OpenAI 自动读取，Clarity 不会保存照片。请对照纸本核对结果。添加到计划的说明会保存至您的记录，方便下次查看，医院/诊所也能查看。",
-    "Foto dihantar ke OpenAI untuk dibaca secara automatik dan tidak disimpan oleh Clarity. Semak hasil dengan helaian anda. Arahan yang ditambah pada pelan disimpan dalam rekod anda untuk lawatan seterusnya dan boleh dilihat oleh hospital/klinik anda.",
-    "படங்கள் தானாகப் படிப்பதற்காக OpenAI-க்கு அனுப்பப்படுகின்றன; Clarity அவற்றைச் சேமிக்காது. முடிவை உங்கள் தாளுடன் சரிபார்க்கவும். திட்டத்தில் சேர்த்த அறிவுறுத்தல்கள் உங்கள் பதிவில் சேமிக்கப்படும்; அடுத்த முறையும் மருத்துவமனை/கிளினிக்கும் அவற்றைப் பார்க்கலாம்."
+  "Photos are sent to OpenAI for automated reading and are not stored by Colonaid. Check the result against your sheet. Instructions you add to your plan are saved to your record, so they are still here next time, and your hospital/clinic can see them.": [
+    "照片会发送至 OpenAI 自动读取，Colonaid 不会保存照片。请对照纸本核对结果。添加到计划的说明会保存至您的记录，方便下次查看，医院/诊所也能查看。",
+    "Foto dihantar ke OpenAI untuk dibaca secara automatik dan tidak disimpan oleh Colonaid. Semak hasil dengan helaian anda. Arahan yang ditambah pada pelan disimpan dalam rekod anda untuk lawatan seterusnya dan boleh dilihat oleh hospital/klinik anda.",
+    "படங்கள் தானாகப் படிப்பதற்காக OpenAI-க்கு அனுப்பப்படுகின்றன; Colonaid அவற்றைச் சேமிக்காது. முடிவை உங்கள் தாளுடன் சரிபார்க்கவும். திட்டத்தில் சேர்த்த அறிவுறுத்தல்கள் உங்கள் பதிவில் சேமிக்கப்படும்; அடுத்த முறையும் மருத்துவமனை/கிளினிக்கும் அவற்றைப் பார்க்கலாம்."
   ],
-  "Photos are sent to OpenAI for automated reading. Check the result against your sheet. Photos and reviewed instructions are not saved by Clarity; leaving or refreshing this page clears them.": [
-    "照片会发送至 OpenAI 自动读取。请对照纸本核对结果。Clarity 不会保存照片或已核对的说明；离开或刷新此页后，这些内容会清除。",
-    "Foto dihantar ke OpenAI untuk bacaan automatik. Semak hasil dengan helaian anda. Foto dan arahan yang disemak tidak disimpan oleh Clarity; meninggalkan atau memuat semula halaman akan memadamkannya.",
+  "Photos are sent to OpenAI for automated reading. Check the result against your sheet. Photos and reviewed instructions are not saved by Colonaid; leaving or refreshing this page clears them.": [
+    "照片会发送至 OpenAI 自动读取。请对照纸本核对结果。Colonaid 不会保存照片或已核对的说明；离开或刷新此页后，这些内容会清除。",
+    "Foto dihantar ke OpenAI untuk bacaan automatik. Semak hasil dengan helaian anda. Foto dan arahan yang disemak tidak disimpan oleh Colonaid; meninggalkan atau memuat semula halaman akan memadamkannya.",
     "படங்கள் தானாகப் படிப்பதற்காக OpenAI-க்கு அனுப்பப்படுகின்றன. முடிவை உங்கள் தாளுடன் சரிபார்க்கவும். படங்களும் சரிபார்த்த அறிவுறுத்தல்களும் சேமிக்கப்படாது; பக்கத்தை விட்டு வெளியேறினால் அல்லது புதுப்பித்தால் அவை அழிக்கப்படும்."
   ],
   "Take medication photo": [
@@ -436,10 +436,10 @@ export const PATIENT_COPY: Readonly<Record<string, readonly [string, string, str
     "peringatan ubat.",
     "மருந்து நினைவூட்டல்கள்."
   ],
-  "The second dose is the one most often skipped, and it is the one that clears the right side of the colon. Finish both.": [
-    "第二剂最容易被漏服，也是清洁结肠右侧的关键。请完成两剂。",
-    "Dos kedua paling kerap terlepas dan membersihkan bahagian kanan kolon. Habiskan kedua-duanya.",
-    "இரண்டாவது வேளைதான் அதிகம் தவறவிடப்படுகிறது; அதுவே பெருங்குடலின் வலப்பக்கத்தைச் சுத்தம் செய்கிறது. இரண்டையும் முடிக்கவும்."
+  "The second dose of purgative is the one most often skipped, and it is the one that clears the right side of the colon. Finish both.": [
+    "第二剂清肠药最容易被漏服，也是清洁结肠右侧的关键。请完成两剂。",
+    "Dos kedua ubat pencuci usus paling kerap terlepas dan membersihkan bahagian kanan kolon. Habiskan kedua-duanya.",
+    "குடல் சுத்திகரிப்பு மருந்தின் இரண்டாவது வேளைதான் அதிகம் தவறவிடப்படுகிறது; அதுவே பெருங்குடலின் வலப்பக்கத்தைச் சுத்தம் செய்கிறது. இரண்டையும் முடிக்கவும்."
   ],
   "From the hospital/clinic’s sheet you reviewed.": [
     "来自您已核对的医院/诊所说明单。",
@@ -856,10 +856,10 @@ export const PATIENT_COPY: Readonly<Record<string, readonly [string, string, str
     "Hantar",
     "அனுப்பு"
   ],
-  "This assistant supports your preparation and cannot change your dose or decide whether your procedure goes ahead. For anything urgent call": [
-    "此助手协助您准备，不能更改剂量或决定检查是否进行。紧急情况请致电",
-    "Pembantu ini menyokong persediaan anda dan tidak boleh mengubah dos atau menentukan sama ada prosedur diteruskan. Untuk perkara segera, hubungi",
-    "இந்த உதவியாளர் தயாரிப்புக்கு உதவும்; மருந்தளவை மாற்றவோ பரிசோதனை நடைபெறுமா என்பதை முடிவுசெய்யவோ முடியாது. அவசரமான விஷயங்களுக்கு அழைக்கவும்:"
+  "This assistant supports your preparation and cannot change your dose or decide whether your procedure goes ahead. This is an AI-powered chatbot for guidance only and AI can make mistakes. For anything urgent call": [
+    "此助手协助您准备，不能更改剂量或决定检查是否进行。这是一个人工智能聊天机器人，仅供参考，而且人工智能可能会出错。紧急情况请致电",
+    "Pembantu ini menyokong persediaan anda dan tidak boleh mengubah dos atau menentukan sama ada prosedur diteruskan. Ini ialah chatbot berkuasa AI untuk panduan sahaja dan AI boleh membuat kesilapan. Untuk perkara segera, hubungi",
+    "இந்த உதவியாளர் தயாரிப்புக்கு உதவும்; மருந்தளவை மாற்றவோ பரிசோதனை நடைபெறுமா என்பதை முடிவுசெய்யவோ முடியாது. இது வழிகாட்டுதலுக்காக மட்டுமே உள்ள செயற்கை நுண்ணறிவு உரையாடல் உதவியாளர், மேலும் செயற்கை நுண்ணறிவு தவறுகள் செய்யலாம். அவசரமான விஷயங்களுக்கு அழைக்கவும்:"
   ],
   "your hospital/clinic": [
     "您的医院/诊所",
@@ -876,10 +876,10 @@ export const PATIENT_COPY: Readonly<Record<string, readonly [string, string, str
     "hospital/klinik anda, atau 995 jika teruk.",
     "உங்கள் மருத்துவமனை/கிளினிக்; நிலை கடுமையாக இருந்தால் 995."
   ],
-  "Ask — Clarity": [
-    "提问 — Clarity",
-    "Tanya — Clarity",
-    "கேள்விகள் — Clarity"
+  "Ask — Colonaid": [
+    "提问 — Colonaid",
+    "Tanya — Colonaid",
+    "கேள்விகள் — Colonaid"
   ],
   "Ask": [
     "提问",
@@ -966,10 +966,10 @@ export const PATIENT_COPY: Readonly<Record<string, readonly [string, string, str
     "Tiada makanan disenaraikan untuk pilihan ini.",
     "இந்தத் தேர்வுக்கு உணவுகள் பட்டியலிடப்படவில்லை."
   ],
-  "Meal list — Clarity": [
-    "食物清单 — Clarity",
-    "Senarai makanan — Clarity",
-    "உணவுப் பட்டியல் — Clarity"
+  "Meal list — Colonaid": [
+    "食物清单 — Colonaid",
+    "Senarai makanan — Colonaid",
+    "உணவுப் பட்டியல் — Colonaid"
   ],
   "Meal list": [
     "食物清单",
@@ -1001,10 +1001,10 @@ export const PATIENT_COPY: Readonly<Record<string, readonly [string, string, str
     "Tanya dalam sembang",
     "உரையாடலில் கேள்"
   ],
-  "The preparation — Clarity": [
-    "清肠准备 — Clarity",
-    "Persediaan — Clarity",
-    "தயாரிப்பு — Clarity"
+  "The preparation — Colonaid": [
+    "清肠准备 — Colonaid",
+    "Persediaan — Colonaid",
+    "தயாரிப்பு — Colonaid"
   ],
   "The preparation": [
     "清肠准备",
@@ -1031,10 +1031,10 @@ export const PATIENT_COPY: Readonly<Record<string, readonly [string, string, str
     "Hubungi hospital/klinik",
     "மருத்துவமனை/கிளினிக்கை அழை"
   ],
-  "Journey — Clarity": [
-    "准备过程 — Clarity",
-    "Perjalanan — Clarity",
-    "தயாரிப்புப் பயணம் — Clarity"
+  "Journey — Colonaid": [
+    "准备过程 — Colonaid",
+    "Perjalanan — Colonaid",
+    "தயாரிப்புப் பயணம் — Colonaid"
   ],
   "Your journey": [
     "您的准备过程",
@@ -1051,10 +1051,10 @@ export const PATIENT_COPY: Readonly<Record<string, readonly [string, string, str
     "Semua ini berlaku di luar hospital, sebab itulah ia sering tidak disedari.",
     "இவை அனைத்தும் மருத்துவமனைக்கு வெளியே நடப்பதால் பெரும்பாலும் கவனிக்கப்படுவதில்லை."
   ],
-  "How to prep — Clarity": [
-    "如何准备 — Clarity",
-    "Cara membuat persediaan — Clarity",
-    "எவ்வாறு தயாராவது — Clarity"
+  "How to prep — Colonaid": [
+    "如何准备 — Colonaid",
+    "Cara membuat persediaan — Colonaid",
+    "எவ்வாறு தயாராவது — Colonaid"
   ],
   "Not sure about something?": [
     "有不确定的地方？",
@@ -1071,10 +1071,10 @@ export const PATIENT_COPY: Readonly<Record<string, readonly [string, string, str
     "Disimpan",
     "சேமிக்கப்பட்டது"
   ],
-  "Readiness — Clarity": [
-    "准备情况 — Clarity",
-    "Kesediaan — Clarity",
-    "தயார்நிலை — Clarity"
+  "Readiness — Colonaid": [
+    "准备情况 — Colonaid",
+    "Kesediaan — Colonaid",
+    "தயார்நிலை — Colonaid"
   ],
   "Choose a valid preparation status.": [
     "请选择有效的准备状态。",
@@ -1221,10 +1221,10 @@ export const PATIENT_COPY: Readonly<Record<string, readonly [string, string, str
     "Tanya soalan →",
     "கேள்வி கேள் →"
   ],
-  "Home — Clarity": [
-    "首页 — Clarity",
-    "Utama — Clarity",
-    "முகப்பு — Clarity"
+  "Home — Colonaid": [
+    "首页 — Colonaid",
+    "Utama — Colonaid",
+    "முகப்பு — Colonaid"
   ],
   "You are preparing with {0}.": [
     "您正在陪同 {0} 做准备。",
@@ -1281,10 +1281,10 @@ export const PATIENT_COPY: Readonly<Record<string, readonly [string, string, str
     "Log masuk sebagai",
     "உள்நுழைந்த எண்"
   ],
-  "Stool check-in — Clarity": [
-    "排便记录 — Clarity",
-    "Catatan najis — Clarity",
-    "மலப் பதிவு — Clarity"
+  "Stool check-in — Colonaid": [
+    "排便记录 — Colonaid",
+    "Catatan najis — Colonaid",
+    "மலப் பதிவு — Colonaid"
   ],
   "Stool check-in": [
     "排便记录",
@@ -1406,10 +1406,10 @@ export const PATIENT_COPY: Readonly<Record<string, readonly [string, string, str
     "Gunakan nombor lain",
     "வேறு எண்ணைப் பயன்படுத்து"
   ],
-  "Sign in — Clarity": [
-    "登录 — Clarity",
-    "Log masuk — Clarity",
-    "உள்நுழை — Clarity"
+  "Sign in — Colonaid": [
+    "登录 — Colonaid",
+    "Log masuk — Colonaid",
+    "உள்நுழை — Colonaid"
   ],
   "Your colonoscopy preparation": [
     "您的结肠镜检查准备",
@@ -1426,30 +1426,30 @@ export const PATIENT_COPY: Readonly<Record<string, readonly [string, string, str
     "Aplikasi ini menyokong persediaan anda, bukan menggantikan pasukan penjagaan. Dalam kecemasan, hubungi 995.",
     "இந்தச் செயலி தயாரிப்புக்கு உதவும்; மருத்துவக் குழுவிற்கு மாற்றாகாது. அவசரநிலையில் 995-ஐ அழைக்கவும்."
   ],
-  "Before you start — Clarity": [
-    "开始之前 — Clarity",
-    "Sebelum bermula — Clarity",
-    "தொடங்கும் முன் — Clarity"
+  "Before you start — Colonaid": [
+    "开始之前 — Colonaid",
+    "Sebelum bermula — Colonaid",
+    "தொடங்கும் முன் — Colonaid"
   ],
-  "Clarity — QR code for printing": [
-    "Clarity — 可打印二维码",
-    "Clarity — kod QR untuk dicetak",
-    "Clarity — அச்சிடுவதற்கான QR குறியீடு"
+  "Colonaid — QR code for printing": [
+    "Colonaid — 可打印二维码",
+    "Colonaid — kod QR untuk dicetak",
+    "Colonaid — அச்சிடுவதற்கான QR குறியீடு"
   ],
   "Scan this with your phone camera. Sign in with the mobile number the endoscopy hospital/clinic has on file.": [
     "用手机相机扫描。使用内镜医院/诊所记录的手机号码登录。",
     "Imbas dengan kamera telefon. Log masuk dengan nombor telefon bimbit dalam rekod hospital/klinik endoskopi.",
     "கைப்பேசி கேமராவால் ஸ்கேன் செய்யவும். எண்டோஸ்கோபி மருத்துவமனை/கிளினிக்கில் பதிவுசெய்த கைப்பேசி எண்ணில் உள்நுழையவும்."
   ],
-  "Sign out — Clarity": [
-    "退出 — Clarity",
-    "Log keluar — Clarity",
-    "வெளியேறு — Clarity"
+  "Sign out — Colonaid": [
+    "退出 — Colonaid",
+    "Log keluar — Colonaid",
+    "வெளியேறு — Colonaid"
   ],
-  "Clarity — your colonoscopy preparation": [
-    "Clarity — 您的结肠镜准备",
-    "Clarity — persediaan kolonoskopi anda",
-    "Clarity — உங்கள் பெருங்குடல் நோக்கிப் பரிசோதனைத் தயாரிப்பு"
+  "Colonaid — your colonoscopy preparation": [
+    "Colonaid — 您的结肠镜准备",
+    "Colonaid — persediaan kolonoskopi anda",
+    "Colonaid — உங்கள் பெருங்குடல் நோக்கிப் பரிசோதனைத் தயாரிப்பு"
   ],
   "Your appointment, what to do and when, and how your preparation is going. From your endoscopy hospital/clinic.": [
     "您的预约、各项准备的时间安排及准备进展。来自您的内镜医院/诊所。",
@@ -1516,10 +1516,10 @@ export const PATIENT_COPY: Readonly<Record<string, readonly [string, string, str
     "Hari diet",
     "உணவுமுறை நாட்கள்"
   ],
-  "Low-residue meals only. Photograph anything you are unsure about.": [
-    "只吃低渣餐食。不确定的食物可以拍照。",
-    "Makan rendah sisa sahaja. Ambil foto jika tidak pasti.",
-    "குறைந்த சக்கை உணவு மட்டும். சந்தேகமுள்ளவற்றைப் படம் எடுக்கவும்."
+  "Low-residue meals only. Clarify dishes you are unsure about in the Ask tab.": [
+    "只吃低渣餐食。对不确定的菜肴，请在「提问」页面咨询。",
+    "Makan rendah sisa sahaja. Dapatkan penjelasan tentang hidangan yang anda kurang pasti dalam tab Tanya.",
+    "குறைந்த சக்கை உணவு மட்டும். சந்தேகமுள்ள உணவுகளைப் பற்றி கேள்விகள் தாவலில் தெளிவுபடுத்திக் கொள்ளவும்."
   ],
   "The purge night": [
     "清肠之夜",
@@ -1611,10 +1611,10 @@ export const PATIENT_COPY: Readonly<Record<string, readonly [string, string, str
     "Dos kedua",
     "இரண்டாம் வேளை"
   ],
-  "The second dose is what clears the right side of the colon. It is the one most often skipped.": [
-    "第二剂能清洁结肠右侧，也是最容易被漏服的一剂。",
-    "Dos kedua membersihkan bahagian kanan kolon. Dos inilah yang paling kerap terlepas.",
-    "இரண்டாம் வேளை பெருங்குடலின் வலப்பக்கத்தைச் சுத்தம் செய்கிறது. இதுவே அதிகம் தவறவிடப்படுகிறது."
+  "The second dose of purgative is what clears the right side of the colon. It is the one most often skipped.": [
+    "第二剂清肠药能清洁结肠右侧，也是最容易被漏服的一剂。",
+    "Dos kedua ubat pencuci usus membersihkan bahagian kanan kolon. Dos inilah yang paling kerap terlepas.",
+    "குடல் சுத்திகரிப்பு மருந்தின் இரண்டாம் வேளை பெருங்குடலின் வலப்பக்கத்தைச் சுத்தம் செய்கிறது. இதுவே அதிகம் தவறவிடப்படுகிறது."
   ],
   "Nothing by mouth": [
     "禁食禁饮",

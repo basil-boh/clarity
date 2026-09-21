@@ -9,7 +9,7 @@ import { saveStoolCheck } from '../actions'
 
 export async function generateMetadata() {
   const { tx } = await getI18n()
-  return { title: tx('Stool check-in — Clarity') }
+  return { title: tx('Stool check-in — Colonaid') }
 }
 
 export default async function Verify() {

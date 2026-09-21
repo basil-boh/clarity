@@ -40,8 +40,8 @@ import { db, logDbError } from '@/lib/supabase'
  * page and every server action under /admin calls it first.
  */
 
-const COOKIE = 'clarity_admin'
-const AUDIENCE = 'clarity-admin'
+const COOKIE = 'colonaid_admin'
+const AUDIENCE = 'colonaid-admin'
 const MAX_AGE = 60 * 60 * 8 // a working day
 
 function password(): string | null {
@@ -54,7 +54,7 @@ function secret(): Uint8Array {
     if (process.env.NODE_ENV === 'production') {
       throw new Error('SESSION_SECRET is not set. Generate one: openssl rand -base64 32')
     }
-    return new TextEncoder().encode('clarity-dev-secret-not-for-production-use')
+    return new TextEncoder().encode('colonaid-dev-secret-not-for-production-use')
   }
   return new TextEncoder().encode(raw)
 }

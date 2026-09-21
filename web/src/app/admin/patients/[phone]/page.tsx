@@ -36,7 +36,7 @@ import { usingDatabase } from '@/lib/source'
 import { resetPatient } from '../../actions'
 import { ALL_PATIENTS, AdminHeader, NoDatabase } from '../../AdminShell'
 
-export const metadata = { title: 'Patient — Clarity admin' }
+export const metadata = { title: 'Patient — Colonaid admin' }
 
 const DONE: Record<string, string> = {
   saved: 'Saved. The patient sees the change the next time a screen loads.',

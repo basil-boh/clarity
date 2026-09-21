@@ -17,7 +17,7 @@ import { palette } from '@/theme';
 const AnimatedPath = Animated.createAnimatedComponent(Path);
 
 /**
- * The lockup: the mark, then "larity", drawn by a pen.
+ * The lockup: the mark, then "olonaid", drawn by a pen.
  *
  * The mark already is a C, so it stands in as the word's first letter rather
  * than sitting beside a redundant one.
@@ -56,8 +56,8 @@ const AnimatedPath = Animated.createAnimatedComponent(Path);
  * lands fractionally early, which reads as one movement trailing its hairline.
  */
 
-const VIEW_BOX = '18 6 377.40 132';
-const RATIO = 2.8591;
+const VIEW_BOX = '18 6 488 132';
+const RATIO = 488 / 132;
 /** Seconds for the whole lockup. */
 const TOTAL = 1.164;
 
@@ -65,25 +65,25 @@ type Stroke = { d: string; w: number; cap: 'butt' | 'round'; len: number; t0: nu
 
 /**
  * The first two strokes are the mark — the body's centreline and its echo — and
- * everything after them is "larity". `markColor` splits on that boundary, so the
+ * everything after them is "olonaid". `markColor` splits on that boundary, so the
  * mark can take the brand colour while the letters reverse to white.
  */
 const MARK_STROKES = 2;
 
 const STROKES: Stroke[] = [
-  { d: 'M92.42 35.10 A33.5 33.5 0 1 0 92.42 84.90', w: 15, cap: 'butt', len: 154.34, t0: 0.0, dur: 0.3035 },
-  { d: 'M97.53 20.68 A48 48 0 1 0 97.53 99.32', w: 5, cap: 'round', len: 209.44, t0: 0.0, dur: 0.3035 },
-  { d: 'M126.50 22.00 L126.50 101.00', w: 13, cap: 'round', len: 79.0, t0: 0.3035, dur: 0.1145 },
-  { d: 'M194.50 79.50 A21.5 21.5 0 1 1 151.50 79.50 A21.5 21.5 0 1 1 194.50 79.50', w: 13, cap: 'round', len: 135.09, t0: 0.418, dur: 0.1958 },
-  { d: 'M194.50 58.00 L194.50 101.00', w: 13, cap: 'round', len: 43.0, t0: 0.6138, dur: 0.0623 },
-  { d: 'M219.50 58.00 L219.50 101.00', w: 13, cap: 'round', len: 43.0, t0: 0.6761, dur: 0.0623 },
-  { d: 'M219.50 74.00 A16 16 0 0 1 239.91 58.62', w: 13, cap: 'round', len: 29.6, t0: 0.7384, dur: 0.0429 },
-  { d: 'M264.90 58.00 L264.90 101.00', w: 13, cap: 'round', len: 43.0, t0: 0.7813, dur: 0.0623 },
-  { d: 'M264.90 39.00 L264.90 39.60', w: 13, cap: 'round', len: 0.6, t0: 0.8437, dur: 0.0009 },
-  { d: 'M300.90 28.00 L300.90 90.00 A11 11 0 0 0 311.90 101.00', w: 13, cap: 'round', len: 79.28, t0: 0.8445, dur: 0.1149 },
-  { d: 'M289.90 58.00 L315.90 58.00', w: 13, cap: 'round', len: 26.0, t0: 0.9594, dur: 0.0377 },
-  { d: 'M340.90 58.00 L357.90 95.00', w: 13, cap: 'round', len: 40.72, t0: 0.9971, dur: 0.059 },
-  { d: 'M374.90 58.00 L349.90 128.00', w: 13, cap: 'round', len: 74.33, t0: 1.0561, dur: 0.1077 },
+  { d: 'M92.42 35.10 A33.5 33.5 0 1 0 92.42 84.90', w: 15, cap: 'butt', len: 154.34, t0: 0.000000, dur: 0.303500 },
+  { d: 'M97.53 20.68 A48 48 0 1 0 97.53 99.32', w: 5, cap: 'round', len: 209.44, t0: 0.000000, dur: 0.303500 },
+  { d: 'M165 79.5 A21.5 21.5 0 1 1 122 79.5 A21.5 21.5 0 1 1 165 79.5', w: 13, cap: 'round', len: 135.09, t0: 0.303500, dur: 0.126767 },
+  { d: 'M190 22 L190 101', w: 13, cap: 'round', len: 79, t0: 0.430267, dur: 0.074132 },
+  { d: 'M258 79.5 A21.5 21.5 0 1 1 215 79.5 A21.5 21.5 0 1 1 258 79.5', w: 13, cap: 'round', len: 135.09, t0: 0.504399, dur: 0.126767 },
+  { d: 'M283 58 L283 101', w: 13, cap: 'round', len: 43, t0: 0.631166, dur: 0.040351 },
+  { d: 'M283 79.5 A21.5 21.5 0 0 1 326 79.5 L326 101', w: 13, cap: 'round', len: 89.04, t0: 0.671516, dur: 0.083554 },
+  { d: 'M394 79.5 A21.5 21.5 0 1 1 351 79.5 A21.5 21.5 0 1 1 394 79.5', w: 13, cap: 'round', len: 135.09, t0: 0.755070, dur: 0.126767 },
+  { d: 'M394 58 L394 101', w: 13, cap: 'round', len: 43, t0: 0.881837, dur: 0.040351 },
+  { d: 'M419 58 L419 101', w: 13, cap: 'round', len: 43, t0: 0.922187, dur: 0.040351 },
+  { d: 'M419 39 L419 39.6', w: 13, cap: 'round', len: 0.6, t0: 0.962538, dur: 0.000563 },
+  { d: 'M487 79.5 A21.5 21.5 0 1 1 444 79.5 A21.5 21.5 0 1 1 487 79.5', w: 13, cap: 'round', len: 135.09, t0: 0.963101, dur: 0.126767 },
+  { d: 'M487 22 L487 101', w: 13, cap: 'round', len: 79, t0: 1.089868, dur: 0.074132 },
 ];
 
 export function Wordmark({
@@ -140,7 +140,7 @@ export function Wordmark({
   // that shows the signature.
   if (!animate) {
     return (
-      <Svg width={size} height={size / RATIO} viewBox={VIEW_BOX} accessibilityLabel="Clarity">
+      <Svg width={size} height={size / RATIO} viewBox={VIEW_BOX} accessibilityLabel="Colonaid">
         {STROKES.map((stroke, i) => (
           <Path
             key={stroke.d}
@@ -157,7 +157,7 @@ export function Wordmark({
   }
 
   return (
-    <Animated.View style={[{ width: size, height: size / RATIO }, rise]} accessibilityLabel="Clarity">
+    <Animated.View style={[{ width: size, height: size / RATIO }, rise]} accessibilityLabel="Colonaid">
       <Svg width={size} height={size / RATIO} viewBox={VIEW_BOX}>
         {STROKES.map((stroke, i) => (
           <Pen

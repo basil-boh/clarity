@@ -8,7 +8,7 @@ import { requireSession } from '@/lib/session'
 
 export async function generateMetadata() {
   const { tx } = await getI18n()
-  return { title: tx('Journey — Clarity') }
+  return { title: tx('Journey — Colonaid') }
 }
 
 export default async function Journey() {

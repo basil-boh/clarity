@@ -7,7 +7,7 @@ import { AskChat } from './AskChat'
 
 export async function generateMetadata() {
   const { tx } = await getI18n()
-  return { title: tx('Ask — Clarity') }
+  return { title: tx('Ask — Colonaid') }
 }
 
 export default async function Ask() {

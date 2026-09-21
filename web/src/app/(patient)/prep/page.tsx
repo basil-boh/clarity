@@ -12,7 +12,7 @@ import { saveMedicationPlan, tickStep } from '../actions'
 
 export async function generateMetadata() {
   const { tx } = await getI18n()
-  return { title: tx('How to prep — Clarity') }
+  return { title: tx('How to prep — Colonaid') }
 }
 
 /**

@@ -82,7 +82,7 @@ export async function POST(request: Request) {
     const t = await copyFor(null)
     await sendMessage(chatId, t.reminders.botUnknown)
   } catch (err) {
-    console.error('[clarity] Telegram webhook failed', err)
+    console.error('[colonaid] Telegram webhook failed', err)
   }
 
   return NextResponse.json({ ok: true })

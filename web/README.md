@@ -1,4 +1,4 @@
-# Clarity — web
+# Colonaid — web
 
 A patient scans a QR code on their appointment letter, signs in with their
 mobile number and a one-time code, and sees their colonoscopy preparation: when
@@ -227,7 +227,7 @@ with no framework imports — it is the part worth keeping.
 
 ### Brand and visual language
 
-The Clarity mark and wordmark are **ported geometry, not a redraw**: the same 120
+The Colonaid mark and wordmark are **ported geometry, not a redraw**: the same 120
 grid and the same 13 strokes as `../src/views/components/AppLogo.tsx` and
 `Wordmark.tsx`, copied into `components/brand.tsx`. If the mark changes there,
 regenerate here rather than nudging it by eye.
@@ -269,7 +269,7 @@ nobody gave.
 If a department does adopt this, that is the point to ask them for their own
 reversed lockup and permission in writing — not to reinstate these.
 
-Clarity's own wordmark is unaffected; it is drawn in `components/brand.tsx` and
+Colonaid's own wordmark is unaffected; it is drawn in `components/brand.tsx` and
 owes nothing to anyone.
 
 ### Where things are decided

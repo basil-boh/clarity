@@ -69,7 +69,7 @@ SINGHEALTH_OUT = (180, 139)
 
 def fetch(work: Path) -> None:
     for name, url in SOURCES.items():
-        request = urllib.request.Request(url, headers={"User-Agent": "clarity-brand-assets/1.0"})
+        request = urllib.request.Request(url, headers={"User-Agent": "colonaid-brand-assets/1.0"})
         with urllib.request.urlopen(request, timeout=30) as response:
             (work / name).write_bytes(response.read())
         print(f"fetched {name}")

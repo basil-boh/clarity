@@ -13,7 +13,7 @@ import { Wordmark } from '@/components/brand'
  */
 export async function generateMetadata() {
   const { tx } = await getI18n()
-  return { title: tx('Clarity — QR code for printing') }
+  return { title: tx('Colonaid — QR code for printing') }
 }
 
 export default async function Qr() {

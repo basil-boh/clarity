@@ -16,7 +16,7 @@ import { useCallback, useSyncExternalStore } from 'react';
  * than in most apps: slide five states the two things the app will never do,
  * and if those guarantees ever change, everyone needs to see the new wording.
  */
-const STORAGE_KEY = 'clarity.onboarding.seen.v1';
+const STORAGE_KEY = 'colonaid.onboarding.seen.v1';
 
 /**
  * In development the tour replays on every cold start, so it can be worked on

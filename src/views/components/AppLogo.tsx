@@ -100,7 +100,7 @@ export function AppLogo({
   const compact = size < COMPACT_BELOW;
 
   return (
-    <Svg width={size} height={size} viewBox="0 0 120 120" accessibilityLabel="Clarity">
+    <Svg width={size} height={size} viewBox="0 0 120 120" accessibilityLabel="Colonaid">
       {tile ? <Rect width="120" height="120" rx="27" fill={palette.paperDim} /> : null}
 
       {compact ? (

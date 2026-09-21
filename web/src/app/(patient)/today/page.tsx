@@ -29,7 +29,7 @@ import { tickStep } from '../actions'
 
 export async function generateMetadata() {
   const { tx } = await getI18n()
-  return { title: tx('Home — Clarity') }
+  return { title: tx('Home — Colonaid') }
 }
 
 /**

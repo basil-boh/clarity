@@ -58,7 +58,7 @@ function overrideNow(request: Request): Date | null {
   if (!raw) return null
   const at = new Date(raw)
   if (Number.isNaN(at.getTime())) return null
-  console.warn(`[clarity] reminder run using overridden clock: ${at.toISOString()}`)
+  console.warn(`[colonaid] reminder run using overridden clock: ${at.toISOString()}`)
   return at
 }
 
@@ -93,7 +93,7 @@ export async function POST(request: Request) {
   }
 
   if (!telegramConfigured()) {
-    console.warn('[clarity] reminder run skipped: TELEGRAM_BOT_TOKEN is not set.')
+    console.warn('[colonaid] reminder run skipped: TELEGRAM_BOT_TOKEN is not set.')
     return NextResponse.json({ ok: true, skipped: 'telegram-not-configured' })
   }
 
@@ -149,19 +149,19 @@ export async function POST(request: Request) {
           if (result.blocked) {
             // They blocked the bot. That is a withdrawal of consent, not a
             // transient error -- stop, and keep the claim so we do not retry.
-            console.info(`[clarity] ${recipient.phone} has blocked the bot; stopping reminders.`)
+            console.info(`[colonaid] ${recipient.phone} has blocked the bot; stopping reminders.`)
             await stopRemindersFor(recipient.phone)
           } else {
             // Transient: give the slot back so the next run tries again, while
             // the dose is still ahead of the patient.
             await releaseSend(recipient.phone, reminder.key)
           }
-          console.error(`[clarity] reminder to ${recipient.phone} failed: ${result.error}`)
+          console.error(`[colonaid] reminder to ${recipient.phone} failed: ${result.error}`)
         }
       }
     } catch (err) {
       failed += 1
-      console.error(`[clarity] reminder run failed for ${recipient.phone}`, err)
+      console.error(`[colonaid] reminder run failed for ${recipient.phone}`, err)
     }
   }
 
@@ -174,6 +174,6 @@ export async function POST(request: Request) {
     failed,
   }
   // One line per run, so a purge night can be read back out of the logs.
-  console.info(`[clarity] reminder run ${JSON.stringify(summary)}`, considered)
+  console.info(`[colonaid] reminder run ${JSON.stringify(summary)}`, considered)
   return NextResponse.json(summary)
 }

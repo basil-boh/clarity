@@ -4,7 +4,7 @@ import { notFound } from 'next/navigation'
 import { adminEnabled } from '@/lib/admin'
 
 export const metadata: Metadata = {
-  title: 'Admin — Clarity',
+  title: 'Admin — Colonaid',
   robots: { index: false, follow: false },
 }
 

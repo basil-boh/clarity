@@ -13,7 +13,7 @@ import { SignJWT, jwtVerify } from 'jose'
  * a phone number, not a medical history.
  */
 
-const COOKIE = 'clarity_session'
+const COOKIE = 'colonaid_session'
 const MAX_AGE = 60 * 60 * 12 // a prep runs overnight; 12h covers the purge night
 
 function secret(): Uint8Array {
@@ -23,7 +23,7 @@ function secret(): Uint8Array {
       throw new Error('SESSION_SECRET is not set. Generate one: openssl rand -base64 32')
     }
     // Dev only, and stable across reloads so a session survives a hot restart.
-    return new TextEncoder().encode('clarity-dev-secret-not-for-production-use')
+    return new TextEncoder().encode('colonaid-dev-secret-not-for-production-use')
   }
   return new TextEncoder().encode(raw)
 }

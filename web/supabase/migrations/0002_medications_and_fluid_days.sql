@@ -1,5 +1,5 @@
 -- ═══════════════════════════════════════════════════════════════════════════
--- Clarity web portal · medication instructions, and clear fluid by day
+-- Colonaid web portal · medication instructions, and clear fluid by day
 -- ═══════════════════════════════════════════════════════════════════════════
 --
 -- Paste into the Supabase SQL editor and run once, after 0001. Safe to re-run:

@@ -1,5 +1,5 @@
 -- ═══════════════════════════════════════════════════════════════════════════
--- Clarity web portal · schema and demo cohort, in one transaction
+-- Colonaid web portal · schema and demo cohort, in one transaction
 -- ═══════════════════════════════════════════════════════════════════════════
 --
 -- Paste the whole file into the Supabase SQL editor and run it once:

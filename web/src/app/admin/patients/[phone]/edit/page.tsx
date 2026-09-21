@@ -9,7 +9,7 @@ import { removePatient } from '../../../actions'
 import { AdminHeader, NoDatabase } from '../../../AdminShell'
 import { PatientForm } from '../../../PatientForm'
 
-export const metadata = { title: 'Edit patient — Clarity admin' }
+export const metadata = { title: 'Edit patient — Colonaid admin' }
 
 export default async function EditPatient({ params }: { params: Promise<{ phone: string }> }) {
   await requireAdmin()

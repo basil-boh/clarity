@@ -72,7 +72,7 @@ export function db(): SupabaseClient {
     // server talking to its own database. Persisting anything would be a
     // cross-request leak waiting to happen.
     auth: { persistSession: false, autoRefreshToken: false },
-    global: { headers: { 'x-application-name': 'clarity-web' } },
+    global: { headers: { 'x-application-name': 'colonaid-web' } },
   })
   return cached
 }
@@ -119,5 +119,5 @@ export function logDbError(where: string, error: unknown): void {
     typeof error === 'object' && error && 'message' in error
       ? String((error as { message: unknown }).message)
       : String(error)
-  console.error(`[clarity] supabase ${where}: ${message}`)
+  console.error(`[colonaid] supabase ${where}: ${message}`)
 }

@@ -208,7 +208,7 @@ export async function POST(request: Request) {
 
     if (!completion.ok) {
       const detail = await completion.text()
-      console.error('[clarity] openai error', completion.status, detail.slice(0, 500))
+      console.error('[colonaid] openai error', completion.status, detail.slice(0, 500))
       return answer({ reply: SAFE_FALLBACK, escalated: true })
     }
 
@@ -218,13 +218,13 @@ export async function POST(request: Request) {
 
     const breach = breachedRule(reply)
     if (breach) {
-      console.warn('[clarity] reply replaced, breached', breach)
+      console.warn('[colonaid] reply replaced, breached', breach)
       return answer({ reply: SAFE_FALLBACK, escalated: true, breach })
     }
 
     return answer({ reply }, /\b995\b|call (your |the )?(?:department|hospital\/clinic)/i.test(reply))
   } catch (err) {
-    console.error('[clarity] ask failed', err)
+    console.error('[colonaid] ask failed', err)
     return answer({ reply: SAFE_FALLBACK, escalated: true })
   }
 }
