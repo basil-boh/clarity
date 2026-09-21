@@ -4,17 +4,14 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 /**
- * Five destinations, fixed to the bottom of the phone.
- *
- * Five is the ceiling at 390px with 44px tap targets, so every label is one
- * short word. Journey lost its tab to Diet and Ask -- it is read once, early,
- * and reached from Home's "All stages" link, whereas these two are opened
- * repeatedly and at speed.
+ * Patient destinations, fixed to the bottom of the phone.
+ * The minimum item width preserves tap targets on narrow screens.
  */
 const TABS = [
   { href: '/today', key: 'home' },
   { href: '/prep', key: 'plan' },
   { href: '/diet', key: 'diet' },
+  { href: '/readiness', key: 'readiness' },
   { href: '/ask', key: 'ask' },
   { href: '/verify', key: 'verify' },
 ] as const
@@ -34,11 +31,11 @@ export function TabBar({ labels }: { labels: Record<(typeof TABS)[number]['key']
       className="fixed inset-x-0 bottom-0 z-40 border-t border-hairline bg-paper/95 backdrop-blur"
       style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
     >
-      <ul className="mx-auto flex w-full max-w-[560px]">
+      <ul className="mx-auto flex w-full max-w-[560px] overflow-x-auto">
         {TABS.map((tab) => {
           const active = path === tab.href || path.startsWith(`${tab.href}/`)
           return (
-            <li key={tab.href} className="flex-1">
+            <li key={tab.href} className="min-w-[60px] flex-1">
               <Link
                 href={tab.href}
                 aria-current={active ? 'page' : undefined}

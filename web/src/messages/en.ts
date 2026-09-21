@@ -70,6 +70,7 @@ export const en = {
     footer: 'Send /stop to turn these reminders off',
   },
   tabs: {
+    readiness: 'Readiness',
     home: 'Home',
     plan: 'Plan',
     diet: 'Diet',

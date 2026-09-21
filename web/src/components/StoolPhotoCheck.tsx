@@ -1,6 +1,6 @@
 'use client'
 
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { Button, Card } from '@/components/ui'
 import { BOWEL_SCALE, type BowelScalePoint } from '@/domain/progress'
@@ -37,6 +37,10 @@ export function StoolPhotoCheck({
   const [result, setResult] = useState<{ id: string; assessment: Assessment } | null>(null)
   const [accepted, setAccepted] = useState<BowelScalePoint | null>(null)
 
+  useEffect(() => () => {
+    if (preview.current) URL.revokeObjectURL(preview.current)
+  }, [])
+
   function showPreview(file: File) {
     if (preview.current) URL.revokeObjectURL(preview.current)
     preview.current = URL.createObjectURL(file)
@@ -48,6 +52,14 @@ export function StoolPhotoCheck({
     setError(null)
     setResult(null)
     setAccepted(null)
+    if (file.size > 8 * 1024 * 1024 || !['image/jpeg', 'image/png', 'image/webp', 'image/heic'].includes(file.type)) {
+      if (preview.current) URL.revokeObjectURL(preview.current)
+      preview.current = null
+      setPreviewUrl(null)
+      setError('Choose a JPEG, PNG, WebP or HEIC image up to 8 MB.')
+      setBusy(false)
+      return
+    }
     showPreview(file)
 
     try {
@@ -73,9 +85,17 @@ export function StoolPhotoCheck({
   }
 
   async function accept(point: BowelScalePoint) {
-    if (!result?.id) return
-    setAccepted(point)
-    await onAccept(result.id, point)
+    if (!result || busy) return
+    setBusy(true)
+    setError(null)
+    try {
+      await onAccept(result.id, point)
+      setAccepted(point)
+    } catch {
+      setError('Your reading could not be saved. Please try again.')
+    } finally {
+      setBusy(false)
+    }
   }
 
   const suggestion = result?.assessment
@@ -86,13 +106,12 @@ export function StoolPhotoCheck({
         ref={input}
         type="file"
         accept="image/jpeg,image/png,image/webp,image/heic"
-        // `capture` opens the camera directly on a phone, which is where this
-        // is used. Left off desktop, where it would be meaningless.
-        capture="environment"
+        aria-label="Upload a stool photograph"
         className="sr-only"
         onChange={(event) => {
           const file = event.target.files?.[0]
           if (file) void read(file)
+          event.target.value = ''
         }}
       />
 
@@ -102,12 +121,12 @@ export function StoolPhotoCheck({
         <img
           src={previewUrl}
           alt="The photograph you just took"
-          className="mb-4 max-h-[220px] w-full rounded-lg object-cover"
+          className="mb-4 max-h-[220px] w-full rounded-lg object-contain"
         />
       ) : null}
 
       <Button type="button" onClick={() => input.current?.click()} disabled={busy}>
-        {busy ? 'Reading…' : previewUrl ? 'Take another' : 'Take a photograph'}
+        {busy ? 'Please wait…' : previewUrl ? 'Choose another photo' : 'Upload a stool photo'}
       </Button>
 
       {error ? (
@@ -145,6 +164,8 @@ export function StoolPhotoCheck({
               <button
                 key={point}
                 type="button"
+                disabled={busy}
+                aria-pressed={accepted === point}
                 onClick={() => void accept(point)}
                 aria-label={`${point}, ${BOWEL_SCALE[point].label}`}
                 className={`min-h-[52px] rounded-lg border text-[17px] font-semibold transition-colors ${
@@ -169,8 +190,8 @@ export function StoolPhotoCheck({
       ) : null}
 
       <p className="mt-5 text-[14px] leading-relaxed text-ink-faint">
-        The photograph is read and then discarded. It is never saved, and your team sees only the
-        number.
+        Images up to 8 MB. Your photo is sent to our AI provider for analysis; Clarity does not
+        store it. Your confirmed reading is saved, not the photo.
       </p>
     </Card>
   )

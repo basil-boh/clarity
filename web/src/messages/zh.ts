@@ -54,6 +54,7 @@ export const zh: Dictionary = {
     footer: '发送 /stop 可关闭提醒',
   },
   tabs: {
+    readiness: '准备情况',
     home: '首页',
     plan: '计划',
     diet: '饮食',

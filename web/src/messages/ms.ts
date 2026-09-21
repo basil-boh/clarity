@@ -55,6 +55,7 @@ export const ms: Dictionary = {
     footer: 'Hantar /stop untuk mematikan peringatan',
   },
   tabs: {
+    readiness: 'Kesediaan',
     home: 'Utama',
     plan: 'Pelan',
     diet: 'Diet',

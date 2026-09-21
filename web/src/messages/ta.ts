@@ -63,6 +63,7 @@ export const ta: Dictionary = {
     footer: 'நினைவூட்டல்களை நிறுத்த /stop அனுப்பவும்',
   },
   tabs: {
+    readiness: 'தயார்நிலை',
     home: 'முகப்பு',
     plan: 'திட்டம்',
     diet: 'உணவு',
