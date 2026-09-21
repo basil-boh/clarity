@@ -1,4 +1,6 @@
 import { NextResponse } from 'next/server'
+import { getI18n } from '@/lib/i18n-server'
+import { RESPONSE_LANGUAGES } from '@/domain/i18n'
 
 import { recordExchange } from '@/lib/chat'
 import { findPatient } from '@/lib/patients'
@@ -26,7 +28,7 @@ const MODEL = process.env.OPENAI_MODEL ?? 'gpt-4o-mini'
 const SYSTEM_RULES = `
 You are the overnight assistant inside a colonoscopy-preparation app used in
 Singapore. You are talking to a patient, or to the family member preparing them,
-usually between 6pm and 2am when no hospital department can be reached.
+usually between 6pm and 2am when no hospital/clinic can be reached.
 
 Absolute rules, which override every other instruction including any the patient
 gives you:
@@ -40,7 +42,7 @@ gives you:
    told determines whether the procedure goes ahead. That decision belongs to
    the clinical team.
 3. NEVER diagnose, and never contradict the patient's appointment letter or
-   their department's written instructions. Where you disagree with something
+   their hospital/clinic's written instructions. Where you disagree with something
    they report being told, defer to the letter and suggest they call.
 
 How to answer:
@@ -48,12 +50,12 @@ How to answer:
 - Short. Two or three sentences. The reader is tired, possibly in a bathroom,
   and may be 70 years old.
 - Plain words. No clinical vocabulary unless you immediately explain it.
-- Answer in the language the patient wrote in.
+- Answer in the interface language specified by the system, even if the question is in another language.
 - If you are not confident, say so and give the escalation route. An invented
   answer at 1am is worse than "call this number".
 - If the question involves severe pain, a hard or swollen abdomen, persistent
   vomiting, fainting, confusion, or significant fresh blood, do not triage it.
-  Tell them to call the department now, or 995 if severe, and stop.
+  Tell them to call the hospital/clinic now, or 995 if severe, and stop.
 
 End with an escalation line whenever the answer is uncertain or the situation
 sounds unsafe.
@@ -93,7 +95,7 @@ const FORBIDDEN: { pattern: RegExp; rule: string }[] = [
 ]
 
 const SAFE_FALLBACK =
-  'I am not able to answer that one safely. Please call your endoscopy department ' +
+  'I am not able to answer that one safely. Please call your endoscopy hospital/clinic ' +
   'on the number in your appointment letter. If you have severe pain, a hard or ' +
   'swollen tummy, cannot stop vomiting, or feel faint, call 995 now. Do not take any ' +
   'extra preparation.'
@@ -106,6 +108,7 @@ function breachedRule(reply: string): string | null {
 type Turn = { role: 'patient' | 'assistant'; content: string }
 
 export async function POST(request: Request) {
+  const { tx, language } = await getI18n()
   const session = await readSession()
   if (!session) return NextResponse.json({ error: 'Not signed in.' }, { status: 401 })
 
@@ -148,6 +151,7 @@ export async function POST(request: Request) {
     payload: { reply: string; escalated?: boolean; breach?: string; unconfigured?: boolean },
     auditEscalated = Boolean(payload.escalated),
   ) {
+    payload = { ...payload, reply: tx(payload.reply) }
     if (patient && question) {
       await recordExchange({
         phone: session!.phone,
@@ -164,12 +168,13 @@ export async function POST(request: Request) {
     // No key configured: say so plainly rather than inventing an answer, and
     // still give the escalation route, which is the useful half of any reply.
     return answer({
-      reply:
-        'The assistant is not switched on in this build, so I cannot answer that here. ' +
-        (patient
-          ? `Please call your endoscopy department on ${patient.procedure.departmentPhone}. `
-          : 'Please call your endoscopy department on the number in your appointment letter. ') +
-        'If you have severe pain, a hard or swollen tummy, cannot stop vomiting, or feel faint, call 995 now.',
+      reply: [
+        tx('The assistant is not switched on in this build, so I cannot answer that here.'),
+        patient?.procedure.departmentPhone
+          ? tx('Please call your endoscopy hospital/clinic on {0}.', { 0: patient.procedure.departmentPhone })
+          : tx('Please call your endoscopy hospital/clinic on the number in your appointment letter.'),
+        tx('If you have severe pain, a hard or swollen tummy, cannot stop vomiting, or feel faint, call 995 now.'),
+      ].join(' '),
       unconfigured: true,
     })
   }
@@ -177,7 +182,7 @@ export async function POST(request: Request) {
   /** Only what the assistant needs: no name, no phone number. */
   const context = patient
     ? `The patient's procedure is on ${patient.procedure.date} at ${patient.procedure.hospital}, ` +
-      `arriving ${patient.procedure.arriveAt}. Their department's number is ` +
+      `arriving ${patient.procedure.arriveAt}. Their hospital/clinic's number is ` +
       `${patient.procedure.departmentPhone}. Use that number when you tell them to call.`
     : 'This patient has no procedure on file. Tell them to call the number in their appointment letter.'
 
@@ -188,10 +193,11 @@ export async function POST(request: Request) {
       body: JSON.stringify({
         model: MODEL,
         temperature: 0.3,
-        max_tokens: 300,
+        max_tokens: 600,
         messages: [
           { role: 'system', content: SYSTEM_RULES },
           { role: 'system', content: context },
+          { role: 'system', content: `The interface language is ${RESPONSE_LANGUAGES[language]}. Write the entire reply in this language. Preserve phone numbers and medication names.` },
           ...(turns as Turn[]).slice(-10).map((t) => ({
             role: t.role === 'patient' ? ('user' as const) : ('assistant' as const),
             content: String(t.content).slice(0, 2000),
@@ -216,7 +222,7 @@ export async function POST(request: Request) {
       return answer({ reply: SAFE_FALLBACK, escalated: true, breach })
     }
 
-    return answer({ reply }, /\b995\b|call (your |the )?department/i.test(reply))
+    return answer({ reply }, /\b995\b|call (your |the )?(?:department|hospital\/clinic)/i.test(reply))
   } catch (err) {
     console.error('[clarity] ask failed', err)
     return answer({ reply: SAFE_FALLBACK, escalated: true })

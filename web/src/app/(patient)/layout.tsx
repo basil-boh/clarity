@@ -1,3 +1,4 @@
+import { getI18n } from '@/lib/i18n-server'
 import { redirect } from 'next/navigation'
 
 import { TabBar } from '@/components/TabBar'
@@ -12,6 +13,8 @@ import { readSession } from '@/lib/session'
  * source of truth for "who is this", checked on the server on every request.
  */
 export default async function PatientLayout({ children }: { children: React.ReactNode }) {
+  const { tx } = await getI18n()
+
   const session = await readSession()
   if (!session) redirect('/sign-in')
 
@@ -20,7 +23,7 @@ export default async function PatientLayout({ children }: { children: React.Reac
   return (
     <div className="min-h-dvh pb-[84px]">
       <main id="main" className="mx-auto w-full max-w-[560px] px-5 pb-8 pt-7">
-        {children}
+        {tx(children)}
       </main>
       <TabBar labels={t.tabs} />
     </div>

@@ -293,7 +293,7 @@ function stepsFor(offset: number): StepSpec[] {
           'Check which medicines to hold',
           null,
           'advised',
-          'Iron tablets and some blood thinners are usually stopped before a scope. The department confirms which, and when.',
+          'Iron tablets and some blood thinners are usually stopped before a scope. The hospital/clinic confirms which, and when.',
         ),
         step('arrange-escort', 'admin', 'Arrange someone to take you home', null, 'advised'),
         step('collect-prep', 'admin', 'Collect the bowel preparation', null, 'advised'),

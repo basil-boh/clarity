@@ -1,5 +1,7 @@
 'use client'
 
+import { useI18n } from '@/components/I18nProvider'
+
 import { useActionState, type ReactNode } from 'react'
 
 /** Keep a failed check-in editable and prevent repeated submissions while saving. */
@@ -8,6 +10,8 @@ export function SaveForm({ action, children, className }: {
   children: ReactNode
   className?: string
 }) {
+  const { tx } = useI18n()
+
   const [status, submit, pending] = useActionState(async (_previous: string, form: FormData) => {
     try {
       await action(form)
@@ -18,9 +22,9 @@ export function SaveForm({ action, children, className }: {
   }, '')
   return (
     <form action={submit} className={className}>
-      <fieldset disabled={pending}>{children}</fieldset>
+      <fieldset disabled={pending}>{tx(children)}</fieldset>
       <p role="status" aria-live="polite" className="mt-1 text-[14px] text-ink-muted">
-        {pending ? 'Saving…' : status}
+        {tx(pending ? 'Saving…' : status)}
       </p>
     </form>
   )

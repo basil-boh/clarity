@@ -1,3 +1,6 @@
+'use client'
+
+import { useI18n } from '@/components/I18nProvider'
 import { gradeOf, type FlagColour } from '@/domain/progress'
 
 /**
@@ -50,13 +53,15 @@ export function FlagRule({
   /** `short` for the inline summary on Today, `full` where the flag leads. */
   width?: 'short' | 'full'
 }) {
+  const { tx } = useI18n()
+
   return (
     <div className={width === 'short' ? 'inline-block min-w-[96px]' : 'block'}>
       <div className={`h-[3px] w-full ${RULE[colour]}`} />
       <p
         className={`mt-2 font-mono text-[12px] font-medium uppercase tracking-[0.12em] ${INK[colour]}`}
       >
-        {label}
+        {tx(label)}
       </p>
     </div>
   )
@@ -82,6 +87,8 @@ export function SignalMeter({
   /** Share of the summary, 0–1. */
   weight: number
 }) {
+  const { tx } = useI18n()
+
   const measured = value >= 0
   const colour = gradeOf(value) ?? 'amber'
   const pct = measured ? Math.round(value * 100) : 0
@@ -90,20 +97,20 @@ export function SignalMeter({
   return (
     <div>
       <div className="flex items-baseline justify-between gap-3">
-        <span className="text-[17px] font-semibold tracking-[-0.01em] text-ink">{label}</span>
+        <span className="text-[17px] font-semibold tracking-[-0.01em] text-ink">{tx(label)}</span>
         <span
           className={`font-mono text-[12px] uppercase tracking-[0.08em] ${
             measured ? INK[colour] : 'text-ink-faint'
           }`}
         >
-          {measured ? `${pct}%` : 'Not recorded'}
+          {tx(measured ? `${pct}%` : 'Not recorded')}
         </span>
       </div>
 
       <div
         className="mt-2 flex gap-[3px]"
         role="img"
-        aria-label={measured ? `${label}: ${pct} percent` : `${label}: not recorded`}
+        aria-label={tx(measured ? `${label}: ${pct} percent` : `${label}: not recorded`)}
       >
         {Array.from({ length: 10 }, (_, i) => (
           <span
@@ -116,8 +123,7 @@ export function SignalMeter({
       </div>
 
       <p className="mt-2 font-mono text-[11px] uppercase tracking-[0.08em] text-ink-faint">
-        {Math.round(weight * 100)}% of the summary
-      </p>
+        {tx(Math.round(weight * 100))}{tx("% of the summary")}</p>
     </div>
   )
 }

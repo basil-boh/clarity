@@ -156,13 +156,13 @@ export const FLAG_MEANING: Readonly<Record<FlagColour, string>> = {
   green: 'Your prep is on track. Come in as planned.',
   amber:
     'Something in your prep is worth a check. Bring this summary with you and mention it at admission.',
-  red: 'Please call the endoscopy department before you travel. Do not take any extra preparation.',
+  red: 'Please call the endoscopy hospital/clinic before you travel. Do not take any extra preparation.',
 }
 
 export const FLAG_LABEL: Readonly<Record<FlagColour, string>> = {
   green: 'On track',
   amber: 'Worth a check',
-  red: 'Call the department',
+  red: 'Call the hospital/clinic',
 }
 
 // ---------------------------------------------------------------------------

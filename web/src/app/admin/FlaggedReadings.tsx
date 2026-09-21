@@ -84,7 +84,7 @@ export async function FlaggedReadings() {
         </ul>
       </Card>
       <p className="mt-2 text-[14px] leading-relaxed text-ink-faint">
-        A reading of a photograph against the department&rsquo;s scale, not an assessment of whether
+        A reading of a photograph against the hospital/clinic&rsquo;s scale, not an assessment of whether
         anyone is ready. No image is kept.
       </p>
     </section>

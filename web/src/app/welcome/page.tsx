@@ -1,13 +1,17 @@
+import { getI18n } from '@/lib/i18n-server'
 import { Wordmark } from '@/components/brand'
 import { DEFAULT_LANGUAGE } from '@/domain/i18n'
 import { findPatient } from '@/lib/patients'
-import { readLanguagePreference, translation } from '@/lib/language'
+import { readLanguagePreference } from '@/lib/language'
 import { requireSession } from '@/lib/session'
 
 import { saveDetails } from './actions'
-import { WelcomeForm } from './WelcomeForm'
+import { WelcomeForm, WelcomeIntro } from './WelcomeForm'
 
-export const metadata = { title: 'Before you start — Clarity' }
+export async function generateMetadata() {
+  const { tx } = await getI18n()
+  return { title: tx('Before you start — Clarity') }
+}
 
 /**
  * Where a patient tells the app who they are.
@@ -21,10 +25,9 @@ export const metadata = { title: 'Before you start — Clarity' }
  */
 export default async function Welcome() {
   const session = await requireSession()
-  const [patient, chosen, { t }] = await Promise.all([
+  const [patient, chosen] = await Promise.all([
     findPatient(session.phone),
     readLanguagePreference(),
-    translation(),
   ])
 
   const editing = Boolean(patient)
@@ -38,12 +41,7 @@ export default async function Welcome() {
       <main id="main" className="mx-auto w-full max-w-[560px] px-5 pb-16 pt-8">
         <header className="mb-7">
           <Wordmark width={116} />
-          <h1 className="mt-5 text-[30px] font-bold leading-[1.1] tracking-[-0.03em] text-ink">
-            {editing ? t.welcome.editTitle : t.welcome.title}
-          </h1>
-          <p className="mt-3 text-[17px] leading-relaxed text-ink-muted">
-            {editing ? t.welcome.editIntro : t.welcome.intro}
-          </p>
+          <WelcomeIntro editing={editing} />
         </header>
 
         <WelcomeForm

@@ -121,7 +121,7 @@ export function medicationIssues(entry: ReviewedMedication, procedureDate: strin
   if (entry.procedureDate !== procedureDate) issues.push('The procedure date changed. Read and review the instructions again.')
   if (!d.procedureSpecific) issues.push('This sheet does not provide procedure-specific instructions for this medicine.')
   if (!d.name.trim() || !d.sourceText.trim()) issues.push('A medicine name and readable source instruction are required.')
-  if (!d.action) issues.push('The department must specify whether to take or hold this medicine.')
+  if (!d.action) issues.push('The hospital/clinic must specify whether to take or hold this medicine.')
   const start = resolveMedicationDate(d.start, procedureDate)
   const end = d.end === null ? procedureDate : resolveMedicationDate(d.end, procedureDate)
   if (!start) issues.push('Enter the day these instructions start.')
@@ -156,9 +156,9 @@ export function medicationOccurrences(entries: readonly ReviewedMedication[], pr
         const details = [d.strength && `Medicine details: ${d.strength}`,
           d.action === 'take' && `Dose: ${entry.doseAmounts[index]}`,
           d.action === 'hold' && `Do not take from ${start} at ${d.startTime}.`,
-          `Department instruction: ${d.sourceText}`, d.timing && `Written timing: ${d.timing}`,
+          `Hospital/clinic instruction: ${d.sourceText}`, d.timing && `Written timing: ${d.timing}`,
           d.action === 'hold' ? `Daily reminder: ${time}. No restart date is implied.` : `Time to take: ${time}`,
-          `Calendar reminders end on ${finalDay}; follow your department's instructions after that.`]
+          `Calendar reminders end on ${finalDay}; follow your hospital/clinic's instructions after that.`]
         occurrences.push({ uid: `med-${entry.id}-${date}-${index}`, date, time: eventTime,
           title: `${d.action === 'hold' ? 'Do not take' : 'Take'} ${d.name}${d.action === 'take' ? ` — ${entry.doseAmounts[index]}` : ''}`,
           description: details.filter(Boolean).join('\n') })

@@ -163,7 +163,7 @@ function Booking({ details, digits }: { details: PatientDetails; digits: string 
         <dd className="text-ink">{procedure.hospital}</dd>
         <dt className="text-ink-faint">Where</dt>
         <dd className="text-ink">{procedure.location || '—'}</dd>
-        <dt className="text-ink-faint">Department</dt>
+        <dt className="text-ink-faint">Hospital/clinic</dt>
         <dd className="font-mono text-ink">{formatPhone(procedure.departmentPhone)}</dd>
       </dl>
     </Card>
@@ -478,7 +478,7 @@ function Chat({ messages }: { messages: readonly ChatMessage[] }) {
           <p className="text-[15px] text-ink-muted">
             {messages.length} message{messages.length === 1 ? '' : 's'}, oldest first
             {escalated > 0
-              ? ` · told to call the department ${escalated} time${escalated === 1 ? '' : 's'}`
+              ? ` · told to call the hospital/clinic ${escalated} time${escalated === 1 ? '' : 's'}`
               : ''}
           </p>
           <ol className="mt-4 space-y-3">

@@ -1,4 +1,7 @@
-import { format, parseISO } from 'date-fns'
+'use client'
+
+import { useI18n } from '@/components/I18nProvider'
+import { parseISO } from 'date-fns'
 
 import { PHASE_COPY, PHASE_ORDER, type Phase } from '@/domain/prep'
 
@@ -48,6 +51,8 @@ const STAMP: Record<Phase, string> = {
 }
 
 export function Timeline({ here, procedureDate }: { here: Phase; procedureDate: string }) {
+  const { tx, dateFormat } = useI18n()
+
   const procedure = parseISO(procedureDate)
   const hereIndex = PHASE_ORDER.indexOf(here)
 
@@ -78,7 +83,7 @@ export function Timeline({ here, procedureDate }: { here: Phase; procedureDate: 
                       : 'border border-hairline bg-paper text-ink-faint'
                 }`}
               >
-                {STAMP[phase]}
+                {tx(STAMP[phase])}
               </span>
             </div>
 
@@ -89,10 +94,10 @@ export function Timeline({ here, procedureDate }: { here: Phase; procedureDate: 
                     isPast ? 'text-ink-muted' : 'text-ink'
                   }`}
                 >
-                  {PHASE_COPY[phase].name}
+                  {tx(PHASE_COPY[phase].name)}
                 </h3>
                 <span className="font-mono text-[11.5px] tabular-nums text-ink-faint">
-                  {phase === 'waiting' ? 'UNTIL WK −1' : format(dateOf(phase), 'd MMM').toUpperCase()}
+                  {tx(phase === 'waiting' ? 'UNTIL WK −1' : dateFormat(dateOf(phase), 'd MMM').toUpperCase())}
                 </span>
               </div>
 
@@ -101,14 +106,12 @@ export function Timeline({ here, procedureDate }: { here: Phase; procedureDate: 
                   isPast ? 'text-ink-faint' : 'text-ink-muted'
                 }`}
               >
-                {PHASE_COPY[phase].blurb}
+                {tx(PHASE_COPY[phase].blurb)}
               </p>
 
               {isHere ? (
                 <p className="mt-2.5 flex items-center gap-2 font-mono text-[11px] uppercase tracking-[0.12em] text-blue">
-                  <span aria-hidden className="h-[2px] w-5 bg-blue" />
-                  You are here
-                </p>
+                  <span aria-hidden className="h-[2px] w-5 bg-blue" />{tx("You are here")}</p>
               ) : null}
             </div>
           </li>

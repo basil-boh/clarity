@@ -1,5 +1,7 @@
 'use client'
 
+import { useI18n } from '@/components/I18nProvider'
+
 import { useEffect, useRef, useState } from 'react'
 
 import { Button, Input } from '@/components/ui'
@@ -28,6 +30,8 @@ const OPENERS = [
 ]
 
 export function AskChat({ departmentPhone }: { departmentPhone: string }) {
+  const { tx } = useI18n()
+
   const [turns, setTurns] = useState<Turn[]>([])
   const [draft, setDraft] = useState('')
   const [busy, setBusy] = useState(false)
@@ -55,7 +59,7 @@ export function AskChat({ departmentPhone }: { departmentPhone: string }) {
         ...t,
         {
           role: 'assistant',
-          content: data.reply ?? 'Something went wrong. Please call your department.',
+          content: data.reply ?? 'Something went wrong. Please call your hospital/clinic.',
           escalated: Boolean(data.escalated || data.unconfigured),
         },
       ])
@@ -65,7 +69,7 @@ export function AskChat({ departmentPhone }: { departmentPhone: string }) {
         {
           role: 'assistant',
           content:
-            'No connection, so I cannot answer. Please call your endoscopy department, or 995 if this is severe.',
+            'No connection, so I cannot answer. Please call your endoscopy hospital/clinic, or 995 if this is severe.',
           escalated: true,
         },
       ])
@@ -93,34 +97,30 @@ export function AskChat({ departmentPhone }: { departmentPhone: string }) {
                     : 'border-hairline-strong bg-paper text-ink'
                 }`}
               >
-                {turn.content}
+                {tx(turn.content)}
               </p>
             </div>
           ),
         )}
 
         {busy ? (
-          <p className="font-mono text-[12px] uppercase tracking-[0.1em] text-ink-faint">
-            Thinking…
-          </p>
+          <p className="font-mono text-[12px] uppercase tracking-[0.1em] text-ink-faint">{tx("Thinking…")}</p>
         ) : null}
         <div ref={endRef} />
       </div>
 
       {turns.length === 0 ? (
         <div className="mt-2">
-          <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.12em] text-ink-faint">
-            What people ask at 1am
-          </p>
+          <p className="mb-3 font-mono text-[11px] uppercase tracking-[0.12em] text-ink-faint">{tx("What people ask at 1am")}</p>
           <ul className="space-y-2">
             {OPENERS.map((q) => (
               <li key={q}>
                 <button
                   type="button"
-                  onClick={() => send(q)}
+                  onClick={() => send(tx(q))}
                   className="w-full border border-hairline bg-paper px-4 py-3 text-left text-[16px] text-ink transition-colors hover:bg-paper-sunken"
                 >
-                  {q}
+                  {tx(q)}
                 </button>
               </li>
             ))}
@@ -138,32 +138,24 @@ export function AskChat({ departmentPhone }: { departmentPhone: string }) {
         <Input
           value={draft}
           onChange={(e) => setDraft(e.target.value)}
-          placeholder="Ask a question"
-          aria-label="Ask a question"
+          placeholder={tx("Ask a question")}
+          aria-label={tx("Ask a question")}
           className="text-[17px]"
           disabled={busy}
         />
         <div className="w-[92px] shrink-0">
-          <Button type="submit" disabled={busy || !draft.trim()}>
-            Send
-          </Button>
+          <Button type="submit" disabled={busy || !draft.trim()}>{tx("Send")}</Button>
         </div>
       </form>
 
-      <p className="mt-4 text-[14px] leading-relaxed text-ink-faint">
-        This assistant supports your preparation and cannot change your dose or decide whether your
-        procedure goes ahead. For anything urgent call{' '}
+      <p className="mt-4 text-[14px] leading-relaxed text-ink-faint">{tx("This assistant supports your preparation and cannot change your dose or decide whether your procedure goes ahead. For anything urgent call")}{tx(' ')}
         {departmentPhone ? (
           <>
-            <a href={`tel:${departmentPhone}`} className="font-semibold text-blue underline">
-              your department
-            </a>
-            , or 995 if it is severe.
-          </>
+            <a href={`tel:${departmentPhone}`} className="font-semibold text-blue underline">{tx("your hospital/clinic")}</a>{tx(", or 995 if it is severe.")}</>
         ) : (
           // No number on file -- this app has no department behind it unless a
           // patient was given one. 995 is the part that always applies.
-          <>your department, or 995 if it is severe.</>
+          <>{tx("your hospital/clinic, or 995 if it is severe.")}</>
         )}
       </p>
     </>

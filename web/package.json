@@ -9,7 +9,6 @@
     "typecheck": "tsc --noEmit",
     "test:prep": "TZ=UTC node --experimental-strip-types --test src/domain/prep.test.mjs",
     "test:progress": "node --experimental-strip-types --test src/domain/progress.test.mjs",
-    "test:calendar": "node --experimental-strip-types --test src/domain/calendar-export.test.mjs",
     "test:medications": "node --experimental-strip-types --test src/domain/medications.test.mjs src/lib/medication-extraction.test.mjs",
     "test:guardrails": "node src/app/api/ask/guardrails.test.mjs",
     "lint": "next lint",
@@ -20,7 +19,8 @@
     "test:diet": "node --experimental-strip-types --test src/domain/diet.test.mjs",
     "test:registration": "node --experimental-strip-types --test src/domain/registration.test.mjs",
     "test:reminders": "node --experimental-strip-types --test src/domain/reminders.test.mjs",
-    "test:verification": "node --experimental-strip-types --test src/domain/verification.test.mjs"
+    "test:verification": "node --experimental-strip-types --test src/domain/verification.test.mjs",
+    "test:i18n": "node --experimental-strip-types --test src/domain/translate.test.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.116.0",

@@ -1,5 +1,7 @@
 'use client'
 
+import { useI18n } from '@/components/I18nProvider'
+
 import { useState, useTransition } from 'react'
 
 import { GLASS_ML, type Dose } from '@/domain/prep'
@@ -30,6 +32,8 @@ export function DoseTracker({
   consumedMl: number
   onRecord: (doseId: string, ml: number) => Promise<number>
 }) {
+  const { tx } = useI18n()
+
   const [optimistic, setOptimistic] = useState(consumedMl)
   const [pending, startTransition] = useTransition()
 
@@ -50,19 +54,19 @@ export function DoseTracker({
   return (
     <div className="border-t border-hairline pt-4 first:border-t-0 first:pt-0">
       <div className="flex items-baseline justify-between gap-3">
-        <h3 className="text-[19px] font-semibold tracking-[-0.018em] text-ink">{dose.label}</h3>
+        <h3 className="text-[19px] font-semibold tracking-[-0.018em] text-ink">{tx(dose.label)}</h3>
         <span className="bg-blue px-2 py-1 font-mono text-[13px] font-medium tabular-nums text-white">
-          {dose.at}
+          {tx(dose.at)}
         </span>
       </div>
 
-      <p className="mt-2 text-[15px] leading-relaxed text-ink-muted">{dose.note}</p>
+      <p className="mt-2 text-[15px] leading-relaxed text-ink-muted">{tx(dose.note)}</p>
 
       {/* One cell per glass: the eye counts glasses, not millilitres. */}
       <div
         className="mt-4 flex gap-[3px]"
         role="img"
-        aria-label={`${glasses} of ${totalGlasses} glasses recorded`}
+        aria-label={tx(`${glasses} of ${totalGlasses} glasses recorded`)}
       >
         {Array.from({ length: totalGlasses }, (_, i) => (
           <span
@@ -74,16 +78,12 @@ export function DoseTracker({
 
       <div className="mt-2 flex items-baseline justify-between gap-3">
         <span className="font-mono text-[12px] uppercase tracking-[0.08em] text-ink-faint">
-          {optimistic} of {dose.volumeMl} ml
-        </span>
+          {tx('{0} of {1} ml', { 0: optimistic, 1: dose.volumeMl })}</span>
         {done ? (
-          <span className="font-mono text-[12px] uppercase tracking-[0.1em] text-flag-green">
-            Full volume done
-          </span>
+          <span className="font-mono text-[12px] uppercase tracking-[0.1em] text-flag-green">{tx("Full volume done")}</span>
         ) : (
           <span className="font-mono text-[12px] tabular-nums text-ink-faint">
-            {glasses}/{totalGlasses} glasses
-          </span>
+            {tx('{0} / {1} glasses', { 0: glasses, 1: totalGlasses })}</span>
         )}
       </div>
 
@@ -94,21 +94,19 @@ export function DoseTracker({
           disabled={done}
           className="min-h-[52px] flex-1 bg-blue px-4 text-[17px] font-semibold text-white transition-colors hover:bg-blue-deep disabled:cursor-not-allowed disabled:bg-paper-sunken disabled:text-ink-faint"
         >
-          {done ? 'All finished' : 'I drank a glass'}
+          {tx(done ? 'All finished' : 'I drank a glass')}
         </button>
         <button
           type="button"
           onClick={() => change(-1)}
           disabled={optimistic <= 0}
           className="min-h-[52px] border border-hairline-strong px-5 text-[17px] font-semibold text-ink transition-colors hover:bg-paper-sunken disabled:cursor-not-allowed disabled:text-ink-faint"
-          aria-label="Undo one glass"
-        >
-          Undo
-        </button>
+          aria-label={tx("Undo one glass")}
+        >{tx("Undo")}</button>
       </div>
 
       <p aria-live="polite" className="sr-only">
-        {pending ? 'Saving' : `${glasses} of ${totalGlasses} glasses recorded`}
+        {tx(pending ? 'Saving' : `${glasses} of ${totalGlasses} glasses recorded`)}
       </p>
     </div>
   )

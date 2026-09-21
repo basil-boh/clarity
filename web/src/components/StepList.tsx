@@ -1,5 +1,7 @@
 'use client'
 
+import { useI18n } from '@/components/I18nProvider'
+
 import { useState } from 'react'
 
 import { Icon, type IconName } from '@/components/Icon'
@@ -70,6 +72,8 @@ export function StepList({
   /** Saves the tick and returns the patient's whole completed list. */
   onToggle?: (uid: string) => Promise<readonly string[]>
 }) {
+  const { tx } = useI18n()
+
   const [ticked, setTicked] = useState<ReadonlySet<string>>(() => new Set(completed))
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -110,24 +114,22 @@ export function StepList({
                       BLOCK[step.kind] ?? 'bg-ink text-white'
                     }`}
                   >
-                    {step.at}
+                    {tx(step.at)}
                   </span>
                 ) : (
                   <span className="block py-1 font-mono text-[13px] tabular-nums text-ink-muted">
-                    {step.at ?? '—'}
+                    {tx(step.at ?? '—')}
                   </span>
                 )}
                 {/* "02:00" under a heading that says tonight is ambiguous at a
                     glance -- and this is the dose most often missed. Say which
                     side of midnight it falls on. */}
                 {step.nextDay ? (
-                  <span className="mt-1 block text-center font-mono text-[10.5px] uppercase tracking-[0.08em] text-flag-amber">
-                    after midnight
-                  </span>
+                  <span className="mt-1 block text-center font-mono text-[10.5px] uppercase tracking-[0.08em] text-flag-amber">{tx("after midnight")}</span>
                 ) : null}
                 <span className="mt-1.5 flex items-center gap-1.5 font-mono text-[10.5px] uppercase tracking-[0.1em] text-ink-faint">
                   <Icon name={KIND_ICON[step.kind]} size={13} className="shrink-0" />
-                  {KIND_LABEL[step.kind]}
+                  {tx(KIND_LABEL[step.kind])}
                 </span>
               </div>
 
@@ -137,15 +139,13 @@ export function StepList({
                     done ? 'text-ink-faint line-through decoration-hairline-strong' : 'text-ink'
                   }`}
                 >
-                  {step.title}
+                  {tx(step.title)}
                 </p>
                 {step.detail ? (
-                  <p className="mt-1 whitespace-pre-line text-[15px] leading-relaxed text-ink-muted">{step.detail}</p>
+                  <p className="mt-1 whitespace-pre-line text-[15px] leading-relaxed text-ink-muted">{tx(step.detail)}</p>
                 ) : null}
                 {done ? (
-                  <p className="mt-1.5 font-mono text-[11px] uppercase tracking-[0.1em] text-ink-faint">
-                    Done
-                  </p>
+                  <p className="mt-1.5 font-mono text-[11px] uppercase tracking-[0.1em] text-ink-faint">{tx("Done")}</p>
                 ) : null}
               </div>
 
@@ -154,7 +154,7 @@ export function StepList({
                   type="button"
                   role="checkbox"
                   aria-checked={done}
-                  aria-label={step.title}
+                  aria-label={tx(step.title)}
                   disabled={saving}
                   onClick={() => toggle(step.uid)}
                   className="-mr-1.5 -mt-1.5 flex h-11 w-11 shrink-0 items-center justify-center disabled:cursor-wait"
@@ -188,7 +188,7 @@ export function StepList({
       </ol>
       {error ? (
         <p role="alert" className="mt-3 text-[15px] font-medium text-alert">
-          {error}
+          {tx(error)}
         </p>
       ) : null}
     </>
