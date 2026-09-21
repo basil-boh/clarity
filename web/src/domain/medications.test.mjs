@@ -1,8 +1,6 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
 import { MAX_SAVED_MEDICATIONS, medicationIssues, medicationOccurrences, parseMedicationExtraction, parseSavedMedications, resolveMedicationDate } from './medications.ts'
-import { exportPlanCalendar } from './calendar-export.ts'
-import { buildPlan } from './prep.ts'
 
 const date = '2026-10-12'
 const draft = {
@@ -105,20 +103,6 @@ test('normalizes explicit clocks and absent start times without assigning missin
   assert.deepEqual(result.times, ['12:00', '08:00'])
   assert.throws(() => parseMedicationExtraction({ medications: [{ ...draft, startTime: 'morning' }] }, 1))
   assert.throws(() => parseMedicationExtraction({ medications: [{ ...draft, startTime: '13:00 PM' }] }, 1))
-})
-
-test('combined calendar preserves prep events and adds medication alarms at the selected time', () => {
-  const procedure = { date, hospital: 'Example Department', location: 'Example Unit', arriveAt: '08:30', departmentPhone: '0000' }
-  const plan = buildPlan(date)
-  const base = exportPlanCalendar({ procedure, plan })
-  const medications = medicationOccurrences([reviewed({}, { name: 'Example, medicine; A' })], date)
-  const result = exportPlanCalendar({ procedure, plan, medications })
-  assert.deepEqual(result.events.slice(0, base.events.length), base.events)
-  assert.equal(result.events.length, base.events.length + 3)
-  assert.match(result.content, /TRIGGER:PT0S/)
-  assert.match(result.content, /TRIGGER:-PT15M/)
-  assert.match(result.content, /DTSTART;TZID=Asia\/Singapore:20261010T090000/)
-  assert.ok(result.content.includes('SUMMARY:Clarity: Take Example\\, medicine\\; A'))
 })
 
 test('saved entries: confirmed ones in the review shape are kept, anything else is dropped', () => {

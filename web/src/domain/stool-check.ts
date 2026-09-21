@@ -66,27 +66,27 @@ export function stoolPointFor(check: StoolCheck): 1 | 3 | 5 | null {
 export function guidanceFor(check: StoolCheck): { title: string; detail: string; contact: boolean } {
   if (check.colour === 'dark' || check.colour === 'red') return {
     title: 'Check this with your clinical team',
-    detail: 'Do not assume very dark, black or red output is caused by food or iron. Contact your department for advice, even if it is watery or you have been many times.',
+    detail: 'Do not assume very dark, black or red output is caused by food or iron. Contact your hospital/clinic for advice, even if it is watery or you have been many times.',
     contact: true,
   }
   if (check.consistency === 'unsure' || (check.consistency === 'watery' && check.clarity === 'unsure')) return {
     title: 'It is okay to be unsure',
-    detail: 'On your next trip, look for solid pieces and whether you can see through the liquid. If you still cannot tell, ask your department.',
+    detail: 'On your next trip, look for solid pieces and whether you can see through the liquid. If you still cannot tell, ask your hospital/clinic.',
     contact: true,
   }
   if (check.consistency !== 'watery') return {
     title: 'You are still seeing solid material',
-    detail: 'The latest output is not yet watery and clear. Follow your prescribed plan. If you have finished it and still see solid material, contact your department.',
+    detail: 'The latest output is not yet watery and clear. Follow your prescribed plan. If you have finished it and still see solid material, contact your hospital/clinic.',
     contact: true,
   }
   if (check.clarity === 'cloudy') return {
     title: 'Watery, but still cloudy',
-    detail: 'Watery and see-through are different. Cloudy liquid can still contain material. Follow your prescribed plan; if you have finished it and the output remains cloudy, contact your department.',
+    detail: 'Watery and see-through are different. Cloudy liquid can still contain material. Follow your prescribed plan; if you have finished it and the output remains cloudy, contact your hospital/clinic.',
     contact: true,
   }
   return {
     title: 'You described watery, see-through output',
-    detail: 'That describes clarity, not confirmation that you are ready. Complete your preparation as prescribed and follow your department’s instructions.',
+    detail: 'That describes clarity, not confirmation that you are ready. Complete your preparation as prescribed and follow your hospital/clinic’s instructions.',
     contact: false,
   }
 }

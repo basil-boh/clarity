@@ -1,0 +1,2469 @@
+/**
+ * Patient-facing copy shared by server pages and client interactions.
+ * Keys are the English source; values are Simplified Chinese, Malay and Tamil.
+ * Keep placeholders identical across languages. The i18n tests enforce coverage
+ * for visible literals, preparation steps, readiness guidance and food records.
+ * These translations share the unreviewed status documented in messages/en.ts.
+ */
+export const PATIENT_COPY: Readonly<Record<string, readonly [string, string, string]>> = {
+  "Sign out of Clarity?": [
+    "要退出 Clarity 吗？",
+    "Log keluar daripada Clarity?",
+    "Clarity-இலிருந்து வெளியேற வேண்டுமா?"
+  ],
+  "You will need your mobile number and a new code to get back in.": [
+    "再次登录时，您需要使用手机号码和新的验证码。",
+    "Anda memerlukan nombor telefon bimbit dan kod baharu untuk masuk semula.",
+    "மீண்டும் உள்நுழைய உங்கள் கைப்பேசி எண்ணும் புதிய குறியீடும் தேவை."
+  ],
+  "Sign out": [
+    "退出登录",
+    "Log keluar",
+    "வெளியேறு"
+  ],
+  "Stay signed in": [
+    "保持登录",
+    "Kekal log masuk",
+    "உள்நுழைந்த நிலையிலேயே இரு"
+  ],
+  "Skip to content": [
+    "跳至正文",
+    "Langkau ke kandungan",
+    "உள்ளடக்கத்திற்குச் செல்"
+  ],
+  "{0} of {1} glasses recorded": [
+    "已记录 {0} 杯，共 {1} 杯",
+    "{0} daripada {1} gelas direkodkan",
+    "{1} குவளைகளில் {0} பதிவு செய்யப்பட்டுள்ளன"
+  ],
+  "Full volume done": [
+    "已喝完全部用量",
+    "Jumlah penuh sudah diminum",
+    "முழு அளவும் குடித்து முடிக்கப்பட்டது"
+  ],
+  "All finished": [
+    "全部完成",
+    "Semuanya selesai",
+    "அனைத்தும் முடிந்தது"
+  ],
+  "I drank a glass": [
+    "我喝了一杯",
+    "Saya sudah minum segelas",
+    "ஒரு குவளை குடித்தேன்"
+  ],
+  "Undo one glass": [
+    "撤销一杯",
+    "Batalkan satu gelas",
+    "ஒரு குவளைப் பதிவை நீக்கு"
+  ],
+  "Undo": [
+    "撤销",
+    "Batal",
+    "மீட்டமை"
+  ],
+  "Saving": [
+    "正在保存",
+    "Menyimpan",
+    "சேமிக்கிறது"
+  ],
+  "Choose up to three photos. Remove a photo before adding another.": [
+    "最多选择三张照片。添加新照片前，请先移除一张。",
+    "Pilih sehingga tiga foto. Buang satu foto sebelum menambah yang lain.",
+    "மூன்று படங்கள் வரை தேர்ந்தெடுக்கலாம். மற்றொன்றைச் சேர்க்கும் முன் ஒரு படத்தை நீக்கவும்."
+  ],
+  "Use JPEG, PNG or WebP photos, up to 5 MB each. For HEIC or other formats, retake the photo using the camera.": [
+    "请使用 JPEG、PNG 或 WebP 照片，每张不超过 5 MB。HEIC 或其他格式请用相机重新拍摄。",
+    "Gunakan foto JPEG, PNG atau WebP, sehingga 5 MB setiap satu. Untuk HEIC atau format lain, ambil semula dengan kamera.",
+    "JPEG, PNG அல்லது WebP படங்களைப் பயன்படுத்தவும்; ஒவ்வொன்றும் 5 MB வரை இருக்கலாம். HEIC அல்லது பிற வடிவங்களுக்கு கேமராவால் மீண்டும் படம் எடுக்கவும்."
+  ],
+  "Photo reading failed. Please try again.": [
+    "照片读取失败，请重试。",
+    "Gagal membaca foto. Sila cuba lagi.",
+    "படத்தைப் படிக்க முடியவில்லை. மீண்டும் முயலவும்."
+  ],
+  "Your procedure date changed. Refresh the page and review the instructions again.": [
+    "您的检查日期已更改。请刷新页面并重新核对说明。",
+    "Tarikh prosedur anda telah berubah. Muat semula halaman dan semak arahan sekali lagi.",
+    "உங்கள் பரிசோதனைத் தேதி மாறியுள்ளது. பக்கத்தைப் புதுப்பித்து அறிவுறுத்தல்களை மீண்டும் சரிபார்க்கவும்."
+  ],
+  "No medication instructions were readable. Try a clearer photo of the hospital/clinic’s instructions.": [
+    "无法读取用药说明。请拍摄更清晰的医院/诊所说明照片。",
+    "Arahan ubat tidak dapat dibaca. Cuba foto arahan hospital/klinik yang lebih jelas.",
+    "மருந்து அறிவுறுத்தல்களைப் படிக்க முடியவில்லை. மருத்துவமனை/கிளினிக் அறிவுறுத்தல்களைத் தெளிவாகப் படம் எடுக்கவும்."
+  ],
+  "Instructions read. Check each entry against your sheet before adding it.": [
+    "说明已读取。添加前请逐项对照纸本说明。",
+    "Arahan telah dibaca. Semak setiap entri dengan helaian anda sebelum menambahnya.",
+    "அறிவுறுத்தல்கள் படிக்கப்பட்டன. சேர்க்கும் முன் ஒவ்வொரு பதிவையும் உங்கள் தாளுடன் ஒப்பிடவும்."
+  ],
+  "Changes need confirmation before they appear in your plan.": [
+    "更改须经确认后才会显示在计划中。",
+    "Perubahan perlu disahkan sebelum dipaparkan dalam pelan anda.",
+    "மாற்றங்கள் திட்டத்தில் தோன்றும் முன் உறுதிப்படுத்த வேண்டும்."
+  ],
+  "Medication instructions": [
+    "用药说明",
+    "Arahan ubat",
+    "மருந்து அறிவுறுத்தல்கள்"
+  ],
+  "Your medication instructions": [
+    "您的用药说明",
+    "Arahan ubat anda",
+    "உங்கள் மருந்து அறிவுறுத்தல்கள்"
+  ],
+  "Add medication instructions": [
+    "添加用药说明",
+    "Tambah arahan ubat",
+    "மருந்து அறிவுறுத்தல்களைச் சேர்"
+  ],
+  "{0} added to your plan": [
+    "已向计划添加 {0} 项",
+    "{0} ditambah pada pelan anda",
+    "உங்கள் திட்டத்தில் {0} சேர்க்கப்பட்டன"
+  ],
+  "Photograph the instructions that say which medicines to take or hold before your colonoscopy. A usual prescription list alone is not enough.": [
+    "请拍摄结肠镜检查前应服用或暂停哪些药物的说明。只有日常处方药清单并不足够。",
+    "Ambil foto arahan tentang ubat yang perlu diambil atau dihentikan sebelum kolonoskopi. Senarai preskripsi biasa sahaja tidak mencukupi.",
+    "பெருங்குடல் நோக்கிப் பரிசோதனைக்கு முன் எந்த மருந்துகளை எடுக்க அல்லது நிறுத்த வேண்டும் என்ற அறிவுறுத்தல்களைப் படம் எடுக்கவும். வழக்கமான மருந்துப் பட்டியல் மட்டும் போதாது."
+  ],
+  "Photos are sent to OpenAI for automated reading and are not stored by Clarity. Check the result against your sheet. Instructions you add to your plan are saved to your record, so they are still here next time, and your hospital/clinic can see them.": [
+    "照片会发送至 OpenAI 自动读取，Clarity 不会保存照片。请对照纸本核对结果。添加到计划的说明会保存至您的记录，方便下次查看，医院/诊所也能查看。",
+    "Foto dihantar ke OpenAI untuk dibaca secara automatik dan tidak disimpan oleh Clarity. Semak hasil dengan helaian anda. Arahan yang ditambah pada pelan disimpan dalam rekod anda untuk lawatan seterusnya dan boleh dilihat oleh hospital/klinik anda.",
+    "படங்கள் தானாகப் படிப்பதற்காக OpenAI-க்கு அனுப்பப்படுகின்றன; Clarity அவற்றைச் சேமிக்காது. முடிவை உங்கள் தாளுடன் சரிபார்க்கவும். திட்டத்தில் சேர்த்த அறிவுறுத்தல்கள் உங்கள் பதிவில் சேமிக்கப்படும்; அடுத்த முறையும் மருத்துவமனை/கிளினிக்கும் அவற்றைப் பார்க்கலாம்."
+  ],
+  "Photos are sent to OpenAI for automated reading. Check the result against your sheet. Photos and reviewed instructions are not saved by Clarity; leaving or refreshing this page clears them.": [
+    "照片会发送至 OpenAI 自动读取。请对照纸本核对结果。Clarity 不会保存照片或已核对的说明；离开或刷新此页后，这些内容会清除。",
+    "Foto dihantar ke OpenAI untuk bacaan automatik. Semak hasil dengan helaian anda. Foto dan arahan yang disemak tidak disimpan oleh Clarity; meninggalkan atau memuat semula halaman akan memadamkannya.",
+    "படங்கள் தானாகப் படிப்பதற்காக OpenAI-க்கு அனுப்பப்படுகின்றன. முடிவை உங்கள் தாளுடன் சரிபார்க்கவும். படங்களும் சரிபார்த்த அறிவுறுத்தல்களும் சேமிக்கப்படாது; பக்கத்தை விட்டு வெளியேறினால் அல்லது புதுப்பித்தால் அவை அழிக்கப்படும்."
+  ],
+  "Take medication photo": [
+    "拍摄用药照片",
+    "Ambil foto ubat",
+    "மருந்துப் படம் எடு"
+  ],
+  "Choose medication photos": [
+    "选择用药照片",
+    "Pilih foto ubat",
+    "மருந்துப் படங்களைத் தேர்ந்தெடு"
+  ],
+  "Take a photo": [
+    "拍照",
+    "Ambil foto",
+    "படம் எடு"
+  ],
+  "Up to 3 photos · JPEG, PNG or WebP · 5 MB each. Changing photos clears entries you have not added yet.": [
+    "最多 3 张照片 · JPEG、PNG 或 WebP · 每张 5 MB。更换照片会清除尚未添加的条目。",
+    "Sehingga 3 foto · JPEG, PNG atau WebP · 5 MB setiap satu. Menukar foto memadamkan entri yang belum ditambah.",
+    "அதிகபட்சம் 3 படங்கள் · JPEG, PNG அல்லது WebP · ஒவ்வொன்றும் 5 MB. படங்களை மாற்றினால் இன்னும் சேர்க்காத பதிவுகள் அழியும்."
+  ],
+  "Enlarge photo {0}": [
+    "放大第 {0} 张照片",
+    "Besarkan foto {0}",
+    "படம் {0}-ஐப் பெரிதாக்கு"
+  ],
+  "Instruction sheet, photo {0}": [
+    "说明单，第 {0} 张照片",
+    "Helaian arahan, foto {0}",
+    "அறிவுறுத்தல் தாள், படம் {0}"
+  ],
+  "Remove photo": [
+    "移除照片",
+    "Buang foto",
+    "படத்தை நீக்கு"
+  ],
+  "Reading your instructions…": [
+    "正在读取您的说明…",
+    "Sedang membaca arahan anda…",
+    "உங்கள் அறிவுறுத்தல்களைப் படிக்கிறது…"
+  ],
+  "Read photos again": [
+    "重新读取照片",
+    "Baca foto semula",
+    "படங்களை மீண்டும் படி"
+  ],
+  "Read these photos": [
+    "读取这些照片",
+    "Baca foto ini",
+    "இந்தப் படங்களைப் படி"
+  ],
+  "Cancel reading": [
+    "取消读取",
+    "Batalkan bacaan",
+    "படிப்பதை ரத்துசெய்"
+  ],
+  "Check against your sheet": [
+    "对照您的说明单核对",
+    "Semak dengan helaian anda",
+    "உங்கள் தாளுடன் சரிபார்"
+  ],
+  "Correct transcription errors using the written instructions. If a dose or date is missing, ask your hospital/clinic. The app cannot decide it.": [
+    "请根据纸本说明纠正读取错误。如缺少剂量或日期，请询问医院/诊所。应用程序不能自行决定。",
+    "Betulkan kesilapan bacaan mengikut arahan bertulis. Jika dos atau tarikh tiada, tanya hospital/klinik anda. Aplikasi tidak boleh menentukannya.",
+    "எழுத்து அறிவுறுத்தல்களைக் கொண்டு படித்ததில் உள்ள பிழைகளைத் திருத்தவும். அளவு அல்லது தேதி இல்லையெனில் மருத்துவமனை/கிளினிக்கைக் கேட்கவும். செயலி அதை முடிவு செய்ய முடியாது."
+  ],
+  "Unreadable medicine": [
+    "无法辨认的药物",
+    "Ubat tidak dapat dibaca",
+    "படிக்க முடியாத மருந்து"
+  ],
+  "Remove {0}": [
+    "移除 {0}",
+    "Buang {0}",
+    "{0}-ஐ நீக்கு"
+  ],
+  "Remove": [
+    "移除",
+    "Buang",
+    "நீக்கு"
+  ],
+  "No readable source text": [
+    "无可读取的原文",
+    "Tiada teks sumber yang boleh dibaca",
+    "படிக்கக்கூடிய மூல உரை இல்லை"
+  ],
+  "Photo": [
+    "照片",
+    "Foto",
+    "படம்"
+  ],
+  "Added to your plan ·": [
+    "已添加至计划 ·",
+    "Ditambah pada pelan anda ·",
+    "உங்கள் திட்டத்தில் சேர்க்கப்பட்டது ·"
+  ],
+  "Edit instructions": [
+    "编辑说明",
+    "Edit arahan",
+    "அறிவுறுத்தல்களைத் திருத்து"
+  ],
+  "Medicine name": [
+    "药物名称",
+    "Nama ubat",
+    "மருந்துப் பெயர்"
+  ],
+  "Hospital/clinic instruction": [
+    "医院/诊所说明",
+    "Arahan hospital/klinik",
+    "மருத்துவமனை/கிளினிக் அறிவுறுத்தல்"
+  ],
+  "Choose the instruction": [
+    "选择说明",
+    "Pilih arahan",
+    "அறிவுறுத்தலைத் தேர்ந்தெடு"
+  ],
+  "Take": [
+    "服用",
+    "Ambil",
+    "எடுத்துக்கொள்"
+  ],
+  "Do not take": [
+    "暂停服用",
+    "Jangan ambil",
+    "எடுத்துக்கொள்ள வேண்டாம்"
+  ],
+  "Medicine details on sheet:": [
+    "说明单上的药物详情：",
+    "Butiran ubat pada helaian:",
+    "தாளில் உள்ள மருந்து விவரங்கள்:"
+  ],
+  "Stop taking from": [
+    "开始暂停服用的时间",
+    "Berhenti mengambil mulai",
+    "எடுப்பதை நிறுத்தத் தொடங்கும் நேரம்"
+  ],
+  "Choose the date and time your hospital/clinic gave you (Singapore time).": [
+    "选择医院/诊所提供的日期和时间（新加坡时间）。",
+    "Pilih tarikh dan masa yang diberikan hospital/klinik anda (waktu Singapura).",
+    "மருத்துவமனை/கிளினிக் கொடுத்த தேதி மற்றும் நேரத்தைத் தேர்ந்தெடுக்கவும் (சிங்கப்பூர் நேரம்)."
+  ],
+  "Start date on sheet:": [
+    "说明单上的开始日期：",
+    "Tarikh mula pada helaian:",
+    "தாளில் உள்ள தொடக்கத் தேதி:"
+  ],
+  ". Complete the date and time above.": [
+    "。请补全上方的日期和时间。",
+    ". Lengkapkan tarikh dan masa di atas.",
+    ". மேலே தேதியையும் நேரத்தையும் நிரப்பவும்."
+  ],
+  "Start taking on": [
+    "开始服用日期",
+    "Mula mengambil pada",
+    "எடுக்கத் தொடங்கும் தேதி"
+  ],
+  "Remind me each day at": [
+    "每天提醒时间",
+    "Ingatkan saya setiap hari pada",
+    "தினமும் நினைவூட்டும் நேரம்"
+  ],
+  "Choose when you want a reminder not to take this medicine.": [
+    "选择每天提醒您暂停此药的时间。",
+    "Pilih masa peringatan untuk tidak mengambil ubat ini.",
+    "இந்த மருந்தை எடுக்க வேண்டாம் என்று நினைவூட்டும் நேரத்தைத் தேர்ந்தெடுக்கவும்."
+  ],
+  "If your reminder time is earlier than the hold starts, the first reminder will arrive when the hold starts.": [
+    "如果提醒时间早于暂停用药的开始时间，首次提醒会在开始暂停时发送。",
+    "Jika masa peringatan lebih awal daripada masa mula berhenti, peringatan pertama tiba apabila tempoh berhenti bermula.",
+    "நினைவூட்டல் நேரம் மருந்தை நிறுத்தும் நேரத்திற்கு முன்பாக இருந்தால், முதல் நினைவூட்டல் நிறுத்தத் தொடங்கும் நேரத்தில் வரும்."
+  ],
+  "How much to take, and when": [
+    "服用多少，以及何时服用",
+    "Berapa banyak dan bila perlu diambil",
+    "எவ்வளவு, எப்போது எடுக்க வேண்டும்"
+  ],
+  "Dose {0}": [
+    "第 {0} 剂",
+    "Dos {0}",
+    "வேளை {0}"
+  ],
+  "Take dose {0} at": [
+    "第 {0} 剂服用时间",
+    "Ambil dos {0} pada",
+    "வேளை {0} எடுக்கும் நேரம்"
+  ],
+  "Remove dose": [
+    "移除此剂",
+    "Buang dos",
+    "வேளையை நீக்கு"
+  ],
+  "Add another daily dose": [
+    "添加另一次每日用药",
+    "Tambah satu lagi dos harian",
+    "மற்றொரு தினசரி வேளையைச் சேர்"
+  ],
+  "Written instructions:": [
+    "纸本说明：",
+    "Arahan bertulis:",
+    "எழுத்து அறிவுறுத்தல்கள்:"
+  ],
+  "All times are Singapore time. Reminders run through": [
+    "所有时间均为新加坡时间。提醒持续至",
+    "Semua masa ialah waktu Singapura. Peringatan sehingga",
+    "அனைத்து நேரங்களும் சிங்கப்பூர் நேரம். நினைவூட்டல்கள் தொடரும் இறுதி நாள்"
+  ],
+  ". Follow the hospital/clinic’s instructions after that; this does not set a restart date.": [
+    "。之后请遵循医院/诊所的说明；这并非恢复用药日期。",
+    ". Ikut arahan hospital/klinik selepas itu; ini bukan tarikh untuk mula mengambil semula.",
+    ". அதன் பிறகு மருத்துவமனை/கிளினிக் அறிவுறுத்தல்களைப் பின்பற்றவும்; இது மருந்தை மீண்டும் தொடங்கும் தேதியல்ல."
+  ],
+  "Earlier last day on your sheet?": [
+    "说明单上的结束日期更早？",
+    "Tarikh akhir pada helaian lebih awal?",
+    "உங்கள் தாளில் இறுதி நாள் முன்னதாக உள்ளதா?"
+  ],
+  "Last day these instructions apply (if specified)": [
+    "说明适用的最后日期（如有注明）",
+    "Hari terakhir arahan terpakai (jika dinyatakan)",
+    "அறிவுறுத்தல்கள் பொருந்தும் கடைசி நாள் (குறிப்பிட்டிருந்தால்)"
+  ],
+  "Leave blank to show reminders through procedure day.": [
+    "留空则提醒持续至检查当天。",
+    "Biarkan kosong untuk peringatan sehingga hari prosedur.",
+    "பரிசோதனை நாள் வரை நினைவூட்ட வேண்டுமெனில் காலியாக விடவும்."
+  ],
+  "Not ready to add": [
+    "尚不能添加",
+    "Belum sedia untuk ditambah",
+    "சேர்க்க இன்னும் தயாரில்லை"
+  ],
+  "Retake the photo with clearer instructions to resolve the flagged items.": [
+    "请重新拍摄更清晰的说明，以解决标记的问题。",
+    "Ambil semula foto arahan yang lebih jelas untuk menyelesaikan perkara yang ditandakan.",
+    "குறிக்கப்பட்ட சிக்கல்களைத் தீர்க்க அறிவுறுத்தல்களைத் தெளிவாக மீண்டும் படம் எடுக்கவும்."
+  ],
+  "{0} added. Your plan now includes these reminders.": [
+    "已添加 {0}。您的计划现已包含这些提醒。",
+    "{0} ditambah. Pelan anda kini mengandungi peringatan ini.",
+    "{0} சேர்க்கப்பட்டது. உங்கள் திட்டத்தில் இந்த நினைவூட்டல்கள் இப்போது உள்ளன."
+  ],
+  "I checked this — add to my plan": [
+    "我已核对 — 添加至计划",
+    "Saya sudah semak — tambah pada pelan",
+    "சரிபார்த்துவிட்டேன் — திட்டத்தில் சேர்"
+  ],
+  "Questions about your medicines? Call the hospital/clinic": [
+    "用药有疑问？请致电医院/诊所",
+    "Soalan tentang ubat? Hubungi hospital/klinik",
+    "மருந்துகள் பற்றி கேள்விகளா? மருத்துவமனை/கிளினிக்கை அழைக்கவும்"
+  ],
+  "Nothing booked under this number": [
+    "此号码下没有预约",
+    "Tiada tempahan di bawah nombor ini",
+    "இந்த எண்ணில் முன்பதிவு இல்லை"
+  ],
+  "We have no colonoscopy against": [
+    "以下号码没有结肠镜预约：",
+    "Tiada tempahan kolonoskopi untuk",
+    "இந்த எண்ணில் பெருங்குடல் நோக்கிப் பரிசோதனை முன்பதிவு இல்லை:"
+  ],
+  ". That usually means the hospital/clinic holds a different number for you — often a family member’s.": [
+    "。这通常表示医院/诊所记录的是另一个号码，可能是家人的号码。",
+    ". Biasanya hospital/klinik menyimpan nombor lain untuk anda — selalunya nombor ahli keluarga.",
+    ". பொதுவாக மருத்துவமனை/கிளினிக்கில் வேறு எண், பெரும்பாலும் குடும்ப உறுப்பினரின் எண், பதிவு செய்யப்பட்டிருக்கலாம்."
+  ],
+  "Call your endoscopy hospital/clinic to check which number they have, then sign in with that one.": [
+    "请致电内镜医院/诊所确认他们记录的号码，再用该号码登录。",
+    "Hubungi hospital/klinik endoskopi untuk menyemak nombor dalam rekod, kemudian log masuk dengan nombor itu.",
+    "பதிவு செய்யப்பட்ட எண்ணை உறுதிசெய்ய எண்டோஸ்கோபி மருத்துவமனை/கிளினிக்கை அழைக்கவும்; பின்னர் அந்த எண்ணில் உள்நுழையவும்."
+  ],
+  "Try a different number": [
+    "尝试其他号码",
+    "Cuba nombor lain",
+    "வேறு எண்ணை முயலவும்"
+  ],
+  "How to prep": [
+    "如何准备",
+    "Cara membuat persediaan",
+    "எவ்வாறு தயாராவது"
+  ],
+  "Every day of the run-up, in order. Today is marked.": [
+    "按顺序查看检查前每一天的安排。今天已标记。",
+    "Setiap hari sebelum prosedur, mengikut urutan. Hari ini ditandakan.",
+    "பரிசோதனைக்கு முன் ஒவ்வொரு நாளும் வரிசையாக. இன்று குறிக்கப்பட்டுள்ளது."
+  ],
+  "Your medication reminders could not be saved, so they last only until you leave this page. Please try saving them again before leaving.": [
+    "用药提醒未能保存，离开此页后将消失。请离开前再次尝试保存。",
+    "Peringatan ubat tidak dapat disimpan dan hanya kekal sehingga anda meninggalkan halaman ini. Cuba simpan semula sebelum keluar.",
+    "மருந்து நினைவூட்டல்களைச் சேமிக்க முடியவில்லை; இந்தப் பக்கத்தை விட்டு வெளியேறியதும் அவை மறையும். வெளியேறும் முன் மீண்டும் சேமிக்க முயலவும்."
+  ],
+  "Includes": [
+    "包含",
+    "Termasuk",
+    "உள்ளடக்கம்:"
+  ],
+  "medication reminders.": [
+    "条用药提醒。",
+    "peringatan ubat.",
+    "மருந்து நினைவூட்டல்கள்."
+  ],
+  "The second dose is the one most often skipped, and it is the one that clears the right side of the colon. Finish both.": [
+    "第二剂最容易被漏服，也是清洁结肠右侧的关键。请完成两剂。",
+    "Dos kedua paling kerap terlepas dan membersihkan bahagian kanan kolon. Habiskan kedua-duanya.",
+    "இரண்டாவது வேளைதான் அதிகம் தவறவிடப்படுகிறது; அதுவே பெருங்குடலின் வலப்பக்கத்தைச் சுத்தம் செய்கிறது. இரண்டையும் முடிக்கவும்."
+  ],
+  "From the hospital/clinic’s sheet you reviewed.": [
+    "来自您已核对的医院/诊所说明单。",
+    "Daripada helaian hospital/klinik yang anda semak.",
+    "நீங்கள் சரிபார்த்த மருத்துவமனை/கிளினிக் தாளிலிருந்து."
+  ],
+  "Good · followed for all required days": [
+    "良好 · 所有要求的日子均有遵守",
+    "Baik · diikuti pada semua hari yang diperlukan",
+    "நன்று · தேவையான எல்லா நாட்களிலும் பின்பற்றப்பட்டது"
+  ],
+  "Partial · mostly followed": [
+    "部分 · 大致遵守",
+    "Sebahagian · kebanyakannya diikuti",
+    "பகுதியளவு · பெரும்பாலும் பின்பற்றப்பட்டது"
+  ],
+  "Poor · largely not followed": [
+    "较差 · 大部分未遵守",
+    "Kurang baik · kebanyakannya tidak diikuti",
+    "குறைவு · பெரும்பாலும் பின்பற்றப்படவில்லை"
+  ],
+  "Check-ins still needed": [
+    "仍需填写记录",
+    "Catatan masih diperlukan",
+    "இன்னும் பதிவுகள் தேவை"
+  ],
+  "Good · full preparation, on time": [
+    "良好 · 按时完成全部准备",
+    "Baik · persediaan penuh, tepat pada masanya",
+    "நன்று · முழுத் தயாரிப்பும் சரியான நேரத்தில் முடிந்தது"
+  ],
+  "Partial · timing off or still completing": [
+    "部分 · 时间不符或仍在完成",
+    "Sebahagian · masa berbeza atau masih melengkapkan",
+    "பகுதியளவு · நேரம் மாறியது அல்லது இன்னும் முடிக்கப்படுகிறது"
+  ],
+  "Poor · missed or incomplete preparation": [
+    "较差 · 漏服或准备未完成",
+    "Kurang baik · terlepas atau persediaan tidak lengkap",
+    "குறைவு · தவறவிடப்பட்டது அல்லது தயாரிப்பு முடியவில்லை"
+  ],
+  "Completion or timing not yet confirmed": [
+    "尚未确认完成情况或时间",
+    "Penyelesaian atau masa belum disahkan",
+    "முடித்ததா அல்லது நேரமா என்பது இன்னும் உறுதியாகவில்லை"
+  ],
+  "Ready appearance · clear or pale-yellow liquid, no bits": [
+    "外观接近准备就绪 · 透明或淡黄色液体，无颗粒",
+    "Rupa sedia · cecair jernih atau kuning pucat, tiada ketulan",
+    "தயாரான தோற்றம் · துகள்களில்லாத தெளிவான அல்லது வெளிர் மஞ்சள் திரவம்"
+  ],
+  "Almost · mostly clear with a few particles or light orange liquid": [
+    "接近 · 大致透明，有少量颗粒或浅橙色液体",
+    "Hampir · kebanyakannya jernih dengan sedikit zarah atau cecair jingga muda",
+    "கிட்டத்தட்ட · சில துகள்களுடன் பெரும்பாலும் தெளிவான அல்லது வெளிர் ஆரஞ்சு திரவம்"
+  ],
+  "Not ready appearance · brown, murky or solid": [
+    "外观尚未准备好 · 棕色、浑浊或固体",
+    "Rupa belum sedia · coklat, keruh atau pejal",
+    "தயாராகாத தோற்றம் · பழுப்பு, கலங்கல் அல்லது திடமானது"
+  ],
+  "Procedure-morning check still needed or uncertain": [
+    "仍需检查当天早晨的记录，或结果不确定",
+    "Pemeriksaan pagi prosedur masih diperlukan atau tidak pasti",
+    "பரிசோதனைக் காலைச் சரிபார்ப்பு இன்னும் தேவை அல்லது உறுதியில்லை"
+  ],
+  "04 · Overall bowel readiness": [
+    "04 · 整体肠道准备情况",
+    "04 · Kesediaan usus keseluruhan",
+    "04 · ஒட்டுமொத்தக் குடல் தயார்நிலை"
+  ],
+  "flag · Based on saved check-ins": [
+    "指示 · 根据已保存的记录",
+    "petunjuk · Berdasarkan catatan disimpan",
+    "குறிகாட்டி · சேமித்த பதிவுகளின் அடிப்படையில்"
+  ],
+  "Purgative": [
+    "清肠药",
+    "Ubat pencuci usus",
+    "குடல் சுத்திகரிப்பு மருந்து"
+  ],
+  "Morning stool": [
+    "早晨排便",
+    "Najis pagi",
+    "காலை மலம்"
+  ],
+  "Low-residue diet": [
+    "低渣饮食",
+    "Diet rendah sisa",
+    "குறைந்த சக்கை உணவு"
+  ],
+  "Your morning output is not yet clear.": [
+    "您早晨的排出物尚未清澈。",
+    "Najis pagi anda belum jernih.",
+    "உங்கள் காலைக் கழிவு இன்னும் தெளிவாக இல்லை."
+  ],
+  "You reported a missed dose or incomplete preparation.": [
+    "您报告了漏服或未完成准备。",
+    "Anda melaporkan dos terlepas atau persediaan tidak lengkap.",
+    "ஒரு வேளையைத் தவறவிட்டதாக அல்லது தயாரிப்பை முடிக்கவில்லை எனப் பதிவு செய்துள்ளீர்கள்."
+  ],
+  "Complete or clarify the missing check-ins. Missing information is not the same as poor preparation.": [
+    "请补全或确认缺少的记录。资料不足不代表准备不佳。",
+    "Lengkapkan atau jelaskan catatan yang belum ada. Maklumat tiada tidak bermaksud persediaan kurang baik.",
+    "விடுபட்ட பதிவுகளை முடிக்கவும் அல்லது தெளிவுபடுத்தவும். தகவல் இல்லாதது தயாரிப்பு குறைவாக உள்ளது என்று பொருளல்ல."
+  ],
+  "If you are still completing preparation, follow the remaining prescribed steps. Ask your team if timing has changed.": [
+    "若仍在准备中，请完成余下的医嘱步骤。如时间有变，请询问医护团队。",
+    "Jika masih melengkapkan persediaan, ikut langkah preskripsi yang berbaki. Tanya pasukan anda jika masa telah berubah.",
+    "இன்னும் தயாரிப்பை முடிக்கிறீர்கள் என்றால், மீதமுள்ள பரிந்துரைக்கப்பட்ட படிகளைப் பின்பற்றவும். நேரம் மாறியிருந்தால் மருத்துவக் குழுவிடம் கேட்கவும்."
+  ],
+  "Follow your hospital/clinic’s clear-fluid and fasting instructions, including when to stop drinking.": [
+    "遵循医院/诊所的清流质及禁食说明，包括停止饮水的时间。",
+    "Ikut arahan cecair jernih dan puasa hospital/klinik anda, termasuk masa berhenti minum.",
+    "குடிப்பதை நிறுத்தும் நேரம் உட்பட மருத்துவமனை/கிளினிக்கின் தெளிந்த திரவம் மற்றும் உண்ணாநிலை அறிவுறுத்தல்களைப் பின்பற்றவும்."
+  ],
+  "Re-check the latest output on procedure morning; colour or frequent trips alone do not confirm clarity.": [
+    "检查当天早晨请再次查看最新排出物；仅凭颜色或频繁排便不能确认清澈度。",
+    "Periksa semula najis terkini pada pagi prosedur; warna atau kekerapan ke tandas sahaja tidak mengesahkan kejernihan.",
+    "பரிசோதனைக் காலையில் சமீபத்திய கழிவை மீண்டும் பார்க்கவும்; நிறம் அல்லது அடிக்கடி கழிப்பறை செல்வது மட்டும் தெளிவை உறுதிசெய்யாது."
+  ],
+  "You followed the diet — thank you for keeping track.": [
+    "您已遵守饮食要求，感谢您持续记录。",
+    "Anda mengikuti diet — terima kasih kerana mencatatnya.",
+    "உணவுமுறையைப் பின்பற்றியுள்ளீர்கள் — பதிவு செய்ததற்கு நன்றி."
+  ],
+  "Add your diet check-ins when those days are complete.": [
+    "相关日期结束后，请补填饮食记录。",
+    "Tambah catatan diet selepas hari berkenaan selesai.",
+    "அந்த நாட்கள் முடிந்ததும் உணவுப் பதிவுகளைச் சேர்க்கவும்."
+  ],
+  "Tell your team about diet slips. Keep following the diet for your current prep stage.": [
+    "如饮食未完全遵守，请告知团队，并继续遵循当前阶段的饮食要求。",
+    "Beritahu pasukan anda tentang pelanggaran diet. Terus ikut diet bagi peringkat persediaan semasa.",
+    "உணவுமுறை தவறுகளை மருத்துவக் குழுவிடம் தெரிவிக்கவும். தற்போதைய தயாரிப்பு நிலைக்கான உணவுமுறையைத் தொடர்ந்து பின்பற்றவும்."
+  ],
+  "Diet alone does not change this flag.": [
+    "饮食本身不会改变此指示。",
+    "Diet sahaja tidak mengubah petunjuk ini.",
+    "உணவுமுறை மட்டும் இந்தக் குறிகாட்டியை மாற்றாது."
+  ],
+  "You reported very dark or blood-like output. Contact your care team, whatever the flag colour.": [
+    "您报告排出物很深色或像血。无论指示颜色如何，请联系医护团队。",
+    "Anda melaporkan najis sangat gelap atau seperti darah. Hubungi pasukan penjagaan tanpa mengira warna petunjuk.",
+    "மிகவும் கருமையான அல்லது இரத்தம் போன்ற கழிவைப் பதிவு செய்துள்ளீர்கள். குறிகாட்டி நிறம் எதுவாக இருந்தாலும் மருத்துவக் குழுவைத் தொடர்புகொள்ளவும்."
+  ],
+  "Contact the endoscopy team": [
+    "联系内镜团队",
+    "Hubungi pasukan endoskopi",
+    "எண்டோஸ்கோபி குழுவைத் தொடர்புகொள்"
+  ],
+  "Call the endoscopy team using the number on your appointment letter.": [
+    "请使用预约信上的号码致电内镜团队。",
+    "Hubungi pasukan endoskopi melalui nombor pada surat janji temu anda.",
+    "முன்பதிவுக் கடிதத்தில் உள்ள எண்ணில் எண்டோஸ்கோபி குழுவை அழைக்கவும்."
+  ],
+  "This flag supports a conversation with your care team. It does not decide whether your colonoscopy goes ahead. Do not take extra purgative based on this flag; your team decides any changes.": [
+    "此指示用于协助您与医护团队沟通，不能决定结肠镜检查是否进行。请勿据此额外服用清肠药；任何调整均由团队决定。",
+    "Petunjuk ini membantu perbincangan dengan pasukan penjagaan. Ia tidak menentukan sama ada kolonoskopi diteruskan. Jangan tambah ubat pencuci usus berdasarkan petunjuk ini; pasukan anda menentukan perubahan.",
+    "இந்தக் குறிகாட்டி மருத்துவக் குழுவுடனான உரையாடலுக்கு உதவும். பரிசோதனை நடைபெறுமா என்பதை இது முடிவுசெய்யாது. இதன் அடிப்படையில் கூடுதல் சுத்திகரிப்பு மருந்து எடுக்க வேண்டாம்; மாற்றங்களை உங்கள் குழுவே முடிவுசெய்யும்."
+  ],
+  "Diet": [
+    "饮食",
+    "Diet",
+    "உணவுமுறை"
+  ],
+  "Fluids": [
+    "液体",
+    "Cecair",
+    "திரவங்கள்"
+  ],
+  "Meds": [
+    "药物",
+    "Ubat",
+    "மருந்துகள்"
+  ],
+  "Prep": [
+    "准备",
+    "Persediaan",
+    "தயாரிப்பு"
+  ],
+  "Admin": [
+    "事务",
+    "Urusan",
+    "நிர்வாகம்"
+  ],
+  "That did not save. Check your connection and try again.": [
+    "未能保存。请检查网络连接并重试。",
+    "Tidak dapat disimpan. Semak sambungan dan cuba lagi.",
+    "சேமிக்க முடியவில்லை. இணைப்பைச் சரிபார்த்து மீண்டும் முயலவும்."
+  ],
+  "Done": [
+    "完成",
+    "Selesai",
+    "முடிந்தது"
+  ],
+  "What makes you think your preparation is working?": [
+    "您为什么觉得清肠准备正在起作用？",
+    "Apakah yang membuat anda fikir persediaan anda berkesan?",
+    "உங்கள் தயாரிப்பு வேலை செய்கிறது என்று ஏன் நினைக்கிறீர்கள்?"
+  ],
+  "What colour was the output on your latest trip?": [
+    "最近一次排便是什么颜色？",
+    "Apakah warna najis pada kali terakhir anda ke tandas?",
+    "கடைசியாகக் கழிப்பறை சென்றபோது கழிவு என்ன நிறத்தில் இருந்தது?"
+  ],
+  "What was its consistency?": [
+    "质地如何？",
+    "Bagaimanakah kepekatannya?",
+    "அதன் தன்மை எப்படி இருந்தது?"
+  ],
+  "Could you see through the liquid?": [
+    "您能透过液体看见后面的东西吗？",
+    "Bolehkah anda melihat menembusi cecair itu?",
+    "திரவத்தின் ஊடாகப் பார்க்க முடிந்ததா?"
+  ],
+  "Could not save your check-in. Please try again.": [
+    "未能保存记录，请重试。",
+    "Catatan tidak dapat disimpan. Sila cuba lagi.",
+    "பதிவைச் சேமிக்க முடியவில்லை. மீண்டும் முயலவும்."
+  ],
+  "Last saved check:": [
+    "上次保存的检查：",
+    "Pemeriksaan terakhir disimpan:",
+    "கடைசியாகச் சேமித்த சரிபார்ப்பு:"
+  ],
+  "Question {0}": [
+    "问题 {0}",
+    "Soalan {0}",
+    "கேள்வி {0}"
+  ],
+  "Your check-in": [
+    "您的记录",
+    "Catatan anda",
+    "உங்கள் பதிவு"
+  ],
+  "Iron tablets and some foods can darken output; bile can tint it yellow-green. Colour alone cannot tell us whether your bowel is clear.": [
+    "铁剂及某些食物会使排出物变深，胆汁可使其呈黄绿色。仅凭颜色不能判断肠道是否清洁。",
+    "Tablet zat besi dan sesetengah makanan boleh menggelapkan najis; hempedu boleh menjadikannya kuning kehijauan. Warna sahaja tidak menentukan usus sudah bersih.",
+    "இரும்பு மாத்திரைகளும் சில உணவுகளும் கழிவைக் கருமையாக்கலாம்; பித்தம் மஞ்சள்-பச்சை நிறம் தரலாம். நிறம் மட்டும் குடல் சுத்தமாக உள்ளதா என்பதைக் கூறாது."
+  ],
+  "Continue": [
+    "继续",
+    "Teruskan",
+    "தொடர்"
+  ],
+  "The number of toilet trips does not confirm readiness. Focus on whether the latest output is watery and clear.": [
+    "排便次数不能确认准备是否充分。请注意最新排出物是否呈水样且清澈。",
+    "Bilangan lawatan ke tandas tidak mengesahkan kesediaan. Tumpukan pada sama ada najis terkini berair dan jernih.",
+    "கழிப்பறை சென்ற எண்ணிக்கை தயார்நிலையை உறுதிசெய்யாது. சமீபத்திய கழிவு நீர்த்தும் தெளிவாகவும் உள்ளதா என்பதைக் கவனிக்கவும்."
+  ],
+  "Colour alone can mislead. Watery consistency and see-through clarity matter together.": [
+    "仅凭颜色可能误判。水样质地和透明度需要一起考虑。",
+    "Warna sahaja boleh mengelirukan. Keadaan berair dan kejernihan kedua-duanya penting.",
+    "நிறம் மட்டும் தவறாக வழிநடத்தலாம். நீர்த்த தன்மையும் ஊடாகப் பார்க்கும் தெளிவும் ஒன்றாக முக்கியம்."
+  ],
+  "Judge the latest output, rather than the number of trips or its colour alone.": [
+    "请判断最近一次的排出物，不要只看次数或颜色。",
+    "Nilai najis terkini, bukan hanya bilangan lawatan atau warnanya.",
+    "சமீபத்திய கழிவை மதிப்பிடவும்; சென்ற எண்ணிக்கை அல்லது நிறத்தை மட்டும் பார்க்க வேண்டாம்."
+  ],
+  "Your answers:": [
+    "您的回答：",
+    "Jawapan anda:",
+    "உங்கள் பதில்கள்:"
+  ],
+  "Saving…": [
+    "正在保存…",
+    "Menyimpan…",
+    "சேமிக்கிறது…"
+  ],
+  "Check-in saved": [
+    "记录已保存",
+    "Catatan disimpan",
+    "பதிவு சேமிக்கப்பட்டது"
+  ],
+  "Save my check-in": [
+    "保存我的记录",
+    "Simpan catatan saya",
+    "என் பதிவைச் சேமி"
+  ],
+  "Saved. You can check again after your next trip.": [
+    "已保存。下次排便后可再次检查。",
+    "Disimpan. Anda boleh periksa lagi selepas lawatan seterusnya.",
+    "சேமிக்கப்பட்டது. அடுத்த முறை கழிப்பறை சென்ற பிறகு மீண்டும் சரிபார்க்கலாம்."
+  ],
+  "Call the hospital/clinic →": [
+    "致电医院/诊所 →",
+    "Hubungi hospital/klinik →",
+    "மருத்துவமனை/கிளினிக்கை அழை →"
+  ],
+  "Use the hospital/clinic number on your appointment letter.": [
+    "请使用预约信上的医院/诊所号码。",
+    "Gunakan nombor hospital/klinik pada surat janji temu anda.",
+    "முன்பதிவுக் கடிதத்தில் உள்ள மருத்துவமனை/கிளினிக் எண்ணைப் பயன்படுத்தவும்."
+  ],
+  "Do not take extra preparation or change medicines based on this check. Your clinical team decides whether your bowel preparation is adequate.": [
+    "不要根据此检查额外服用清肠药或更改用药。肠道准备是否充分由医护团队判断。",
+    "Jangan tambah persediaan atau ubah ubat berdasarkan pemeriksaan ini. Pasukan klinikal menentukan sama ada persediaan usus anda mencukupi.",
+    "இந்தச் சரிபார்ப்பின் அடிப்படையில் கூடுதல் தயாரிப்பு மருந்து எடுக்கவோ மருந்துகளை மாற்றவோ வேண்டாம். குடல் தயாரிப்பு போதுமானதா என்பதை மருத்துவக் குழுவே முடிவுசெய்யும்."
+  ],
+  "Start a new check-in": [
+    "开始新的检查",
+    "Mulakan pemeriksaan baharu",
+    "புதிய சரிபார்ப்பைத் தொடங்கு"
+  ],
+  "Back": [
+    "返回",
+    "Kembali",
+    "பின்"
+  ],
+  "Sections": [
+    "栏目",
+    "Bahagian",
+    "பிரிவுகள்"
+  ],
+  "WAIT": [
+    "等待",
+    "TUNGGU",
+    "காத்திரு"
+  ],
+  "WK −1": [
+    "前一周",
+    "MINGGU −1",
+    "வாரம் −1"
+  ],
+  "DIET": [
+    "饮食",
+    "DIET",
+    "உணவு"
+  ],
+  "PURGE": [
+    "清肠",
+    "CUCI USUS",
+    "சுத்திகரிப்பு"
+  ],
+  "SCOPE": [
+    "检查",
+    "SKOP",
+    "பரிசோதனை"
+  ],
+  "DONE": [
+    "完成",
+    "SELESAI",
+    "முடிந்தது"
+  ],
+  "UNTIL WK −1": [
+    "至前一周",
+    "HINGGA MINGGU −1",
+    "முந்தைய வாரம் வரை"
+  ],
+  "You are here": [
+    "您在这里",
+    "Anda di sini",
+    "நீங்கள் இங்கே உள்ளீர்கள்"
+  ],
+  "Not recorded": [
+    "未记录",
+    "Belum direkodkan",
+    "பதிவு செய்யப்படவில்லை"
+  ],
+  "{0}: not recorded": [
+    "{0}：未记录",
+    "{0}: belum direkodkan",
+    "{0}: பதிவு செய்யப்படவில்லை"
+  ],
+  "I threw up after the first dose": [
+    "我服用第一剂后呕吐了",
+    "Saya muntah selepas dos pertama",
+    "முதல் வேளைக்குப் பிறகு வாந்தி எடுத்தேன்"
+  ],
+  "Can I drink milk tomorrow?": [
+    "我明天可以喝牛奶吗？",
+    "Bolehkah saya minum susu esok?",
+    "நாளை பால் குடிக்கலாமா?"
+  ],
+  "My stools are still brown": [
+    "我的粪便仍是棕色",
+    "Najis saya masih coklat",
+    "எனது மலம் இன்னும் பழுப்பு நிறத்தில் உள்ளது"
+  ],
+  "I cannot finish the whole bottle": [
+    "我喝不完整瓶",
+    "Saya tidak dapat menghabiskan seluruh botol",
+    "முழுப் பாட்டிலையும் குடிக்க முடியவில்லை"
+  ],
+  "Something went wrong. Please call your hospital/clinic.": [
+    "出现问题，请致电医院/诊所。",
+    "Sesuatu tidak kena. Sila hubungi hospital/klinik anda.",
+    "ஏதோ தவறு ஏற்பட்டது. மருத்துவமனை/கிளினிக்கை அழைக்கவும்."
+  ],
+  "No connection, so I cannot answer. Please call your endoscopy hospital/clinic, or 995 if this is severe.": [
+    "没有网络连接，无法回答。请致电内镜医院/诊所，情况严重请拨打 995。",
+    "Tiada sambungan, jadi saya tidak dapat menjawab. Hubungi hospital/klinik endoskopi anda, atau 995 jika teruk.",
+    "இணைப்பு இல்லாததால் பதிலளிக்க முடியவில்லை. எண்டோஸ்கோபி மருத்துவமனை/கிளினிக்கை அழைக்கவும்; நிலை கடுமையாக இருந்தால் 995-ஐ அழைக்கவும்."
+  ],
+  "Thinking…": [
+    "正在思考…",
+    "Sedang berfikir…",
+    "பதிலைத் தயாரிக்கிறது…"
+  ],
+  "What people ask at 1am": [
+    "凌晨一点的常见问题",
+    "Soalan biasa pada pukul 1 pagi",
+    "அதிகாலை 1 மணியில் பொதுவான கேள்விகள்"
+  ],
+  "Ask a question": [
+    "提问",
+    "Tanya soalan",
+    "கேள்வி கேள்"
+  ],
+  "Send": [
+    "发送",
+    "Hantar",
+    "அனுப்பு"
+  ],
+  "This assistant supports your preparation and cannot change your dose or decide whether your procedure goes ahead. For anything urgent call": [
+    "此助手协助您准备，不能更改剂量或决定检查是否进行。紧急情况请致电",
+    "Pembantu ini menyokong persediaan anda dan tidak boleh mengubah dos atau menentukan sama ada prosedur diteruskan. Untuk perkara segera, hubungi",
+    "இந்த உதவியாளர் தயாரிப்புக்கு உதவும்; மருந்தளவை மாற்றவோ பரிசோதனை நடைபெறுமா என்பதை முடிவுசெய்யவோ முடியாது. அவசரமான விஷயங்களுக்கு அழைக்கவும்:"
+  ],
+  "your hospital/clinic": [
+    "您的医院/诊所",
+    "hospital/klinik anda",
+    "உங்கள் மருத்துவமனை/கிளினிக்"
+  ],
+  ", or 995 if it is severe.": [
+    "，情况严重请拨打 995。",
+    ", atau 995 jika teruk.",
+    ", நிலை கடுமையாக இருந்தால் 995."
+  ],
+  "your hospital/clinic, or 995 if it is severe.": [
+    "您的医院/诊所，情况严重请拨打 995。",
+    "hospital/klinik anda, atau 995 jika teruk.",
+    "உங்கள் மருத்துவமனை/கிளினிக்; நிலை கடுமையாக இருந்தால் 995."
+  ],
+  "Ask — Clarity": [
+    "提问 — Clarity",
+    "Tanya — Clarity",
+    "கேள்விகள் — Clarity"
+  ],
+  "Ask": [
+    "提问",
+    "Tanya",
+    "கேள்"
+  ],
+  "For the hours when the hospital/clinic is closed and the sheet does not cover it.": [
+    "医院/诊所休息、说明单又未涵盖时，在这里提问。",
+    "Untuk waktu hospital/klinik ditutup dan helaian tidak menjawab soalan anda.",
+    "மருத்துவமனை/கிளினிக் மூடியிருக்கும் நேரத்திலும் தாளில் பதில் இல்லாதபோதும் உதவ."
+  ],
+  "General": [
+    "普通饮食",
+    "Umum",
+    "பொதுவான உணவு"
+  ],
+  "Prep day": [
+    "准备日",
+    "Hari persediaan",
+    "தயாரிப்பு நாள்"
+  ],
+  "Low residue day": [
+    "低渣饮食日",
+    "Hari rendah sisa",
+    "குறைந்த சக்கை உணவு நாள்"
+  ],
+  "Clear liquid day": [
+    "清流质饮食日",
+    "Hari cecair jernih",
+    "தெளிந்த திரவ உணவு நாள்"
+  ],
+  "Diet preference": [
+    "饮食偏好",
+    "Pilihan diet",
+    "உணவு விருப்பம்"
+  ],
+  "Vegetarian": [
+    "蛋奶素",
+    "Vegetarian",
+    "சைவம்"
+  ],
+  "Vegan": [
+    "纯素",
+    "Vegan",
+    "முழுச் சைவம்"
+  ],
+  "Food category": [
+    "食物类别",
+    "Kategori makanan",
+    "உணவு வகை"
+  ],
+  "All categories": [
+    "所有类别",
+    "Semua kategori",
+    "அனைத்து வகைகளும்"
+  ],
+  "foods you can eat ·": [
+    "种可食用食物 ·",
+    "makanan boleh dimakan ·",
+    "உண்ணக்கூடிய உணவுகள் ·"
+  ],
+  "You are not allowed to eat this category of the food": [
+    "此类食物不能食用",
+    "Anda tidak dibenarkan makan kategori makanan ini",
+    "இந்த வகை உணவை நீங்கள் உண்ணக்கூடாது"
+  ],
+  "You can eat": [
+    "可以吃",
+    "Boleh dimakan",
+    "உண்ணலாம்"
+  ],
+  "Avoid": [
+    "避免",
+    "Elakkan",
+    "தவிர்க்கவும்"
+  ],
+  "No foods listed to avoid in this category.": [
+    "此类别没有列出需避免的食物。",
+    "Tiada makanan untuk dielakkan dalam kategori ini.",
+    "இந்த வகையில் தவிர்க்க வேண்டிய உணவுகள் பட்டியலிடப்படவில்லை."
+  ],
+  "No foods listed for this selection.": [
+    "此选择下没有列出的食物。",
+    "Tiada makanan disenaraikan untuk pilihan ini.",
+    "இந்தத் தேர்வுக்கு உணவுகள் பட்டியலிடப்படவில்லை."
+  ],
+  "Meal list — Clarity": [
+    "食物清单 — Clarity",
+    "Senarai makanan — Clarity",
+    "உணவுப் பட்டியல் — Clarity"
+  ],
+  "Meal list": [
+    "食物清单",
+    "Senarai makanan",
+    "உணவுப் பட்டியல்"
+  ],
+  "Choose your prep day and diet preference to see what you can eat.": [
+    "选择准备日和饮食偏好，查看可以吃什么。",
+    "Pilih hari persediaan dan pilihan diet untuk melihat makanan yang boleh dimakan.",
+    "எதை உண்ணலாம் என்பதைப் பார்க்க தயாரிப்பு நாளையும் உணவு விருப்பத்தையும் தேர்ந்தெடுக்கவும்."
+  ],
+  "Not on the list?": [
+    "清单上没有？",
+    "Tiada dalam senarai?",
+    "பட்டியலில் இல்லையா?"
+  ],
+  "Guidance differs between hospitals, so when it matters your hospital’s answer is the one that applies to you.": [
+    "不同医院的指引可能不同，请以您的医院提供的答复为准。",
+    "Panduan berbeza antara hospital, jadi jawapan hospital anda yang terpakai kepada anda.",
+    "மருத்துவமனைகளின் வழிகாட்டல்கள் மாறுபடும்; உங்கள் மருத்துவமனையின் பதிலே உங்களுக்குப் பொருந்தும்."
+  ],
+  "Call the hospital": [
+    "致电医院",
+    "Hubungi hospital",
+    "மருத்துவமனையை அழை"
+  ],
+  "Ask in chat": [
+    "在聊天中提问",
+    "Tanya dalam sembang",
+    "உரையாடலில் கேள்"
+  ],
+  "The preparation — Clarity": [
+    "清肠准备 — Clarity",
+    "Persediaan — Clarity",
+    "தயாரிப்பு — Clarity"
+  ],
+  "The preparation": [
+    "清肠准备",
+    "Persediaan",
+    "தயாரிப்பு"
+  ],
+  "Record each glass as you finish it. This is what tells the nurse how your prep went.": [
+    "每喝完一杯就记录。这能让护士了解您的准备情况。",
+    "Catat setiap gelas selepas diminum. Ini memberitahu jururawat tentang persediaan anda.",
+    "ஒவ்வொரு குவளையையும் குடித்து முடித்ததும் பதிவு செய்யவும். இது உங்கள் தயாரிப்பு எப்படி நடந்தது என்பதை செவிலியருக்குத் தெரிவிக்கும்."
+  ],
+  "Finishing the full volume is what decides whether the scope works. If you cannot keep it down, call your hospital/clinic — do not take extra to make up for it.": [
+    "喝完全部用量是检查成功的关键。如无法喝下或持续吐出，请联系医院/诊所，不要额外服用来补偿。",
+    "Menghabiskan jumlah penuh menentukan kejayaan skop. Jika anda tidak dapat mengekalkannya tanpa muntah, hubungi hospital/klinik — jangan ambil tambahan untuk menggantikan.",
+    "முழு அளவையும் முடிப்பது பரிசோதனையின் வெற்றிக்கு முக்கியம். வாந்தியின்றிக் குடிக்க முடியாவிட்டால் மருத்துவமனை/கிளினிக்கை அழைக்கவும் — ஈடுசெய்யக் கூடுதலாக எடுக்க வேண்டாம்."
+  ],
+  "Tonight’s doses": [
+    "今晚的剂量",
+    "Dos malam ini",
+    "இன்றிரவு வேளைகள்"
+  ],
+  "Call the hospital/clinic": [
+    "致电医院/诊所",
+    "Hubungi hospital/klinik",
+    "மருத்துவமனை/கிளினிக்கை அழை"
+  ],
+  "Journey — Clarity": [
+    "准备过程 — Clarity",
+    "Perjalanan — Clarity",
+    "தயாரிப்புப் பயணம் — Clarity"
+  ],
+  "Your journey": [
+    "您的准备过程",
+    "Perjalanan anda",
+    "உங்கள் தயாரிப்புப் பயணம்"
+  ],
+  "Stages": [
+    "各个阶段",
+    "Peringkat",
+    "நிலைகள்"
+  ],
+  "All of this happens outside the hospital, which is exactly why it usually goes unnoticed.": [
+    "这些准备都在医院外进行，因此往往容易被忽略。",
+    "Semua ini berlaku di luar hospital, sebab itulah ia sering tidak disedari.",
+    "இவை அனைத்தும் மருத்துவமனைக்கு வெளியே நடப்பதால் பெரும்பாலும் கவனிக்கப்படுவதில்லை."
+  ],
+  "How to prep — Clarity": [
+    "如何准备 — Clarity",
+    "Cara membuat persediaan — Clarity",
+    "எவ்வாறு தயாராவது — Clarity"
+  ],
+  "Not sure about something?": [
+    "有不确定的地方？",
+    "Tidak pasti tentang sesuatu?",
+    "ஏதேனும் சந்தேகமா?"
+  ],
+  "Guidance differs between hospitals. When in doubt, your hospital/clinic’s answer is the one that applies to you.": [
+    "不同医院的指引可能不同。如有疑问，请以您的医院/诊所的答复为准。",
+    "Panduan berbeza antara hospital. Jika ragu, jawapan hospital/klinik anda yang terpakai kepada anda.",
+    "மருத்துவமனைகளின் வழிகாட்டல்கள் மாறுபடும். சந்தேகமிருந்தால் உங்கள் மருத்துவமனை/கிளினிக்கின் பதிலே உங்களுக்குப் பொருந்தும்."
+  ],
+  "Saved": [
+    "已保存",
+    "Disimpan",
+    "சேமிக்கப்பட்டது"
+  ],
+  "Readiness — Clarity": [
+    "准备情况 — Clarity",
+    "Kesediaan — Clarity",
+    "தயார்நிலை — Clarity"
+  ],
+  "Choose a valid preparation status.": [
+    "请选择有效的准备状态。",
+    "Pilih status persediaan yang sah.",
+    "சரியான தயாரிப்பு நிலையைத் தேர்ந்தெடுக்கவும்."
+  ],
+  "Please choose a valid diet day and answer.": [
+    "请选择有效的饮食日期和回答。",
+    "Pilih hari diet dan jawapan yang sah.",
+    "சரியான உணவு நாளையும் பதிலையும் தேர்ந்தெடுக்கவும்."
+  ],
+  "This dose is not due yet.": [
+    "还未到服用此剂的时间。",
+    "Belum tiba masa untuk dos ini.",
+    "இந்த வேளைக்கான நேரம் இன்னும் வரவில்லை."
+  ],
+  "Readiness": [
+    "准备情况",
+    "Kesediaan",
+    "தயார்நிலை"
+  ],
+  "A little check-in, one step at a time. See what you have recorded and what comes next.": [
+    "一步步记录，看看您已完成什么、接下来做什么。",
+    "Semak sedikit demi sedikit. Lihat catatan anda dan langkah seterusnya.",
+    "ஒவ்வொரு படியாகச் சரிபார்க்கவும். பதிவு செய்ததையும் அடுத்து செய்ய வேண்டியதையும் பார்க்கவும்."
+  ],
+  "01 · Low-residue diet": [
+    "01 · 低渣饮食",
+    "01 · Diet rendah sisa",
+    "01 · குறைந்த சக்கை உணவு"
+  ],
+  "How have your meals been?": [
+    "这几天饮食如何？",
+    "Bagaimanakah pemakanan anda?",
+    "உங்கள் உணவுமுறை எப்படி இருந்தது?"
+  ],
+  "Diet followed on all three days": [
+    "三天均遵守饮食要求",
+    "Diet diikuti ketiga-tiga hari",
+    "மூன்று நாட்களிலும் உணவுமுறை பின்பற்றப்பட்டது"
+  ],
+  "{0} of 3 days checked in": [
+    "已记录 {0} 天，共 3 天",
+    "{0} daripada 3 hari dicatat",
+    "3 நாட்களில் {0} பதிவு செய்யப்பட்டன"
+  ],
+  "Record how each day went. It is okay if things did not go exactly to plan.": [
+    "记录每一天的情况。没有完全按计划也没关系。",
+    "Catat keadaan setiap hari. Tidak mengapa jika tidak semuanya mengikut pelan.",
+    "ஒவ்வொரு நாளும் எப்படி இருந்தது எனப் பதிவு செய்யவும். அனைத்தும் திட்டப்படி செல்லாவிட்டாலும் பரவாயில்லை."
+  ],
+  "Upcoming": [
+    "即将到来",
+    "Akan datang",
+    "வரவுள்ளது"
+  ],
+  "View my meal list →": [
+    "查看我的食物清单 →",
+    "Lihat senarai makanan saya →",
+    "என் உணவுப் பட்டியலைப் பார் →"
+  ],
+  "02 · Purgative schedule": [
+    "02 · 清肠药时间表",
+    "02 · Jadual ubat pencuci usus",
+    "02 · குடல் சுத்திகரிப்பு அட்டவணை"
+  ],
+  "Schedule confirmed by you": [
+    "您已确认时间表",
+    "Jadual disahkan oleh anda",
+    "அட்டவணையை நீங்கள் உறுதிசெய்துள்ளீர்கள்"
+  ],
+  "{0} of {1} doses confirmed on time": [
+    "已确认 {0} / {1} 剂按时服用",
+    "{0} daripada {1} dos disahkan tepat pada masanya",
+    "{1} வேளைகளில் {0} சரியான நேரத்தில் எடுத்தது உறுதியானது"
+  ],
+  "Check against your hospital/clinic’s instructions. Recorded volume and timing are separate — only confirm a dose after taking it.": [
+    "请核对医院/诊所的说明。记录饮用量和确认时间是两回事，请在服用后才确认。",
+    "Semak arahan hospital/klinik anda. Jumlah direkodkan dan masa adalah berasingan — sahkan dos hanya selepas mengambilnya.",
+    "மருத்துவமனை/கிளினிக் அறிவுறுத்தல்களைச் சரிபார்க்கவும். குடித்த அளவும் நேரமும் தனித்தனி — எடுத்த பிறகே வேளையை உறுதிசெய்யவும்."
+  ],
+  "Evening before": [
+    "前一天晚上",
+    "Malam sebelumnya",
+    "முந்தைய மாலை"
+  ],
+  "Procedure morning": [
+    "检查当天早晨",
+    "Pagi prosedur",
+    "பரிசோதனைக் காலை"
+  ],
+  "✓ Taken on time · Undo": [
+    "✓ 已按时服用 · 撤销",
+    "✓ Diambil tepat pada masa · Batal",
+    "✓ சரியான நேரத்தில் எடுத்தேன் · மீட்டமை"
+  ],
+  "I took this dose on time": [
+    "我按时服用了这一剂",
+    "Saya mengambil dos ini tepat pada masanya",
+    "இந்த வேளையைச் சரியான நேரத்தில் எடுத்தேன்"
+  ],
+  "Choose your current status. Update it when things change; this report takes priority over the dose log.": [
+    "选择目前的状态，情况改变时请更新。此报告优先于剂量记录。",
+    "Pilih status semasa. Kemas kini apabila berubah; laporan ini diutamakan berbanding log dos.",
+    "தற்போதைய நிலையைத் தேர்ந்தெடுக்கவும். மாற்றம் ஏற்பட்டால் புதுப்பிக்கவும்; இந்த அறிக்கைக்கு வேளைப் பதிவைவிட முன்னுரிமை உள்ளது."
+  ],
+  "Record my glasses →": [
+    "记录我喝的杯数 →",
+    "Catat gelas saya →",
+    "குடித்த குவளைகளைப் பதிவு செய் →"
+  ],
+  "Missed a dose or unsure about timing? Contact your hospital/clinic. Do not take extra preparation.": [
+    "漏服或不确定时间？请联系医院/诊所，不要额外服用清肠药。",
+    "Terlepas dos atau tidak pasti tentang masa? Hubungi hospital/klinik. Jangan ambil persediaan tambahan.",
+    "வேளையைத் தவறவிட்டீர்களா அல்லது நேரத்தில் சந்தேகமா? மருத்துவமனை/கிளினிக்கைத் தொடர்புகொள்ளவும். கூடுதல் தயாரிப்பு மருந்து எடுக்க வேண்டாம்."
+  ],
+  "03 · Stool check-in": [
+    "03 · 排便记录",
+    "03 · Catatan najis",
+    "03 · மலப் பதிவு"
+  ],
+  "Let’s check your latest output": [
+    "一起检查您最近的排出物",
+    "Mari periksa najis terkini anda",
+    "உங்கள் சமீபத்திய கழிவைச் சரிபார்ப்போம்"
+  ],
+  "A few short questions about what you see. No photo needed.": [
+    "几个关于您所见情况的简短问题，无需照片。",
+    "Beberapa soalan ringkas tentang apa yang anda lihat. Tidak perlu foto.",
+    "நீங்கள் பார்த்தது பற்றிய சில சிறிய கேள்விகள். படம் தேவையில்லை."
+  ],
+  "Your team makes the final call": [
+    "最终由您的医护团队决定",
+    "Pasukan anda membuat keputusan akhir",
+    "இறுதி முடிவை உங்கள் மருத்துவக் குழுவே எடுக்கும்"
+  ],
+  "These check-ins help you share your progress. Colour or frequent toilet trips alone cannot confirm readiness for your colonoscopy.": [
+    "这些记录有助于您分享进展。单凭颜色或频繁排便，无法确认结肠镜准备是否充分。",
+    "Catatan ini membantu anda berkongsi kemajuan. Warna atau kekerapan ke tandas sahaja tidak mengesahkan kesediaan untuk kolonoskopi.",
+    "இந்தப் பதிவுகள் முன்னேற்றத்தைப் பகிர உதவும். நிறம் அல்லது அடிக்கடி கழிப்பறை செல்வது மட்டும் பரிசோதனைக்கான தயார்நிலையை உறுதிசெய்யாது."
+  ],
+  "Ask a question →": [
+    "提问 →",
+    "Tanya soalan →",
+    "கேள்வி கேள் →"
+  ],
+  "Home — Clarity": [
+    "首页 — Clarity",
+    "Utama — Clarity",
+    "முகப்பு — Clarity"
+  ],
+  "You are preparing with {0}.": [
+    "您正在陪同 {0} 做准备。",
+    "Anda membuat persediaan bersama {0}.",
+    "நீங்கள் {0} உடன் தயாராகிறீர்கள்."
+  ],
+  "Tonight decides whether the scope works. Finish the whole volume, at the times below.": [
+    "今晚的准备决定检查效果。请在以下时间喝完全部用量。",
+    "Persediaan malam ini menentukan kejayaan skop. Habiskan jumlah penuh pada masa di bawah.",
+    "இன்றிரவு தயாரிப்பு பரிசோதனை வெற்றிக்கு முக்கியம். கீழே உள்ள நேரங்களில் முழு அளவையும் முடிக்கவும்."
+  ],
+  "Your appointment": [
+    "您的预约",
+    "Janji temu anda",
+    "உங்கள் முன்பதிவு"
+  ],
+  "Arrive {0}": [
+    "到达时间 {0}",
+    "Tiba {0}",
+    "வருகை நேரம் {0}"
+  ],
+  "Where you are": [
+    "您目前的阶段",
+    "Peringkat semasa anda",
+    "உங்கள் தற்போதைய நிலை"
+  ],
+  "All stages": [
+    "所有阶段",
+    "Semua peringkat",
+    "அனைத்து நிலைகளும்"
+  ],
+  "Record each glass as you finish it. It is the one thing here that changes what the nurse sees in the morning.": [
+    "每喝完一杯就记录，让护士明早了解您的准备情况。",
+    "Catat setiap gelas selepas diminum. Ini membantu jururawat mengetahui keadaan anda pada waktu pagi.",
+    "ஒவ்வொரு குவளையையும் முடித்ததும் பதிவு செய்யவும். காலையில் செவிலியர் உங்கள் தயாரிப்பை அறிய இது உதவும்."
+  ],
+  "Track tonight’s doses": [
+    "记录今晚的剂量",
+    "Jejak dos malam ini",
+    "இன்றிரவு வேளைகளைப் பதிவு செய்"
+  ],
+  "What to do today": [
+    "今天要做什么",
+    "Apa perlu dibuat hari ini",
+    "இன்று செய்ய வேண்டியது"
+  ],
+  "How your prep is going": [
+    "您的准备进展",
+    "Kemajuan persediaan anda",
+    "உங்கள் தயாரிப்பு முன்னேற்றம்"
+  ],
+  "Signed in as": [
+    "当前登录号码",
+    "Log masuk sebagai",
+    "உள்நுழைந்த எண்"
+  ],
+  "Stool check-in — Clarity": [
+    "排便记录 — Clarity",
+    "Catatan najis — Clarity",
+    "மலப் பதிவு — Clarity"
+  ],
+  "Stool check-in": [
+    "排便记录",
+    "Catatan najis",
+    "மலப் பதிவு"
+  ],
+  "Tell us what you noticed on your latest toilet trip. We will take it one question at a time.": [
+    "请告诉我们您最近一次排便的情况。我们一次问一个问题。",
+    "Beritahu kami apa yang anda perhatikan pada lawatan terakhir ke tandas. Kita jawab satu soalan pada satu masa.",
+    "கடைசியாகக் கழிப்பறை சென்றபோது கவனித்ததைக் கூறவும். ஒவ்வொரு கேள்வியாகப் பார்ப்போம்."
+  ],
+  "We could not send the code.": [
+    "未能发送验证码。",
+    "Kami tidak dapat menghantar kod.",
+    "குறியீட்டை அனுப்ப முடியவில்லை."
+  ],
+  "No connection. Check your signal and try again.": [
+    "没有网络连接。请检查信号并重试。",
+    "Tiada sambungan. Semak isyarat dan cuba lagi.",
+    "இணைப்பு இல்லை. சமிக்ஞையைச் சரிபார்த்து மீண்டும் முயலவும்."
+  ],
+  "That code is not right.": [
+    "验证码不正确。",
+    "Kod itu tidak betul.",
+    "அந்தக் குறியீடு தவறானது."
+  ],
+  "Your mobile number": [
+    "您的手机号码",
+    "Nombor telefon bimbit anda",
+    "உங்கள் கைப்பேசி எண்"
+  ],
+  "The number your endoscopy hospital/clinic has on file.": [
+    "内镜医院/诊所记录的号码。",
+    "Nombor dalam rekod hospital/klinik endoskopi anda.",
+    "எண்டோஸ்கோபி மருத்துவமனை/கிளினிக்கில் பதிவுசெய்த எண்."
+  ],
+  "Sending…": [
+    "正在发送…",
+    "Menghantar…",
+    "அனுப்புகிறது…"
+  ],
+  "Send me a code": [
+    "发送验证码给我",
+    "Hantar kod kepada saya",
+    "எனக்குக் குறியீடு அனுப்பு"
+  ],
+  "We will text you a 6-digit code. Standard message rates apply.": [
+    "我们将通过短信发送 6 位验证码。短信按标准资费收取。",
+    "Kami akan menghantar kod 6 digit melalui SMS. Kadar mesej standard dikenakan.",
+    "6 இலக்கக் குறியீட்டைக் குறுஞ்செய்தியாக அனுப்புவோம். வழக்கமான செய்திக் கட்டணங்கள் பொருந்தும்."
+  ],
+  "Demo mode.": [
+    "演示模式。",
+    "Mod demo.",
+    "செயல்விளக்க முறை."
+  ],
+  "Demo numbers.": [
+    "演示号码。",
+    "Nombor demo.",
+    "செயல்விளக்க எண்கள்."
+  ],
+  "No text message is sent — your code is shown on the next screen.": [
+    "不会发送短信，验证码将显示在下一页。",
+    "Tiada SMS dihantar — kod anda dipaparkan pada skrin seterusnya.",
+    "குறுஞ்செய்தி அனுப்பப்படாது — அடுத்த திரையில் குறியீடு காட்டப்படும்."
+  ],
+  "These numbers skip the text message and show their code on the next screen. Any other number gets a real text.": [
+    "这些号码不会收到短信，验证码将显示在下一页。其他号码会收到真实短信。",
+    "Nombor ini tidak menerima SMS dan kod dipaparkan pada skrin seterusnya. Nombor lain menerima SMS sebenar.",
+    "இந்த எண்களுக்கு குறுஞ்செய்தி அனுப்பாமல் அடுத்த திரையில் குறியீடு காட்டப்படும். மற்ற எண்களுக்கு உண்மையான குறுஞ்செய்தி வரும்."
+  ],
+  "Try": [
+    "试用",
+    "Cuba",
+    "முயலவும்"
+  ],
+  "Demo number, so no text was sent.": [
+    "这是演示号码，因此未发送短信。",
+    "Nombor demo, jadi tiada SMS dihantar.",
+    "செயல்விளக்க எண் என்பதால் குறுஞ்செய்தி அனுப்பப்படவில்லை."
+  ],
+  "Your code is": [
+    "您的验证码是",
+    "Kod anda ialah",
+    "உங்கள் குறியீடு"
+  ],
+  "Enter your code": [
+    "输入验证码",
+    "Masukkan kod anda",
+    "உங்கள் குறியீட்டை உள்ளிடவும்"
+  ],
+  "We sent a 6-digit code to the number ending {0}.": [
+    "我们已向尾号为 {0} 的号码发送 6 位验证码。",
+    "Kami menghantar kod 6 digit ke nombor berakhir dengan {0}.",
+    "{0} என்று முடியும் எண்ணுக்கு 6 இலக்கக் குறியீட்டை அனுப்பியுள்ளோம்."
+  ],
+  "We sent you a 6-digit code.": [
+    "我们已向您发送 6 位验证码。",
+    "Kami menghantar kod 6 digit kepada anda.",
+    "உங்களுக்கு 6 இலக்கக் குறியீட்டை அனுப்பியுள்ளோம்."
+  ],
+  "Checking…": [
+    "正在验证…",
+    "Menyemak…",
+    "சரிபார்க்கிறது…"
+  ],
+  "Send a new code in {0}s": [
+    "{0} 秒后可重新发送验证码",
+    "Hantar kod baharu dalam {0}s",
+    "{0} விநாடிகளில் புதிய குறியீடு அனுப்பு"
+  ],
+  "Send a new code": [
+    "重新发送验证码",
+    "Hantar kod baharu",
+    "புதிய குறியீடு அனுப்பு"
+  ],
+  "Use a different number": [
+    "使用其他号码",
+    "Gunakan nombor lain",
+    "வேறு எண்ணைப் பயன்படுத்து"
+  ],
+  "Sign in — Clarity": [
+    "登录 — Clarity",
+    "Log masuk — Clarity",
+    "உள்நுழை — Clarity"
+  ],
+  "Your colonoscopy preparation": [
+    "您的结肠镜检查准备",
+    "Persediaan kolonoskopi anda",
+    "உங்கள் பெருங்குடல் நோக்கிப் பரிசோதனைத் தயாரிப்பு"
+  ],
+  "Sign in with the mobile number your endoscopy hospital/clinic has on file.": [
+    "请使用内镜医院/诊所记录的手机号码登录。",
+    "Log masuk dengan nombor telefon bimbit dalam rekod hospital/klinik endoskopi anda.",
+    "எண்டோஸ்கோபி மருத்துவமனை/கிளினிக்கில் பதிவுசெய்த கைப்பேசி எண்ணில் உள்நுழையவும்."
+  ],
+  "This app supports your preparation. It does not replace your care team. In an emergency, call 995.": [
+    "本应用协助您准备，不能替代医护团队。紧急情况请拨打 995。",
+    "Aplikasi ini menyokong persediaan anda, bukan menggantikan pasukan penjagaan. Dalam kecemasan, hubungi 995.",
+    "இந்தச் செயலி தயாரிப்புக்கு உதவும்; மருத்துவக் குழுவிற்கு மாற்றாகாது. அவசரநிலையில் 995-ஐ அழைக்கவும்."
+  ],
+  "Before you start — Clarity": [
+    "开始之前 — Clarity",
+    "Sebelum bermula — Clarity",
+    "தொடங்கும் முன் — Clarity"
+  ],
+  "Clarity — QR code for printing": [
+    "Clarity — 可打印二维码",
+    "Clarity — kod QR untuk dicetak",
+    "Clarity — அச்சிடுவதற்கான QR குறியீடு"
+  ],
+  "Scan this with your phone camera. Sign in with the mobile number the endoscopy hospital/clinic has on file.": [
+    "用手机相机扫描。使用内镜医院/诊所记录的手机号码登录。",
+    "Imbas dengan kamera telefon. Log masuk dengan nombor telefon bimbit dalam rekod hospital/klinik endoskopi.",
+    "கைப்பேசி கேமராவால் ஸ்கேன் செய்யவும். எண்டோஸ்கோபி மருத்துவமனை/கிளினிக்கில் பதிவுசெய்த கைப்பேசி எண்ணில் உள்நுழையவும்."
+  ],
+  "Sign out — Clarity": [
+    "退出 — Clarity",
+    "Log keluar — Clarity",
+    "வெளியேறு — Clarity"
+  ],
+  "Clarity — your colonoscopy preparation": [
+    "Clarity — 您的结肠镜准备",
+    "Clarity — persediaan kolonoskopi anda",
+    "Clarity — உங்கள் பெருங்குடல் நோக்கிப் பரிசோதனைத் தயாரிப்பு"
+  ],
+  "Your appointment, what to do and when, and how your preparation is going. From your endoscopy hospital/clinic.": [
+    "您的预约、各项准备的时间安排及准备进展。来自您的内镜医院/诊所。",
+    "Janji temu, apa perlu dibuat dan bila, serta kemajuan persediaan anda. Daripada hospital/klinik endoskopi anda.",
+    "உங்கள் முன்பதிவு, எப்போது என்ன செய்ய வேண்டும், தயாரிப்பு முன்னேற்றம். உங்கள் எண்டோஸ்கோபி மருத்துவமனை/கிளினிக்கிலிருந்து."
+  ],
+  "Today is the day": [
+    "今天是检查日",
+    "Hari ini hari prosedur",
+    "இன்றுதான் பரிசோதனை நாள்"
+  ],
+  "Tonight is the prep": [
+    "今晚开始清肠准备",
+    "Malam ini persediaannya",
+    "இன்றிரவு தயாரிப்பு"
+  ],
+  "Tomorrow you start the prep": [
+    "明天开始准备",
+    "Esok anda mula membuat persediaan",
+    "நாளை தயாரிப்பைத் தொடங்குகிறீர்கள்"
+  ],
+  "Your procedure has passed": [
+    "您的检查日期已过",
+    "Tarikh prosedur anda telah berlalu",
+    "உங்கள் பரிசோதனைத் தேதி கடந்துவிட்டது"
+  ],
+  "{0} days to go": [
+    "还有 {0} 天",
+    "{0} hari lagi",
+    "இன்னும் {0} நாட்கள்"
+  ],
+  "{0} weeks to go": [
+    "还有 {0} 周",
+    "{0} minggu lagi",
+    "இன்னும் {0} வாரங்கள்"
+  ],
+  "{0} months to go": [
+    "还有 {0} 个月",
+    "{0} bulan lagi",
+    "இன்னும் {0} மாதங்கள்"
+  ],
+  "Waiting": [
+    "等待中",
+    "Menunggu",
+    "காத்திருக்கிறது"
+  ],
+  "Nothing to do yet. We will tell you when to start, so you can put the sheet away.": [
+    "目前无需准备。到开始时我们会提醒您，暂时可以收起说明单。",
+    "Belum perlu buat apa-apa. Kami akan beritahu bila hendak bermula, jadi simpan dahulu helaian anda.",
+    "இப்போது எதுவும் செய்யத் தேவையில்லை. எப்போது தொடங்க வேண்டும் என்று தெரிவிப்போம்; தாளை இப்போதைக்கு வைத்துவிடலாம்."
+  ],
+  "The week before": [
+    "检查前一周",
+    "Seminggu sebelum",
+    "முந்தைய வாரம்"
+  ],
+  "Arrange your escort, check your medicines, collect the preparation.": [
+    "安排陪同人员、核对药物，并领取清肠药。",
+    "Aturkan pengiring, semak ubat, ambil ubat persediaan.",
+    "உடன் வருபவரை ஏற்பாடு செய்து, மருந்துகளைச் சரிபார்த்து, தயாரிப்பு மருந்தைப் பெற்றுக்கொள்ளவும்."
+  ],
+  "Diet days": [
+    "饮食准备日",
+    "Hari diet",
+    "உணவுமுறை நாட்கள்"
+  ],
+  "Low-residue meals only. Photograph anything you are unsure about.": [
+    "只吃低渣餐食。不确定的食物可以拍照。",
+    "Makan rendah sisa sahaja. Ambil foto jika tidak pasti.",
+    "குறைந்த சக்கை உணவு மட்டும். சந்தேகமுள்ளவற்றைப் படம் எடுக்கவும்."
+  ],
+  "The purge night": [
+    "清肠之夜",
+    "Malam pencucian usus",
+    "குடல் சுத்திகரிப்பு இரவு"
+  ],
+  "Finish the full volume, at the times given. This is what decides the outcome.": [
+    "按指定时间喝完全部用量。这是准备效果的关键。",
+    "Habiskan jumlah penuh pada masa ditetapkan. Inilah yang menentukan hasilnya.",
+    "குறிப்பிட்ட நேரங்களில் முழு அளவையும் முடிக்கவும். இதுவே முடிவுக்கு முக்கியம்."
+  ],
+  "Procedure day": [
+    "检查日",
+    "Hari prosedur",
+    "பரிசோதனை நாள்"
+  ],
+  "Nothing by mouth. Bring your prep summary to admission.": [
+    "禁食禁饮。入院时请携带准备摘要。",
+    "Jangan makan atau minum. Bawa ringkasan persediaan semasa kemasukan.",
+    "எதையும் உண்ணவோ குடிக்கவோ வேண்டாம். சேர்க்கையின்போது தயாரிப்புச் சுருக்கத்தைக் கொண்டுவரவும்."
+  ],
+  "Afterwards": [
+    "检查之后",
+    "Selepas prosedur",
+    "பரிசோதனைக்குப் பிறகு"
+  ],
+  "Your procedure has passed. Your next one will appear here when it is booked.": [
+    "您的检查日期已过。下次检查预约后会显示在此处。",
+    "Prosedur anda telah berlalu. Prosedur seterusnya akan dipaparkan selepas ditempah.",
+    "உங்கள் பரிசோதனைத் தேதி கடந்துவிட்டது. அடுத்த பரிசோதனை முன்பதிவு செய்யப்பட்டதும் இங்கே தோன்றும்."
+  ],
+  "Check which medicines to hold": [
+    "确认需要暂停的药物",
+    "Semak ubat yang perlu dihentikan",
+    "நிறுத்த வேண்டிய மருந்துகளைச் சரிபார்"
+  ],
+  "Iron tablets and some blood thinners are usually stopped before a scope. The hospital/clinic confirms which, and when.": [
+    "检查前通常需暂停铁剂及某些抗凝血药。由医院/诊所确认哪些药物需要停、何时停。",
+    "Tablet zat besi dan sesetengah pencair darah biasanya dihentikan sebelum skop. Hospital/klinik mengesahkan yang mana dan bila.",
+    "பரிசோதனைக்கு முன் இரும்பு மாத்திரைகளும் சில இரத்தம் உறைவதைத் தடுக்கும் மருந்துகளும் பொதுவாக நிறுத்தப்படும். எவை, எப்போது என்பதை மருத்துவமனை/கிளினிக் உறுதிசெய்யும்."
+  ],
+  "Arrange someone to take you home": [
+    "安排接您回家的人",
+    "Aturkan seseorang membawa anda pulang",
+    "வீட்டிற்கு அழைத்துச் செல்ல ஒருவரை ஏற்பாடு செய்"
+  ],
+  "Collect the bowel preparation": [
+    "领取清肠药",
+    "Ambil ubat pencuci usus",
+    "குடல் சுத்திகரிப்பு மருந்தைப் பெற்றுக்கொள்"
+  ],
+  "Low-residue meals only": [
+    "只吃低渣餐食",
+    "Makanan rendah sisa sahaja",
+    "குறைந்த சக்கை உணவு மட்டும்"
+  ],
+  "No skins, seeds, nuts or wholegrains.": [
+    "不吃果皮、种子、坚果或全谷物。",
+    "Tiada kulit, biji, kekacang atau bijirin penuh.",
+    "தோல்கள், விதைகள், கொட்டைகள் அல்லது முழுத் தானியங்கள் வேண்டாம்."
+  ],
+  "Drink through the day": [
+    "全天补充水分",
+    "Minum sepanjang hari",
+    "நாள் முழுவதும் குடிக்கவும்"
+  ],
+  "Aim for 8 glasses.": [
+    "目标为 8 杯。",
+    "Sasarkan 8 gelas.",
+    "8 குவளைகளை இலக்காகக் கொள்ளவும்."
+  ],
+  "First dose of the preparation": [
+    "第一剂清肠药",
+    "Dos pertama persediaan",
+    "முதல் வேளை தயாரிப்பு மருந்து"
+  ],
+  "Finish the whole volume. Keep drinking clear fluid alongside it.": [
+    "喝完全部用量，同时继续饮用清流质。",
+    "Habiskan jumlah penuh. Terus minum cecair jernih bersamanya.",
+    "முழு அளவையும் முடிக்கவும். அதனுடன் தெளிந்த திரவங்களையும் தொடர்ந்து குடிக்கவும்."
+  ],
+  "Clear fluid after the first dose": [
+    "第一剂后饮用清流质",
+    "Cecair jernih selepas dos pertama",
+    "முதல் வேளைக்குப் பிறகு தெளிந்த திரவம்"
+  ],
+  "Second dose": [
+    "第二剂",
+    "Dos kedua",
+    "இரண்டாம் வேளை"
+  ],
+  "The second dose is what clears the right side of the colon. It is the one most often skipped.": [
+    "第二剂能清洁结肠右侧，也是最容易被漏服的一剂。",
+    "Dos kedua membersihkan bahagian kanan kolon. Dos inilah yang paling kerap terlepas.",
+    "இரண்டாம் வேளை பெருங்குடலின் வலப்பக்கத்தைச் சுத்தம் செய்கிறது. இதுவே அதிகம் தவறவிடப்படுகிறது."
+  ],
+  "Nothing by mouth": [
+    "禁食禁饮",
+    "Jangan makan atau minum",
+    "எதையும் உண்ணவோ குடிக்கவோ வேண்டாம்"
+  ],
+  "Show your prep summary at admission": [
+    "入院时出示准备摘要",
+    "Tunjukkan ringkasan persediaan semasa kemasukan",
+    "சேர்க்கையின்போது தயாரிப்புச் சுருக்கத்தைக் காட்டு"
+  ],
+  "First dose": [
+    "第一剂",
+    "Dos pertama",
+    "முதல் வேளை"
+  ],
+  "This is the one that clears the right side of the colon, and the one most often skipped.": [
+    "这一剂清洁结肠右侧，也是最容易被漏服的一剂。",
+    "Dos ini membersihkan bahagian kanan kolon dan paling kerap terlepas.",
+    "இந்த வேளை பெருங்குடலின் வலப்பக்கத்தைச் சுத்தம் செய்கிறது; இதுவே அதிகம் தவறவிடப்படுகிறது."
+  ],
+  "Prep timing": [
+    "清肠药时间",
+    "Masa persediaan",
+    "தயாரிப்பு நேரம்"
+  ],
+  "Bowel output": [
+    "排便情况",
+    "Najis",
+    "மலத்தின் நிலை"
+  ],
+  "{0} not recorded": [
+    "{0} 未记录",
+    "{0} belum direkodkan",
+    "{0} பதிவு செய்யப்படவில்லை"
+  ],
+  "{0} below target": [
+    "{0} 低于目标",
+    "{0} di bawah sasaran",
+    "{0} இலக்கிற்குக் கீழே உள்ளது"
+  ],
+  "No prep data recorded": [
+    "尚无准备记录",
+    "Tiada data persediaan direkodkan",
+    "தயாரிப்பு விவரம் பதிவு செய்யப்படவில்லை"
+  ],
+  "Your prep is on track. Come in as planned.": [
+    "您的准备进展良好，请按计划前来。",
+    "Persediaan anda berjalan lancar. Datang seperti dirancang.",
+    "உங்கள் தயாரிப்பு சரியாக உள்ளது. திட்டமிட்டபடி வரவும்."
+  ],
+  "Something in your prep is worth a check. Bring this summary with you and mention it at admission.": [
+    "您的准备有些地方需要确认。请带上此摘要并在入院时告知团队。",
+    "Ada perkara dalam persediaan anda yang perlu disemak. Bawa ringkasan ini dan maklumkan semasa kemasukan.",
+    "உங்கள் தயாரிப்பில் சிலவற்றைச் சரிபார்க்க வேண்டும். இந்தச் சுருக்கத்தைக் கொண்டுவந்து சேர்க்கையின்போது தெரிவிக்கவும்."
+  ],
+  "Please call the endoscopy hospital/clinic before you travel. Do not take any extra preparation.": [
+    "出发前请致电内镜医院/诊所。不要额外服用清肠药。",
+    "Hubungi hospital/klinik endoskopi sebelum bertolak. Jangan ambil persediaan tambahan.",
+    "புறப்படும் முன் எண்டோஸ்கோபி மருத்துவமனை/கிளினிக்கை அழைக்கவும். கூடுதல் தயாரிப்பு மருந்து எடுக்க வேண்டாம்."
+  ],
+  "On track": [
+    "进展良好",
+    "Mengikut rancangan",
+    "சரியான பாதையில்"
+  ],
+  "Worth a check": [
+    "需要确认",
+    "Perlu disemak",
+    "சரிபார்க்க வேண்டும்"
+  ],
+  "Solid": [
+    "固体",
+    "Pejal",
+    "திடமானது"
+  ],
+  "Formed stool. The preparation has not started working yet.": [
+    "成形粪便，清肠药尚未起效。",
+    "Najis berbentuk. Persediaan belum mula berkesan.",
+    "வடிவமுள்ள மலம். தயாரிப்பு இன்னும் வேலை செய்யத் தொடங்கவில்லை."
+  ],
+  "Mostly solid": [
+    "大部分为固体",
+    "Kebanyakannya pejal",
+    "பெரும்பாலும் திடமானது"
+  ],
+  "Still formed, some liquid. Keep going with the fluids.": [
+    "仍有成形粪便，伴少量液体。继续补充液体。",
+    "Masih berbentuk, sedikit cecair. Teruskan minum cecair.",
+    "இன்னும் வடிவமுள்ளது, சிறிது திரவத்துடன். திரவங்களைத் தொடர்ந்து குடிக்கவும்."
+  ],
+  "Cloudy liquid": [
+    "浑浊液体",
+    "Cecair keruh",
+    "கலங்கலான திரவம்"
+  ],
+  "Liquid with solid pieces. It is starting to work.": [
+    "液体中有固体颗粒，开始起效。",
+    "Cecair dengan ketulan pejal. Ia mula berkesan.",
+    "திடத் துண்டுகளுடன் திரவம். வேலை செய்யத் தொடங்குகிறது."
+  ],
+  "Light and cloudy": [
+    "浅色但浑浊",
+    "Cerah dan keruh",
+    "வெளிர்ந்தும் கலங்கலாகவும்"
+  ],
+  "Mostly clear liquid with some cloudiness. This is close.": [
+    "大致清澈的液体，略浑浊。已接近目标。",
+    "Kebanyakannya cecair jernih dengan sedikit kekeruhan. Hampir mencapai sasaran.",
+    "சிறிது கலங்கலுடன் பெரும்பாலும் தெளிவான திரவம். இலக்கை நெருங்குகிறது."
+  ],
+  "Clear": [
+    "清澈",
+    "Jernih",
+    "தெளிவானது"
+  ],
+  "Clear or pale yellow liquid. This is what the team is looking for.": [
+    "透明或淡黄色液体，这是团队希望看到的。",
+    "Cecair jernih atau kuning pucat. Inilah yang diharapkan pasukan.",
+    "தெளிவான அல்லது வெளிர் மஞ்சள் திரவம். மருத்துவக் குழு எதிர்பார்ப்பது இதுவே."
+  ],
+  "Stuck to it": [
+    "完全遵守",
+    "Ikut sepenuhnya",
+    "முழுமையாகப் பின்பற்றினேன்"
+  ],
+  "Mostly": [
+    "大致遵守",
+    "Kebanyakannya",
+    "பெரும்பாலும்"
+  ],
+  "Slipped": [
+    "未能遵守",
+    "Tidak mengikut",
+    "தவறிவிட்டேன்"
+  ],
+  "Use my dose and timing records": [
+    "使用我的剂量和时间记录",
+    "Gunakan rekod dos dan masa saya",
+    "என் வேளை மற்றும் நேரப் பதிவுகளைப் பயன்படுத்து"
+  ],
+  "I am behind schedule but still completing the prep": [
+    "我落后于时间表，但仍在完成准备",
+    "Saya lewat daripada jadual tetapi masih melengkapkan persediaan",
+    "அட்டவணையைவிடத் தாமதமாக இருந்தாலும் தயாரிப்பைத் தொடர்கிறேன்"
+  ],
+  "I took the full preparation, but the timing was off": [
+    "我已服用全部清肠药，但时间不符",
+    "Saya mengambil persediaan penuh tetapi masanya berbeza",
+    "முழுத் தயாரிப்பு மருந்தையும் எடுத்தேன், ஆனால் நேரம் மாறியது"
+  ],
+  "I missed a dose or stopped without completing it": [
+    "我漏服了一剂或未完成就停止了",
+    "Saya terlepas dos atau berhenti sebelum selesai",
+    "ஒரு வேளையைத் தவறவிட்டேன் அல்லது முடிக்காமல் நிறுத்தினேன்"
+  ],
+  "Your morning stool check and completed, on-time preparation are on track. Follow the final steps in your hospital/clinic’s instructions.": [
+    "早晨排便检查及按时完成的准备显示进展良好。请遵循医院/诊所说明中的最后步骤。",
+    "Pemeriksaan najis pagi dan persediaan lengkap tepat pada masanya mengikut rancangan. Ikut langkah akhir dalam arahan hospital/klinik anda.",
+    "காலை மலச் சரிபார்ப்பும் சரியான நேரத்தில் முடித்த தயாரிப்பும் சரியாக உள்ளன. மருத்துவமனை/கிளினிக் அறிவுறுத்தல்களில் உள்ள இறுதிப் படிகளைப் பின்பற்றவும்."
+  ],
+  "A little more to check": [
+    "还有一些需要确认",
+    "Ada lagi untuk disemak",
+    "இன்னும் சிறிது சரிபார்க்க வேண்டும்"
+  ],
+  "Review the items below. Follow your prescribed preparation and fluid cut-off instructions, and check your latest stool again on the morning of your procedure.": [
+    "请查看以下项目，遵循医嘱中的准备及停止饮水时间，并在检查当天早晨再次查看最新粪便。",
+    "Semak perkara di bawah. Ikut arahan persediaan dan waktu berhenti minum yang ditetapkan, dan periksa najis terkini sekali lagi pada pagi prosedur.",
+    "கீழே உள்ளவற்றைப் பாருங்கள். பரிந்துரைத்த தயாரிப்பு மற்றும் திரவம் நிறுத்தும் நேர அறிவுறுத்தல்களைப் பின்பற்றி, பரிசோதனைக் காலையில் சமீபத்திய மலத்தை மீண்டும் சரிபார்க்கவும்."
+  ],
+  "Preparation may not be complete": [
+    "准备可能尚未完成",
+    "Persediaan mungkin belum lengkap",
+    "தயாரிப்பு இன்னும் முடியாமல் இருக்கலாம்"
+  ],
+  "Please contact your endoscopy team for advice. They can review your preparation with you.": [
+    "请联系内镜团队寻求建议。他们可与您一起核对准备情况。",
+    "Hubungi pasukan endoskopi untuk nasihat. Mereka boleh menyemak persediaan bersama anda.",
+    "ஆலோசனைக்கு எண்டோஸ்கோபி குழுவைத் தொடர்புகொள்ளவும். அவர்கள் உங்களுடன் தயாரிப்பைச் சரிபார்க்கலாம்."
+  ],
+  "The colour looks different": [
+    "颜色变了",
+    "Warnanya berbeza",
+    "நிறம் மாறியுள்ளது"
+  ],
+  "I have been to the toilet many times": [
+    "我已多次去厕所",
+    "Saya sudah ke tandas banyak kali",
+    "பலமுறை கழிப்பறைக்குச் சென்றேன்"
+  ],
+  "The latest output looks watery and clear": [
+    "最新排出物呈水样且清澈",
+    "Najis terkini kelihatan berair dan jernih",
+    "சமீபத்திய கழிவு நீர்த்தும் தெளிவாகவும் உள்ளது"
+  ],
+  "I am not sure what to look for": [
+    "我不知道该看什么",
+    "Saya tidak pasti apa yang perlu diperhatikan",
+    "எதைக் கவனிக்க வேண்டும் என்று தெரியவில்லை"
+  ],
+  "Pale yellow": [
+    "淡黄色",
+    "Kuning pucat",
+    "வெளிர் மஞ்சள்"
+  ],
+  "Yellow-green": [
+    "黄绿色",
+    "Kuning kehijauan",
+    "மஞ்சள்-பச்சை"
+  ],
+  "Light orange": [
+    "浅橙色",
+    "Jingga muda",
+    "வெளிர் ஆரஞ்சு"
+  ],
+  "Brown": [
+    "棕色",
+    "Coklat",
+    "பழுப்பு"
+  ],
+  "Very dark or black": [
+    "很深色或黑色",
+    "Sangat gelap atau hitam",
+    "மிகவும் கருமை அல்லது கருப்பு"
+  ],
+  "Red or blood-like": [
+    "红色或像血",
+    "Merah atau seperti darah",
+    "சிவப்பு அல்லது இரத்தம் போன்றது"
+  ],
+  "Almost colourless": [
+    "几乎无色",
+    "Hampir tidak berwarna",
+    "கிட்டத்தட்ட நிறமற்றது"
+  ],
+  "I cannot tell": [
+    "我无法判断",
+    "Saya tidak dapat pastikan",
+    "என்னால் அறிய முடியவில்லை"
+  ],
+  "Formed or mostly solid": [
+    "成形或大部分为固体",
+    "Berbentuk atau kebanyakannya pejal",
+    "வடிவமுள்ள அல்லது பெரும்பாலும் திடமானது"
+  ],
+  "Liquid with solid pieces": [
+    "液体中有固体颗粒",
+    "Cecair dengan ketulan pejal",
+    "திடத் துண்டுகளுடன் திரவம்"
+  ],
+  "Mostly liquid, with a few small particles": [
+    "大部分为液体，有少量小颗粒",
+    "Kebanyakannya cecair dengan sedikit zarah kecil",
+    "சில சிறிய துகள்களுடன் பெரும்பாலும் திரவம்"
+  ],
+  "Watery, with no solid pieces": [
+    "水样，没有固体颗粒",
+    "Berair, tanpa ketulan pejal",
+    "திடத் துண்டுகளில்லாமல் நீர்த்தது"
+  ],
+  "See-through — I can see through the liquid": [
+    "透明 — 能透过液体看清",
+    "Jernih — saya boleh melihat menembusi cecair",
+    "தெளிவானது — திரவத்தின் ஊடாகப் பார்க்க முடிகிறது"
+  ],
+  "Cloudy — I cannot see through it clearly": [
+    "浑浊 — 无法透过液体看清",
+    "Keruh — saya tidak dapat melihat menembusinya dengan jelas",
+    "கலங்கலானது — அதன் ஊடாகத் தெளிவாகப் பார்க்க முடியவில்லை"
+  ],
+  "Colour is only one clue. Let’s check whether the latest output is watery and see-through.": [
+    "颜色只是线索之一。我们再看看最新排出物是否呈水样且透明。",
+    "Warna hanyalah satu petunjuk. Mari periksa sama ada najis terkini berair dan boleh dilihat menembusinya.",
+    "நிறம் ஒரு குறிப்பு மட்டுமே. சமீபத்திய கழிவு நீர்த்தும் ஊடாகப் பார்க்கக்கூடியதாகவும் உள்ளதா எனப் பார்ப்போம்."
+  ],
+  "Those are useful things to notice. Let’s check the latest output, including whether any pieces remain.": [
+    "这些观察很有帮助。再看看最新排出物，包括是否还有颗粒。",
+    "Itu pemerhatian yang berguna. Mari periksa najis terkini, termasuk sama ada masih ada ketulan.",
+    "இவை பயனுள்ள கவனிப்புகள். துண்டுகள் மீதமுள்ளனவா என்பது உட்பட சமீபத்திய கழிவைப் பார்ப்போம்."
+  ],
+  "We will check one thing at a time: colour, solid pieces, then whether you can see through the liquid.": [
+    "我们逐项查看：颜色、固体颗粒，然后看液体是否透明。",
+    "Kita periksa satu demi satu: warna, ketulan pejal, kemudian sama ada cecair boleh dilihat menembusinya.",
+    "ஒவ்வொன்றாகப் பார்ப்போம்: நிறம், திடத் துண்டுகள், பிறகு திரவத்தின் ஊடாகப் பார்க்க முடிகிறதா என்பது."
+  ],
+  "Check this with your clinical team": [
+    "请向医护团队确认",
+    "Semak dengan pasukan klinikal anda",
+    "மருத்துவக் குழுவுடன் இதைச் சரிபார்க்கவும்"
+  ],
+  "Do not assume very dark, black or red output is caused by food or iron. Contact your hospital/clinic for advice, even if it is watery or you have been many times.": [
+    "不要以为很深色、黑色或红色排出物只是由食物或铁剂造成。即使呈水样或已多次排便，也请联系医院/诊所。",
+    "Jangan anggap najis sangat gelap, hitam atau merah disebabkan makanan atau zat besi. Hubungi hospital/klinik walaupun berair atau anda telah ke tandas banyak kali.",
+    "மிகவும் கருமையான, கருப்பு அல்லது சிவப்புக் கழிவு உணவு அல்லது இரும்பால் ஏற்பட்டது எனக் கருத வேண்டாம். நீர்த்திருந்தாலும் பலமுறை சென்றிருந்தாலும் மருத்துவமனை/கிளினிக்கைத் தொடர்புகொள்ளவும்."
+  ],
+  "It is okay to be unsure": [
+    "不确定也没关系",
+    "Tidak mengapa jika tidak pasti",
+    "உறுதியில்லாவிட்டாலும் பரவாயில்லை"
+  ],
+  "On your next trip, look for solid pieces and whether you can see through the liquid. If you still cannot tell, ask your hospital/clinic.": [
+    "下次排便时，注意是否有固体颗粒，以及能否透过液体看清。若仍无法判断，请询问医院/诊所。",
+    "Pada lawatan seterusnya, lihat jika ada ketulan pejal dan sama ada cecair boleh dilihat menembusinya. Jika masih tidak pasti, tanya hospital/klinik.",
+    "அடுத்த முறை திடத் துண்டுகள் உள்ளனவா, திரவத்தின் ஊடாகப் பார்க்க முடிகிறதா எனக் கவனிக்கவும். இன்னும் தெரியாவிட்டால் மருத்துவமனை/கிளினிக்கைக் கேட்கவும்."
+  ],
+  "You are still seeing solid material": [
+    "您仍看到固体物质",
+    "Anda masih melihat bahan pejal",
+    "இன்னும் திடப் பொருட்களைப் பார்க்கிறீர்கள்"
+  ],
+  "The latest output is not yet watery and clear. Follow your prescribed plan. If you have finished it and still see solid material, contact your hospital/clinic.": [
+    "最新排出物尚未呈水样且清澈。请遵循医嘱计划。若已完成却仍见固体物质，请联系医院/诊所。",
+    "Najis terkini belum berair dan jernih. Ikut pelan preskripsi. Jika sudah selesai tetapi masih ada bahan pejal, hubungi hospital/klinik.",
+    "சமீபத்திய கழிவு இன்னும் நீர்த்தும் தெளிவாகவும் இல்லை. பரிந்துரைத்த திட்டத்தைப் பின்பற்றவும். முடித்தும் திடப் பொருட்கள் இருந்தால் மருத்துவமனை/கிளினிக்கைத் தொடர்புகொள்ளவும்."
+  ],
+  "Watery, but still cloudy": [
+    "呈水样，但仍浑浊",
+    "Berair tetapi masih keruh",
+    "நீர்த்துள்ளது, ஆனால் இன்னும் கலங்கலாக உள்ளது"
+  ],
+  "Watery and see-through are different. Cloudy liquid can still contain material. Follow your prescribed plan; if you have finished it and the output remains cloudy, contact your hospital/clinic.": [
+    "水样与透明不同。浑浊液体仍可含有残留物。请遵循医嘱；若已完成准备但仍浑浊，请联系医院/诊所。",
+    "Berair dan jernih adalah berbeza. Cecair keruh masih boleh mengandungi bahan. Ikut pelan preskripsi; jika sudah selesai tetapi masih keruh, hubungi hospital/klinik.",
+    "நீர்த்ததும் ஊடாகத் தெரிவதும் வேறுபடும். கலங்கலான திரவத்தில் பொருட்கள் இருக்கலாம். பரிந்துரைத்த திட்டத்தைப் பின்பற்றவும்; முடித்தும் கலங்கலாக இருந்தால் மருத்துவமனை/கிளினிக்கைத் தொடர்புகொள்ளவும்."
+  ],
+  "You described watery, see-through output": [
+    "您描述的是水样、透明的排出物",
+    "Anda menerangkan najis berair dan jernih",
+    "நீர்த்த, ஊடாகத் தெரியும் கழிவை விவரித்துள்ளீர்கள்"
+  ],
+  "That describes clarity, not confirmation that you are ready. Complete your preparation as prescribed and follow your hospital/clinic’s instructions.": [
+    "这说明清澈程度，不代表已确认准备就绪。请按医嘱完成准备，遵循医院/诊所的说明。",
+    "Ini menerangkan kejernihan, bukan pengesahan kesediaan. Lengkapkan persediaan seperti dipreskripsikan dan ikut arahan hospital/klinik.",
+    "இது தெளிவை விவரிக்கிறது; தயாராகிவிட்டதை உறுதிசெய்யவில்லை. பரிந்துரைத்தபடி தயாரிப்பை முடித்து மருத்துவமனை/கிளினிக் அறிவுறுத்தல்களைப் பின்பற்றவும்."
+  ],
+  "Invalid medication extraction": [
+    "用药资料读取结果无效",
+    "Hasil bacaan ubat tidak sah",
+    "மருந்து வாசிப்பு முடிவு செல்லாது"
+  ],
+  "The procedure date changed. Read and review the instructions again.": [
+    "检查日期已更改。请重新阅读并核对说明。",
+    "Tarikh prosedur berubah. Baca dan semak arahan semula.",
+    "பரிசோதனைத் தேதி மாறியது. அறிவுறுத்தல்களை மீண்டும் படித்துச் சரிபார்க்கவும்."
+  ],
+  "This sheet does not provide procedure-specific instructions for this medicine.": [
+    "此说明单未提供该药在检查前后的专门用药指示。",
+    "Helaian ini tidak memberikan arahan khusus prosedur untuk ubat ini.",
+    "இந்தத் தாளில் இந்த மருந்துக்கான பரிசோதனை சார்ந்த அறிவுறுத்தல்கள் இல்லை."
+  ],
+  "A medicine name and readable source instruction are required.": [
+    "必须有药物名称及可读取的原始说明。",
+    "Nama ubat dan arahan sumber yang boleh dibaca diperlukan.",
+    "மருந்துப் பெயரும் படிக்கக்கூடிய மூல அறிவுறுத்தலும் தேவை."
+  ],
+  "The hospital/clinic must specify whether to take or hold this medicine.": [
+    "医院/诊所必须明确说明服用还是暂停此药。",
+    "Hospital/klinik mesti menyatakan sama ada ubat perlu diambil atau dihentikan.",
+    "மருந்தை எடுக்க வேண்டுமா நிறுத்த வேண்டுமா என்பதை மருத்துவமனை/கிளினிக் குறிப்பிட வேண்டும்."
+  ],
+  "Enter the day these instructions start.": [
+    "输入这些说明开始适用的日期。",
+    "Masukkan hari arahan ini bermula.",
+    "இந்த அறிவுறுத்தல்கள் தொடங்கும் நாளை உள்ளிடவும்."
+  ],
+  "Enter the time you were instructed to stop taking this medicine.": [
+    "输入医嘱要求停止服用此药的时间。",
+    "Masukkan masa anda diarahkan berhenti mengambil ubat ini.",
+    "இந்த மருந்தை நிறுத்தச் சொன்ன நேரத்தை உள்ளிடவும்."
+  ],
+  "This schedule must start on or before the procedure, end after it starts, and span at most a year.": [
+    "此安排须在检查当天或之前开始、在开始之后结束，且跨度不超过一年。",
+    "Jadual mesti bermula pada atau sebelum prosedur, berakhir selepas ia bermula, dan tidak melebihi setahun.",
+    "அட்டவணை பரிசோதனை நாளிலோ அதற்கு முன்போ தொடங்கி, தொடங்கிய பிறகு முடிய வேண்டும்; ஒரு ஆண்டை மீறக்கூடாது."
+  ],
+  "The number of daily doses must be stated in the instructions.": [
+    "说明中必须注明每日服用次数。",
+    "Bilangan dos harian mesti dinyatakan dalam arahan.",
+    "தினசரி வேளைகளின் எண்ணிக்கை அறிவுறுத்தல்களில் இருக்க வேண்டும்."
+  ],
+  "Choose a distinct reminder time for each daily instruction.": [
+    "为每天每次用药选择不同的提醒时间。",
+    "Pilih masa peringatan berbeza bagi setiap arahan harian.",
+    "ஒவ்வொரு தினசரி அறிவுறுத்தலுக்கும் தனித்தனி நினைவூட்டல் நேரத்தைத் தேர்ந்தெடுக்கவும்."
+  ],
+  "Enter the prescribed dose for each time you take this medicine.": [
+    "输入每次服药的医嘱剂量。",
+    "Masukkan dos preskripsi setiap kali ubat diambil.",
+    "ஒவ்வொரு முறை எடுக்கும் பரிந்துரைத்த மருந்தளவை உள்ளிடவும்."
+  ],
+  "Medicine details: {0}": [
+    "药物详情：{0}",
+    "Butiran ubat: {0}",
+    "மருந்து விவரங்கள்: {0}"
+  ],
+  "Do not take from {0} at {1}.": [
+    "从 {0} {1} 起暂停服用。",
+    "Jangan ambil mulai {0} pada {1}.",
+    "{0} அன்று {1} முதல் எடுக்க வேண்டாம்."
+  ],
+  "Hospital/clinic instruction: {0}": [
+    "医院/诊所说明：{0}",
+    "Arahan hospital/klinik: {0}",
+    "மருத்துவமனை/கிளினிக் அறிவுறுத்தல்: {0}"
+  ],
+  "Written timing: {0}": [
+    "医嘱时间：{0}",
+    "Masa bertulis: {0}",
+    "எழுதப்பட்ட நேரம்: {0}"
+  ],
+  "Daily reminder: {0}. No restart date is implied.": [
+    "每日提醒：{0}。这不表示恢复用药日期。",
+    "Peringatan harian: {0}. Ini tidak menetapkan tarikh mula semula.",
+    "தினசரி நினைவூட்டல்: {0}. மீண்டும் தொடங்கும் தேதியை இது குறிக்காது."
+  ],
+  "Time to take: {0}": [
+    "服用时间：{0}",
+    "Masa mengambil: {0}",
+    "எடுக்கும் நேரம்: {0}"
+  ],
+  "Calendar reminders end on {0}; follow your hospital/clinic's instructions after that.": [
+    "提醒于 {0} 结束；之后请遵循医院/诊所说明。",
+    "Peringatan berakhir pada {0}; ikut arahan hospital/klinik selepas itu.",
+    "நினைவூட்டல்கள் {0} அன்று முடியும்; அதன் பிறகு மருத்துவமனை/கிளினிக் அறிவுறுத்தல்களைப் பின்பற்றவும்."
+  ],
+  "Sign-in is unavailable right now. Please call the hospital/clinic.": [
+    "暂时无法登录，请致电医院/诊所。",
+    "Log masuk tidak tersedia sekarang. Hubungi hospital/klinik.",
+    "இப்போது உள்நுழைய முடியவில்லை. மருத்துவமனை/கிளினிக்கை அழைக்கவும்."
+  ],
+  "Please wait {0}s before asking for another code.": [
+    "请等待 {0} 秒后再索取验证码。",
+    "Tunggu {0}s sebelum meminta kod lagi.",
+    "மீண்டும் குறியீடு கேட்கும் முன் {0} விநாடிகள் காத்திருக்கவும்."
+  ],
+  "That does not look like a mobile number.": [
+    "这似乎不是手机号码。",
+    "Itu tidak kelihatan seperti nombor telefon bimbit.",
+    "அது கைப்பேசி எண் போலத் தெரியவில்லை."
+  ],
+  "Too many codes requested. Try again in a few minutes.": [
+    "请求验证码次数过多，请几分钟后再试。",
+    "Terlalu banyak permintaan kod. Cuba lagi dalam beberapa minit.",
+    "மிக அதிக குறியீடுகள் கோரப்பட்டன. சில நிமிடங்களில் மீண்டும் முயலவும்."
+  ],
+  "That number cannot receive SMS.": [
+    "此号码无法接收短信。",
+    "Nombor itu tidak boleh menerima SMS.",
+    "இந்த எண்ணால் குறுஞ்செய்தி பெற முடியாது."
+  ],
+  "We could not send the code. Please try again.": [
+    "未能发送验证码，请重试。",
+    "Kami tidak dapat menghantar kod. Sila cuba lagi.",
+    "குறியீட்டை அனுப்ப முடியவில்லை. மீண்டும் முயலவும்."
+  ],
+  "Enter the 6-digit code.": [
+    "请输入 6 位验证码。",
+    "Masukkan kod 6 digit.",
+    "6 இலக்கக் குறியீட்டை உள்ளிடவும்."
+  ],
+  "That code has expired. Ask for a new one.": [
+    "验证码已过期，请索取新的验证码。",
+    "Kod telah tamat tempoh. Minta kod baharu.",
+    "குறியீடு காலாவதியானது. புதிய குறியீட்டைக் கேட்கவும்."
+  ],
+  "Too many wrong attempts. Ask for a new code.": [
+    "输入错误次数过多，请索取新的验证码。",
+    "Terlalu banyak percubaan salah. Minta kod baharu.",
+    "மிக அதிக தவறான முயற்சிகள். புதிய குறியீட்டைக் கேட்கவும்."
+  ],
+  "We could not check the code. Please try again.": [
+    "未能验证验证码，请重试。",
+    "Kami tidak dapat menyemak kod. Sila cuba lagi.",
+    "குறியீட்டைச் சரிபார்க்க முடியவில்லை. மீண்டும் முயலவும்."
+  ],
+  "Please sign in again before uploading.": [
+    "请重新登录后再上传。",
+    "Sila log masuk semula sebelum memuat naik.",
+    "பதிவேற்றும் முன் மீண்டும் உள்நுழையவும்."
+  ],
+  "No procedure is available for this account.": [
+    "此账户没有检查资料。",
+    "Tiada prosedur tersedia untuk akaun ini.",
+    "இந்தக் கணக்கிற்கு பரிசோதனை விவரம் இல்லை."
+  ],
+  "Photo reading is not switched on in this build. Your existing preparation plan is still available.": [
+    "此版本尚未启用照片读取，您仍可使用现有准备计划。",
+    "Bacaan foto belum diaktifkan dalam versi ini. Pelan persediaan sedia ada masih tersedia.",
+    "இந்தப் பதிப்பில் படம் படித்தல் இயக்கப்படவில்லை. உங்கள் தற்போதைய தயாரிப்புத் திட்டம் இன்னும் கிடைக்கும்."
+  ],
+  "Choose supported photos and try again.": [
+    "请选择支持的照片格式并重试。",
+    "Pilih foto yang disokong dan cuba lagi.",
+    "ஆதரிக்கப்படும் படங்களைத் தேர்ந்தெடுத்து மீண்டும் முயலவும்."
+  ],
+  "of": [
+    "／",
+    "daripada",
+    "இல்"
+  ],
+  "ml": [
+    "毫升",
+    "ml",
+    "மி.லி."
+  ],
+  "glasses": [
+    "杯",
+    "gelas",
+    "குவளைகள்"
+  ],
+  "Optional · from your hospital/clinic’s preparation sheet": [
+    "可选 · 来自医院/诊所的准备说明单",
+    "Pilihan · daripada helaian persediaan hospital/klinik anda",
+    "விருப்பத்தேர்வு · மருத்துவமனை/கிளினிக்கின் தயாரிப்புத் தாளிலிருந்து"
+  ],
+  "Choose from gallery": [
+    "从相册选择",
+    "Pilih daripada galeri",
+    "படத் தொகுப்பிலிருந்து தேர்ந்தெடு"
+  ],
+  "entry": [
+    "条目",
+    "entri",
+    "பதிவு"
+  ],
+  "hold reminders": [
+    "暂停用药提醒",
+    "peringatan berhenti ubat",
+    "மருந்தை நிறுத்தும் நினைவூட்டல்கள்"
+  ],
+  "doses": [
+    "剂量",
+    "dos",
+    "வேளைகள்"
+  ],
+  "at": [
+    "时间",
+    "pada",
+    "நேரம்"
+  ],
+  "Copy each dose from your instructions. These times set your medication reminders.": [
+    "按说明填写每次剂量。这些时间用于用药提醒。",
+    "Salin setiap dos daripada arahan. Masa ini menetapkan peringatan ubat anda.",
+    "உங்கள் அறிவுறுத்தலிலிருந்து ஒவ்வொரு அளவையும் நகலெடுக்கவும். இந்த நேரங்களே மருந்து நினைவூட்டல்களை அமைக்கும்."
+  ],
+  "e.g. 1 tablet": [
+    "例如：1 片",
+    "cth. 1 tablet",
+    "எ.கா. 1 மாத்திரை"
+  ],
+  " · Today": [
+    " · 今天",
+    " · Hari ini",
+    " · இன்று"
+  ],
+  "after midnight": [
+    "午夜后",
+    "selepas tengah malam",
+    "நள்ளிரவுக்குப் பிறகு"
+  ],
+  "Choose the closest answer. We will guide you from there.": [
+    "选择最符合的答案，我们会逐步引导您。",
+    "Pilih jawapan paling hampir. Kami akan membimbing anda seterusnya.",
+    "மிகப் பொருத்தமான பதிலைத் தேர்ந்தெடுக்கவும். அங்கிருந்து வழிகாட்டுவோம்."
+  ],
+  "% of the summary": [
+    "% 的综合评分",
+    "% daripada ringkasan",
+    "% சுருக்கத்தின் பங்கு"
+  ],
+  "to avoid": [
+    "种需避免",
+    "perlu dielakkan",
+    "தவிர்க்க வேண்டியவை"
+  ],
+  "Five stages from here to the procedure. You are in": [
+    "从现在到检查共五个阶段。您目前处于",
+    "Lima peringkat hingga prosedur. Anda kini dalam",
+    "இங்கிருந்து பரிசோதனை வரை ஐந்து நிலைகள். நீங்கள் இருப்பது"
+  ],
+  "day": [
+    "天",
+    "hari",
+    "நாள்"
+  ],
+  "days": [
+    "天",
+    "hari",
+    "நாட்கள்"
+  ],
+  "before ·": [
+    "前 ·",
+    "sebelum ·",
+    "முன்பு ·"
+  ],
+  "ml recorded": [
+    "毫升已记录",
+    "ml direkodkan",
+    "மி.லி. பதிவு செய்யப்பட்டது"
+  ],
+  "Anything different from your dose records?": [
+    "实际情况与剂量记录有不同吗？",
+    "Ada perbezaan daripada rekod dos anda?",
+    "வேளைப் பதிவுகளிலிருந்து ஏதேனும் வேறுபாடு உள்ளதா?"
+  ],
+  " or ": [
+    " 或 ",
+    " atau ",
+    " அல்லது "
+  ],
+  ", filled in below.": [
+    "，已填写在下方。",
+    ", diisi di bawah.",
+    ", கீழே நிரப்பப்பட்டுள்ளது."
+  ],
+  "green": [
+    "绿色",
+    "hijau",
+    "பச்சை"
+  ],
+  "amber": [
+    "琥珀色",
+    "kuning ambar",
+    "அம்பர்"
+  ],
+  "red": [
+    "红色",
+    "merah",
+    "சிவப்பு"
+  ],
+  "Hello, {0}.": [
+    "您好，{0}。",
+    "Helo, {0}.",
+    "வணக்கம், {0}."
+  ],
+  "Clear fluids only from now": [
+    "从现在起只喝清流质",
+    "Cecair jernih sahaja mulai sekarang",
+    "இனி தெளிந்த திரவங்கள் மட்டும்"
+  ],
+  "Check the earlier last day copied from the sheet.": [
+    "核对从说明单抄录的较早结束日期。",
+    "Semak tarikh akhir lebih awal yang disalin daripada helaian.",
+    "தாளிலிருந்து நகலெடுத்த முந்தைய இறுதி நாளைச் சரிபார்க்கவும்."
+  ],
+  "Dose: {0}": [
+    "剂量：{0}",
+    "Dos: {0}",
+    "அளவு: {0}"
+  ],
+  "Take {0}": [
+    "服用 {0}",
+    "Ambil {0}",
+    "{0} எடுத்துக்கொள்ளவும்"
+  ],
+  "Do not take {0}": [
+    "暂停服用 {0}",
+    "Jangan ambil {0}",
+    "{0} எடுக்க வேண்டாம்"
+  ],
+  "Entry removed from the plan.": [
+    "已从计划移除条目。",
+    "Entri dibuang daripada pelan.",
+    "திட்டத்திலிருந்து பதிவு நீக்கப்பட்டது."
+  ],
+  "{0}: {1} percent": [
+    "{0}：百分之 {1}",
+    "{0}: {1} peratus",
+    "{0}: {1} சதவீதம்"
+  ],
+  "Enter your mobile number.": [
+    "请输入手机号码。",
+    "Masukkan nombor telefon bimbit anda.",
+    "உங்கள் கைப்பேசி எண்ணை உள்ளிடவும்."
+  ],
+  "Enter an 8-digit Singapore mobile number, or the full number with +.": [
+    "请输入 8 位新加坡手机号码，或以 + 开头的完整号码。",
+    "Masukkan nombor bimbit Singapura 8 digit, atau nombor penuh dengan +.",
+    "8 இலக்க சிங்கப்பூர் கைப்பேசி எண்ணை அல்லது + உடன் முழு எண்ணை உள்ளிடவும்."
+  ],
+  "Bad request.": [
+    "请求无效，请重试。",
+    "Permintaan tidak sah. Sila cuba lagi.",
+    "கோரிக்கை செல்லாது. மீண்டும் முயலவும்."
+  ],
+  "Not signed in.": [
+    "尚未登录。",
+    "Belum log masuk.",
+    "உள்நுழையவில்லை."
+  ],
+  "Upload from the Plan page.": [
+    "请从计划页面上传。",
+    "Muat naik daripada halaman Pelan.",
+    "திட்டப் பக்கத்திலிருந்து பதிவேற்றவும்."
+  ],
+  "Choose image files to upload.": [
+    "请选择要上传的图片文件。",
+    "Pilih fail imej untuk dimuat naik.",
+    "பதிவேற்றப் படக் கோப்புகளைத் தேர்ந்தெடுக்கவும்."
+  ],
+  "Choose up to three photos, no more than 5 MB each.": [
+    "最多选择三张照片，每张不超过 5 MB。",
+    "Pilih sehingga tiga foto, tidak melebihi 5 MB setiap satu.",
+    "மூன்று படங்கள் வரை தேர்ந்தெடுக்கவும்; ஒவ்வொன்றும் 5 MB-ஐ மீறக்கூடாது."
+  ],
+  "Choose between one and three photos.": [
+    "请选择一至三张照片。",
+    "Pilih antara satu hingga tiga foto.",
+    "ஒன்று முதல் மூன்று படங்களைத் தேர்ந்தெடுக்கவும்."
+  ],
+  "Use JPEG, PNG or WebP photos, no more than 5 MB each. Retake unsupported photos with your camera.": [
+    "使用 JPEG、PNG 或 WebP 照片，每张不超过 5 MB。不支持的照片请用相机重拍。",
+    "Gunakan foto JPEG, PNG atau WebP, tidak melebihi 5 MB setiap satu. Ambil semula foto yang tidak disokong dengan kamera.",
+    "JPEG, PNG அல்லது WebP படங்களைப் பயன்படுத்தவும்; ஒவ்வொன்றும் 5 MB வரை. ஆதரிக்கப்படாத படங்களை கேமராவால் மீண்டும் எடுக்கவும்."
+  ],
+  "This file is not a supported photo. Please retake it.": [
+    "不支持此照片文件，请重新拍摄。",
+    "Fail ini bukan foto yang disokong. Sila ambil semula.",
+    "இந்தப் படம் ஆதரிக்கப்படவில்லை. மீண்டும் படம் எடுக்கவும்."
+  ],
+  "Photo reading cannot connect because its API credentials were rejected. The app configuration needs attention.": [
+    "照片读取无法连接，因为 API 凭据被拒绝。需要检查应用配置。",
+    "Bacaan foto tidak dapat disambungkan kerana kelayakan API ditolak. Konfigurasi aplikasi perlu diperiksa.",
+    "API சான்றுகள் நிராகரிக்கப்பட்டதால் படம் படிக்கும் சேவையுடன் இணைய முடியவில்லை. செயலியின் அமைப்பைச் சரிபார்க்க வேண்டும்."
+  ],
+  "Photo reading is unavailable because the API account has no remaining quota. Check the API billing and usage limits.": [
+    "API 账户额度已用尽，无法读取照片。请检查 API 账单及用量限制。",
+    "Bacaan foto tidak tersedia kerana kuota akaun API telah habis. Semak bil dan had penggunaan API.",
+    "API கணக்கில் ஒதுக்கீடு மீதமில்லாததால் படம் படித்தல் கிடைக்கவில்லை. API கட்டணம் மற்றும் பயன்பாட்டு வரம்புகளைச் சரிபார்க்கவும்."
+  ],
+  "Photo reading is receiving too many requests. Wait a minute before trying again.": [
+    "照片读取请求过多，请等一分钟再试。",
+    "Terlalu banyak permintaan bacaan foto. Tunggu seminit sebelum cuba lagi.",
+    "படம் படிக்க அதிக கோரிக்கைகள் வருகின்றன. ஒரு நிமிடம் காத்திருந்து மீண்டும் முயலவும்."
+  ],
+  "The photo-reading service rejected the request. Please check the server diagnostic code.": [
+    "照片读取服务拒绝请求，请检查服务器诊断代码。",
+    "Perkhidmatan bacaan foto menolak permintaan. Semak kod diagnostik pelayan.",
+    "படம் படிக்கும் சேவை கோரிக்கையை நிராகரித்தது. சேவையகச் சிக்கல் குறியீட்டைச் சரிபார்க்கவும்."
+  ],
+  "The photo-reading service could not complete the request. Please try again shortly.": [
+    "照片读取服务未能完成请求，请稍后重试。",
+    "Perkhidmatan bacaan foto tidak dapat melengkapkan permintaan. Cuba lagi sebentar nanti.",
+    "படம் படிக்கும் சேவையால் கோரிக்கையை முடிக்க முடியவில்லை. சிறிது நேரத்தில் மீண்டும் முயலவும்."
+  ],
+  "The server could not connect to the photo-reading service. Please try again shortly.": [
+    "服务器无法连接照片读取服务，请稍后重试。",
+    "Pelayan tidak dapat menyambung ke perkhidmatan bacaan foto. Cuba lagi sebentar nanti.",
+    "சேவையகத்தால் படம் படிக்கும் சேவையுடன் இணைய முடியவில்லை. சிறிது நேரத்தில் மீண்டும் முயலவும்."
+  ],
+  "Photo reading took longer than 45 seconds. Try again with one clear photo.": [
+    "照片读取超过 45 秒。请用一张清晰照片重试。",
+    "Bacaan foto melebihi 45 saat. Cuba lagi dengan satu foto yang jelas.",
+    "படம் படிக்க 45 விநாடிகளுக்கு மேல் ஆனது. ஒரு தெளிவான படத்துடன் மீண்டும் முயலவும்."
+  ],
+  "The service could not read this document. Try a clear photo of the written medication instructions.": [
+    "无法读取此文件，请使用清晰的纸本用药说明照片。",
+    "Perkhidmatan tidak dapat membaca dokumen ini. Cuba foto jelas arahan ubat bertulis.",
+    "இந்த ஆவணத்தைச் சேவையால் படிக்க முடியவில்லை. எழுத்து மருந்து அறிவுறுத்தல்களின் தெளிவான படத்தை முயலவும்."
+  ],
+  "The reading was incomplete. Try one page at a time. No instructions have been added.": [
+    "读取未完成。请一次上传一页。目前未添加任何说明。",
+    "Bacaan tidak lengkap. Cuba satu halaman pada satu masa. Tiada arahan ditambah.",
+    "படித்தல் முழுமையடையவில்லை. ஒரு நேரத்தில் ஒரு பக்கத்தை முயலவும். அறிவுறுத்தல்கள் சேர்க்கப்படவில்லை."
+  ],
+  "The service returned an unexpected reading format. No instructions have been added. Please try again.": [
+    "服务返回了不符合预期的格式，未添加任何说明。请重试。",
+    "Perkhidmatan memberikan format bacaan yang tidak dijangka. Tiada arahan ditambah. Sila cuba lagi.",
+    "சேவை எதிர்பாராத வடிவத்தில் முடிவளித்தது. அறிவுறுத்தல்கள் சேர்க்கப்படவில்லை. மீண்டும் முயலவும்."
+  ],
+  "The assistant is not switched on in this build, so I cannot answer that here.": [
+    "此版本尚未启用助手，暂时无法回答。",
+    "Pembantu belum diaktifkan dalam versi ini, jadi saya tidak dapat menjawab di sini.",
+    "இந்தப் பதிப்பில் உதவியாளர் இயக்கப்படவில்லை; இங்கே பதிலளிக்க முடியவில்லை."
+  ],
+  "Please call your endoscopy hospital/clinic on {0}.": [
+    "请拨打 {0} 联系内镜医院/诊所。",
+    "Sila hubungi hospital/klinik endoskopi anda di {0}.",
+    "{0} என்ற எண்ணில் எண்டோஸ்கோபி மருத்துவமனை/கிளினிக்கை அழைக்கவும்."
+  ],
+  "Please call your endoscopy hospital/clinic on the number in your appointment letter.": [
+    "请使用预约信上的号码致电内镜医院/诊所。",
+    "Sila hubungi hospital/klinik endoskopi melalui nombor pada surat janji temu anda.",
+    "முன்பதிவுக் கடிதத்தில் உள்ள எண்ணில் எண்டோஸ்கோபி மருத்துவமனை/கிளினிக்கை அழைக்கவும்."
+  ],
+  "If you have severe pain, a hard or swollen tummy, cannot stop vomiting, or feel faint, call 995 now.": [
+    "如有剧烈疼痛、腹部发硬或肿胀、持续呕吐或感到昏厥，请立即拨打 995。",
+    "Jika sakit teruk, perut keras atau bengkak, muntah berterusan atau rasa hendak pitam, hubungi 995 sekarang.",
+    "கடுமையான வலி, கடினமான அல்லது வீங்கிய வயிறு, நிற்காத வாந்தி அல்லது மயக்க உணர்வு இருந்தால் உடனே 995-ஐ அழைக்கவும்."
+  ],
+  "I am not able to answer that one safely. Please call your endoscopy hospital/clinic on the number in your appointment letter. If you have severe pain, a hard or swollen tummy, cannot stop vomiting, or feel faint, call 995 now. Do not take any extra preparation.": [
+    "我无法安全地回答这个问题。请使用预约信上的号码致电内镜医院/诊所。如有剧烈疼痛、腹部发硬或肿胀、持续呕吐或感到昏厥，请立即拨打 995。不要额外服用清肠药。",
+    "Saya tidak dapat menjawab soalan itu dengan selamat. Hubungi hospital/klinik endoskopi melalui nombor pada surat janji temu. Jika sakit teruk, perut keras atau bengkak, muntah berterusan atau rasa hendak pitam, hubungi 995 sekarang. Jangan ambil persediaan tambahan.",
+    "அந்தக் கேள்விக்குப் பாதுகாப்பாகப் பதிலளிக்க முடியவில்லை. முன்பதிவுக் கடிதத்தில் உள்ள எண்ணில் எண்டோஸ்கோபி மருத்துவமனை/கிளினிக்கை அழைக்கவும். கடுமையான வலி, கடினமான அல்லது வீங்கிய வயிறு, நிற்காத வாந்தி அல்லது மயக்க உணர்வு இருந்தால் உடனே 995-ஐ அழைக்கவும். கூடுதல் தயாரிப்பு மருந்து எடுக்க வேண்டாம்."
+  ],
+  "Many toilet trips do not tell us whether the bowel is clear. Let’s look at the output from your latest trip.": [
+    "多次排便不能说明肠道是否清洁。我们来看看最近一次的排出物。",
+    "Kerap ke tandas tidak menentukan sama ada usus sudah bersih. Mari lihat najis pada lawatan terkini.",
+    "பலமுறை கழிப்பறை சென்றது மட்டும் குடல் சுத்தமானதா என்பதைக் கூறாது. சமீபத்திய கழிவைப் பார்ப்போம்."
+  ],
+  "Singapore General Hospital": [
+    "新加坡中央医院",
+    "Hospital Besar Singapura",
+    "சிங்கப்பூர் பொது மருத்துவமனை"
+  ],
+  "Changi General Hospital": [
+    "樟宜综合医院",
+    "Hospital Besar Changi",
+    "சாங்கி பொது மருத்துவமனை"
+  ],
+  "Block 3, Level 4 — Endoscopy Centre": [
+    "第3座，4楼 — 内镜中心",
+    "Blok 3, Aras 4 — Pusat Endoskopi",
+    "பிளாக் 3, தளம் 4 — எண்டோஸ்கோபி நிலையம்"
+  ],
+  "Medical Centre, Level 2": [
+    "医疗中心，2楼",
+    "Pusat Perubatan, Aras 2",
+    "மருத்துவ நிலையம், தளம் 2"
+  ],
+  "{0} foods you can eat · {1} to avoid": [
+    "{0} 种可食用食物 · {1} 种需避免",
+    "{0} makanan boleh dimakan · {1} perlu dielakkan",
+    "உண்ணக்கூடியவை {0} · தவிர்க்க வேண்டியவை {1}"
+  ],
+  "{0} of {1} ml": [
+    "{0} / {1} 毫升",
+    "{0} daripada {1} ml",
+    "{1} மி.லி. அளவில் {0} மி.லி."
+  ],
+  "{0} / {1} glasses": [
+    "{0} / {1} 杯",
+    "{0} / {1} gelas",
+    "{0} / {1} குவளைகள்"
+  ],
+  "Includes {0} medication reminders.": [
+    "包含 {0} 条用药提醒。",
+    "Termasuk {0} peringatan ubat.",
+    "{0} மருந்து நினைவூட்டல்கள் உள்ளன."
+  ],
+  "{0} days before": [
+    "{0} 天前",
+    "{0} hari sebelum",
+    "{0} நாட்களுக்கு முன்பு"
+  ],
+  "1 day before": [
+    "1 天前",
+    "1 hari sebelum",
+    "1 நாளுக்கு முன்பு"
+  ]
+}

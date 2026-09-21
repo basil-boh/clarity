@@ -93,3 +93,13 @@ test('distinguishes quota, credentials, rate limits, configuration and timeouts 
       err => extractionFailure(err).diagnostic.kind === kind)
   }
 })
+
+test('generated extraction explanations use the chosen language while preserving source instructions', async () => {
+  let sent
+  await extractMedications([], 'fake-test-key', 'test-model', async (_url, options) => {
+    sent = JSON.parse(options.body)
+    return new Response(JSON.stringify({ choices: [{ finish_reason: 'stop', message: { content: '{"medications":[]}' } }] }), { status: 200 })
+  }, 'ta')
+  assert.match(sent.messages[0].content, /issues in Tamil/)
+  assert.match(sent.messages[0].content, /quoted sourceText exactly as written/)
+})

@@ -1,3 +1,4 @@
+import { getI18n } from '@/lib/i18n-server'
 import { NoPatient } from '@/components/NoPatient'
 import { StoolCheck } from '@/components/StoolCheck'
 import { hasDepartmentPhone } from '@/domain/prep'
@@ -6,9 +7,14 @@ import { readProgress } from '@/lib/progress'
 import { requireSession } from '@/lib/session'
 import { saveStoolCheck } from '../actions'
 
-export const metadata = { title: 'Stool check-in — Clarity' }
+export async function generateMetadata() {
+  const { tx } = await getI18n()
+  return { title: tx('Stool check-in — Clarity') }
+}
 
 export default async function Verify() {
+  const { tx } = await getI18n()
+
   const session = await requireSession()
   const patient = await findPatient(session.phone)
   if (!patient) return <NoPatient phone={session.phone} />
@@ -16,8 +22,8 @@ export default async function Verify() {
   return (
     <>
       <header className="mb-7">
-        <h1 className="text-[30px] font-bold leading-[1.1] tracking-[-0.03em] text-ink">Stool check-in</h1>
-        <p className="mt-2 text-[17px] leading-relaxed text-ink-muted">Tell us what you noticed on your latest toilet trip. We will take it one question at a time.</p>
+        <h1 className="text-[30px] font-bold leading-[1.1] tracking-[-0.03em] text-ink">{tx("Stool check-in")}</h1>
+        <p className="mt-2 text-[17px] leading-relaxed text-ink-muted">{tx("Tell us what you noticed on your latest toilet trip. We will take it one question at a time.")}</p>
       </header>
       <StoolCheck saved={progress.stoolCheck ?? null} onSave={saveStoolCheck}
         departmentPhone={hasDepartmentPhone(patient.procedure) ? patient.procedure.departmentPhone : undefined} />

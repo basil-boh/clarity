@@ -1,3 +1,4 @@
+import { getI18n } from '@/lib/i18n-server'
 import { Card } from '@/components/ui'
 import { PreparationPlan } from '@/components/PreparationPlan'
 import { NoPatient } from '@/components/NoPatient'
@@ -9,7 +10,10 @@ import { requireSession } from '@/lib/session'
 
 import { saveMedicationPlan, tickStep } from '../actions'
 
-export const metadata = { title: 'How to prep — Clarity' }
+export async function generateMetadata() {
+  const { tx } = await getI18n()
+  return { title: tx('How to prep — Clarity') }
+}
 
 /**
  * The whole run-up, day by day.
@@ -19,6 +23,8 @@ export const metadata = { title: 'How to prep — Clarity' }
  * with today marked. Nothing is collapsed behind a tap.
  */
 export default async function Prep() {
+  const { tx } = await getI18n()
+
   const session = await requireSession()
   const [progress, medications] = await Promise.all([readProgress(), loadMedications()])
   const patient = await livePatient(
@@ -47,18 +53,13 @@ export default async function Prep() {
 
       <section className="mt-8">
         <Card>
-          <h3 className="text-[17px] font-semibold text-ink">Not sure about something?</h3>
-          <p className="mt-1.5 text-[15px] leading-relaxed text-ink-muted">
-            Guidance differs between hospitals. When in doubt, your department&rsquo;s answer is
-            the one that applies to you.
-          </p>
+          <h3 className="text-[17px] font-semibold text-ink">{tx("Not sure about something?")}</h3>
+          <p className="mt-1.5 text-[15px] leading-relaxed text-ink-muted">{tx("Guidance differs between hospitals. When in doubt, your hospital/clinic’s answer is the one that applies to you.")}</p>
           {hasDepartmentPhone(patient.procedure) ? (
             <a
               href={`tel:${patient.procedure.departmentPhone}`}
               className="mt-4 inline-flex min-h-[48px] w-full items-center justify-center rounded-lg bg-blue px-4 text-[16px] font-semibold text-white"
-            >
-              Call the department
-            </a>
+            >{tx("Call the hospital/clinic")}</a>
           ) : null}
         </Card>
       </section>

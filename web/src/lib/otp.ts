@@ -293,7 +293,7 @@ export async function sendCode(phone: string): Promise<SendResult> {
   // burning cooldowns for codes it was never going to send.
   if (misconfigured()) {
     console.error('[clarity] Twilio is not configured; refusing to send a code.')
-    return { ok: false, error: 'Sign-in is unavailable right now. Please call the department.' }
+    return { ok: false, error: 'Sign-in is unavailable right now. Please call the hospital/clinic.' }
   }
 
   if (usesDemoCode(phone)) {
@@ -345,7 +345,7 @@ export async function checkCode(phone: string, code: string): Promise<CheckResul
   if (clean.length !== 6) return { ok: false, error: 'Enter the 6-digit code.' }
 
   if (misconfigured()) {
-    return { ok: false, error: 'Sign-in is unavailable right now. Please call the department.' }
+    return { ok: false, error: 'Sign-in is unavailable right now. Please call the hospital/clinic.' }
   }
 
   if (usesDemoCode(phone)) {

@@ -1,9 +1,11 @@
+import { getI18n } from '@/lib/i18n-server'
 import type { Metadata, Viewport } from 'next'
 import { DM_Mono, Inter } from 'next/font/google'
 
 import { HTML_LANG } from '@/domain/i18n'
 import { readLanguage } from '@/lib/language'
 
+import { I18nProvider } from '@/components/I18nProvider'
 import './globals.css'
 
 /**
@@ -28,10 +30,13 @@ const dmMono = DM_Mono({
   display: 'swap',
 })
 
-export const metadata: Metadata = {
-  title: 'Clarity — your colonoscopy preparation',
+export async function generateMetadata(): Promise<Metadata> {
+  const { tx } = await getI18n()
+  return {
+  title: tx('Clarity — your colonoscopy preparation'),
   description:
-    'Your appointment, what to do and when, and how your preparation is going. From your endoscopy department.',
+    tx('Your appointment, what to do and when, and how your preparation is going. From your endoscopy hospital/clinic.'),
+  }
 }
 
 export const viewport: Viewport = {
@@ -50,18 +55,20 @@ export const viewport: Viewport = {
  * sentence read aloud by an English voice is not readable at all.
  */
 export default async function RootLayout({ children }: { children: React.ReactNode }) {
+  const { tx } = await getI18n()
+
   const language = await readLanguage()
 
   return (
     <html lang={HTML_LANG[language]} className={`${inter.variable} ${dmMono.variable}`}>
       <body>
+        <I18nProvider language={language}>
         <a
           href="#main"
           className="sr-only focus:not-sr-only focus:absolute focus:left-3 focus:top-3 focus:z-50 focus:rounded-lg focus:bg-blue focus:px-4 focus:py-2 focus:text-white"
-        >
-          Skip to content
-        </a>
-        {children}
+        >{tx("Skip to content")}</a>
+        {tx(children)}
+      </I18nProvider>
       </body>
     </html>
   )

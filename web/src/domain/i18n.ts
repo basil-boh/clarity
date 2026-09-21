@@ -25,17 +25,15 @@ export const LANGUAGE_NAMES: Readonly<Record<Language, string>> = {
 }
 
 /**
- * The name in its own script, plus the English name alongside it.
+ * Each name in its own script.
  *
- * The dropdown shows both: the native name so a patient can find their
- * language, and the English gloss so a caregiver filling the form in for them
- * can too.
+ * Keep language choices recognisable in any selected interface language.
  */
 export const LANGUAGE_LABELS: Readonly<Record<Language, string>> = {
   en: 'English',
-  zh: '中文 · Chinese',
-  ms: 'Bahasa Melayu · Malay',
-  ta: 'தமிழ் · Tamil',
+  zh: '中文',
+  ms: 'Bahasa Melayu',
+  ta: 'தமிழ்',
 }
 
 /** The `lang` attribute for the document, which decides font and hyphenation. */
@@ -56,4 +54,9 @@ export function asLanguage(value: unknown): Language | null {
 /** Never throws and never guesses: anything unrecognised reads as English. */
 export function languageOr(value: unknown, fallback: Language = DEFAULT_LANGUAGE): Language {
   return asLanguage(value) ?? fallback
+}
+
+/** Fixed system-prompt values; never interpolate an unvalidated request value. */
+export const RESPONSE_LANGUAGES: Record<Language, string> = {
+  en: 'English', zh: 'Simplified Chinese', ms: 'Malay', ta: 'Tamil',
 }

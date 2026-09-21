@@ -1,10 +1,11 @@
 'use client'
 
+import { useI18n } from '@/components/I18nProvider'
+
 import { useEffect, useRef, useState } from 'react'
-import { format, parseISO } from 'date-fns'
+import { parseISO } from 'date-fns'
 import { PHASE_COPY, type PlanDay, type Procedure, type Step } from '@/domain/prep'
 import { medicationIssues, medicationOccurrences, type ReviewedMedication } from '@/domain/medications'
-import { CalendarExportButton } from './CalendarExportButton'
 import { MedicationReview } from './MedicationReview'
 import { Card, Notice, SectionTitle } from './ui'
 import { StepList } from './StepList'
@@ -22,6 +23,8 @@ export function PreparationPlan({ procedure, plan, offset, completed, onToggleSt
   /** Keeps confirmed entries; absent where there is nowhere to keep them. */
   onSaveMedications?: (entries: ReviewedMedication[]) => Promise<boolean>
 }) {
+  const { tx, dateFormat } = useI18n()
+
   const [entries, setEntries] = useState<ReviewedMedication[]>(savedMedications)
   const [saveFailed, setSaveFailed] = useState(false)
   const savedKey = useRef(JSON.stringify(keepable(savedMedications, procedure.date)))
@@ -55,14 +58,13 @@ export function PreparationPlan({ procedure, plan, offset, completed, onToggleSt
 
   return <>
     <header className="mb-7">
-      <h1 className="text-[30px] font-bold leading-[1.1] tracking-[-0.03em] text-ink">How to prep</h1>
-      <p className="mt-2 text-[17px] leading-relaxed text-ink-muted">Every day of the run-up, in order. Today is marked.</p>
+      <h1 className="text-[30px] font-bold leading-[1.1] tracking-[-0.03em] text-ink">{tx("How to prep")}</h1>
+      <p className="mt-2 text-[17px] leading-relaxed text-ink-muted">{tx("Every day of the run-up, in order. Today is marked.")}</p>
       <MedicationReview procedure={procedure} entries={entries} onChange={setEntries} persisted={persisted} />
-      {saveFailed && <div className="mt-4"><Notice tone="alert">Your medication reminders could not be saved, so they last only until you leave this page. Download them to your calendar to keep them.</Notice></div>}
-      <CalendarExportButton procedure={procedure} plan={plan} medications={medications} />
-      {medications.length > 0 && <p className="mt-3 text-[14px] text-blue-deep">Includes {medications.length} medication reminders.{persisted ? '' : ' Download before leaving this page.'}</p>}
+      {saveFailed && <div className="mt-4"><Notice tone="alert">{tx("Your medication reminders could not be saved, so they last only until you leave this page. Please try saving them again before leaving.")}</Notice></div>}
+      {medications.length > 0 && <p className="mt-3 text-[14px] text-blue-deep">{tx('Includes {0} medication reminders.', { 0: medications.length })}</p>}
     </header>
-    <div className="mb-6"><Notice tone="alert">The second dose is the one most often skipped, and it is the one that clears the right side of the colon. Finish both.</Notice></div>
+    <div className="mb-6"><Notice tone="alert">{tx("The second dose is the one most often skipped, and it is the one that clears the right side of the colon. Finish both.")}</Notice></div>
     <div className="space-y-5">
       {dates.map(date => {
         const day = plan.find(d => d.date === date)
@@ -76,10 +78,10 @@ export function PreparationPlan({ procedure, plan, offset, completed, onToggleSt
         const steps = [...day?.steps ?? [], ...added].sort((a, b) =>
           `${a.date} ${a.at ?? ''}`.localeCompare(`${b.date} ${b.at ?? ''}`))
         return <section key={date}>
-          <SectionTitle>{format(parseISO(date), 'EEEE d MMMM')}{isToday ? ' · Today' : ''}</SectionTitle>
+          <SectionTitle>{tx(dateFormat(parseISO(date), 'EEEE d MMMM'))}{tx(isToday ? ' · Today' : '')}</SectionTitle>
           <Card className={isToday ? 'border-blue' : undefined}>
-            <h3 className="mb-1 text-[19px] font-semibold tracking-[-0.015em] text-ink">{day ? PHASE_COPY[day.phase].name : 'Your medication instructions'}</h3>
-            <p className="mb-4 text-[15px] leading-relaxed text-ink-muted">{day ? PHASE_COPY[day.phase].blurb : 'From the department’s sheet you reviewed.'}</p>
+            <h3 className="mb-1 text-[19px] font-semibold tracking-[-0.015em] text-ink">{tx(day ? PHASE_COPY[day.phase].name : 'Your medication instructions')}</h3>
+            <p className="mb-4 text-[15px] leading-relaxed text-ink-muted">{tx(day ? PHASE_COPY[day.phase].blurb : 'From the hospital/clinic’s sheet you reviewed.')}</p>
             <StepList steps={steps} completed={completed} tickable={tickable} onToggle={onToggleStep} />
           </Card>
         </section>

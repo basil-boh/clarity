@@ -1,5 +1,7 @@
 'use client'
 
+import { useI18n } from '@/components/I18nProvider'
+
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
@@ -11,9 +13,8 @@ const TABS = [
   { href: '/today', key: 'home' },
   { href: '/prep', key: 'plan' },
   { href: '/diet', key: 'diet' },
-  { href: '/readiness', key: 'readiness' },
   { href: '/ask', key: 'ask' },
-  { href: '/verify', key: 'verify' },
+  { href: '/readiness', key: 'readiness' },
 ] as const
 
 /**
@@ -23,11 +24,13 @@ const TABS = [
  * each navigation would be worse than not translating it at all.
  */
 export function TabBar({ labels }: { labels: Record<(typeof TABS)[number]['key'], string> }) {
+  const { tx } = useI18n()
+
   const path = usePathname()
 
   return (
     <nav
-      aria-label="Sections"
+      aria-label={tx("Sections")}
       className="fixed inset-x-0 bottom-0 z-40 border-t border-hairline bg-paper/95 backdrop-blur"
       style={{ paddingBottom: 'env(safe-area-inset-bottom, 0px)' }}
     >
@@ -47,7 +50,7 @@ export function TabBar({ labels }: { labels: Record<(typeof TABS)[number]['key']
                   aria-hidden
                   className={`h-[3px] w-7 rounded-full ${active ? 'bg-blue' : 'bg-transparent'}`}
                 />
-                <span className="text-center">{labels[tab.key]}</span>
+                <span className="text-center">{tx(labels[tab.key])}</span>
               </Link>
             </li>
           )

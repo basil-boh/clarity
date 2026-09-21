@@ -43,7 +43,7 @@ export function stoolRating(check: StoolCheck | null | undefined, isMorning: boo
   return 'unknown'
 }
 export const FLAG_COPY = {
-  green: { title: 'On track', detail: 'Your morning stool check and completed, on-time preparation are on track. Follow the final steps in your department’s instructions.' },
+  green: { title: 'On track', detail: 'Your morning stool check and completed, on-time preparation are on track. Follow the final steps in your hospital/clinic’s instructions.' },
   amber: { title: 'A little more to check', detail: 'Review the items below. Follow your prescribed preparation and fluid cut-off instructions, and check your latest stool again on the morning of your procedure.' },
   red: { title: 'Preparation may not be complete', detail: 'Please contact your endoscopy team for advice. They can review your preparation with you.' },
 } as const

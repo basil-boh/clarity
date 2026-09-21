@@ -1,3 +1,4 @@
+import { getI18n } from '@/lib/i18n-server'
 import { Card, SectionTitle } from '@/components/ui'
 import type { Dictionary } from '@/messages'
 import { readLink, issueLinkToken } from '@/lib/reminder-store'
@@ -16,6 +17,8 @@ import { botUsername, deepLink } from '@/lib/telegram'
  * whose whole promise is "you do not have to remember".
  */
 export async function TelegramConnect({ phone, t }: { phone: string; t: Dictionary }) {
+  const { tx } = await getI18n()
+
   if (!botUsername()) return null
 
   const link = await readLink(phone)
@@ -24,9 +27,9 @@ export async function TelegramConnect({ phone, t }: { phone: string; t: Dictiona
   if (link.linked) {
     return (
       <section className="mb-5">
-        <SectionTitle>{t.reminders.heading}</SectionTitle>
+        <SectionTitle>{tx(t.reminders.heading)}</SectionTitle>
         <Card>
-          <p className="text-[16px] leading-relaxed text-ink-muted">{t.reminders.connected}</p>
+          <p className="text-[16px] leading-relaxed text-ink-muted">{tx(t.reminders.connected)}</p>
         </Card>
       </section>
     )
@@ -38,10 +41,10 @@ export async function TelegramConnect({ phone, t }: { phone: string; t: Dictiona
 
   return (
     <section className="mb-5">
-      <SectionTitle>{t.reminders.heading}</SectionTitle>
+      <SectionTitle>{tx(t.reminders.heading)}</SectionTitle>
       <Card>
         <p className="text-[16px] leading-relaxed text-ink-muted">
-          {link.stopped ? t.reminders.stopped : t.reminders.blurb}
+          {tx(link.stopped ? t.reminders.stopped : t.reminders.blurb)}
         </p>
         <a
           href={href}
@@ -51,7 +54,7 @@ export async function TelegramConnect({ phone, t }: { phone: string; t: Dictiona
           rel="noopener noreferrer"
           className="mt-4 inline-flex min-h-[52px] w-full items-center justify-center rounded-lg bg-blue px-4 text-[17px] font-semibold text-white hover:bg-blue-deep"
         >
-          {t.reminders.connect}
+          {tx(t.reminders.connect)}
         </a>
       </Card>
     </section>

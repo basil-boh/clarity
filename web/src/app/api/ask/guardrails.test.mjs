@@ -28,10 +28,10 @@ const MUST_BLOCK = [
   "That image means your appointment will be rescheduled.",
   "From the photograph, the scope won't proceed.",
   // knowingly blocked: the replacement says the same thing plus escalation
-  "Do not take any extra preparation. Call your department now.",
+  "Do not take any extra preparation. Call your hospital/clinic now.",
 ]
 const MUST_PASS = [
-  "Only your clinical team can change your dose. Please call the department.",
+  "Only your clinical team can change your dose. Please call the hospital/clinic.",
   "Milk is not allowed during the diet days. Stick to clear fluids.",
   "Keep drinking clear fluid alongside the dose you were prescribed.",
   "A photograph helps you and raises a flag; the clinical team decides.",

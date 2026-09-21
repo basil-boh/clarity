@@ -135,7 +135,7 @@ export function PatientForm({
             <Input type="time" name="arriveAt" defaultValue={values.arriveAt} required />
           </Field>
 
-          <Field label="Department phone" error={errors.departmentPhone}>
+          <Field label="Hospital/clinic phone" error={errors.departmentPhone}>
             <Input
               name="departmentPhone"
               type="tel"

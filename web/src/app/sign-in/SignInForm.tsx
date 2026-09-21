@@ -1,5 +1,7 @@
 'use client'
 
+import { useI18n } from '@/components/I18nProvider'
+
 import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 
@@ -30,6 +32,8 @@ export function SignInForm({
   demoNumbers: string[]
   resendSeconds: number
 }) {
+  const { tx } = useI18n()
+
   const router = useRouter()
   const [step, setStep] = useState<Step>('phone')
   const [phone, setPhone] = useState('')
@@ -110,9 +114,9 @@ export function SignInForm({
     return (
       <form onSubmit={send} className="space-y-5" noValidate>
         <Field
-          label="Your mobile number"
-          hint="The number your endoscopy department has on file."
-          error={error}
+          label={tx("Your mobile number")}
+          hint={tx("The number your endoscopy hospital/clinic has on file.")}
+          error={tx(error)}
         >
           <Input
             name="phone"
@@ -120,7 +124,7 @@ export function SignInForm({
             inputMode="tel"
             autoComplete="tel"
             autoFocus
-            placeholder="9123 4567"
+            placeholder={tx("9123 4567")}
             value={phone}
             onChange={(e) => setPhone(e.target.value)}
             aria-invalid={error ? true : undefined}
@@ -128,34 +132,31 @@ export function SignInForm({
         </Field>
 
         <Button type="submit" disabled={busy || phone.trim().length < 8}>
-          {busy ? 'Sending…' : 'Send me a code'}
+          {tx(busy ? 'Sending…' : 'Send me a code')}
         </Button>
 
-        <p className="text-[15px] leading-relaxed text-ink-muted">
-          We will text you a 6-digit code. Standard message rates apply.
-        </p>
+        <p className="text-[15px] leading-relaxed text-ink-muted">{tx("We will text you a 6-digit code. Standard message rates apply.")}</p>
 
         {demo !== 'off' ? (
           <Notice>
             <strong className="font-semibold">
-              {demo === 'all' ? 'Demo mode.' : 'Demo numbers.'}
-            </strong>{' '}
-            {demo === 'all'
+              {tx(demo === 'all' ? 'Demo mode.' : 'Demo numbers.')}
+            </strong>{tx(' ')}
+            {tx(demo === 'all'
               ? 'No text message is sent — your code is shown on the next screen.'
-              : 'These numbers skip the text message and show their code on the next screen. Any other number gets a real text.'}
+              : 'These numbers skip the text message and show their code on the next screen. Any other number gets a real text.')}
             {demoNumbers.length > 0 ? (
               <>
-                {' '}
-                Try{' '}
+                {tx(' ')}{tx("Try")}{tx(' ')}
                 {demoNumbers.map((number, i) => (
                   <span key={number}>
-                    {i > 0 ? (i === demoNumbers.length - 1 ? ' or ' : ', ') : null}
+                    {tx(i > 0 ? (i === demoNumbers.length - 1 ? ' or ' : ', ') : null)}
                     <button
                       type="button"
                       className="underline underline-offset-2"
                       onClick={() => setPhone(formatPhone(number))}
                     >
-                      {formatPhone(number)}
+                      {tx(formatPhone(number))}
                     </button>
                   </span>
                 ))}
@@ -172,19 +173,17 @@ export function SignInForm({
     <form onSubmit={verify} className="space-y-5" noValidate>
       {demoCode ? (
         <Notice>
-          <strong className="font-semibold">Demo number, so no text was sent.</strong> Your code
-          is <span className="font-mono font-semibold">{demoCode}</span>, filled in below.
-        </Notice>
+          <strong className="font-semibold">{tx("Demo number, so no text was sent.")}</strong>{' '}{tx("Your code is")}{' '}<span className="font-mono font-semibold">{tx(demoCode)}</span>{tx(", filled in below.")}</Notice>
       ) : null}
 
       <Field
-        label="Enter your code"
+        label={tx("Enter your code")}
         hint={
-          sentTo
+          tx(sentTo
             ? `We sent a 6-digit code to the number ending ${sentTo}.`
-            : 'We sent you a 6-digit code.'
+            : 'We sent you a 6-digit code.')
         }
-        error={error}
+        error={tx(error)}
       >
         <Input
           ref={codeRef}
@@ -194,7 +193,7 @@ export function SignInForm({
           autoComplete="one-time-code"
           pattern="[0-9]*"
           maxLength={6}
-          placeholder="000000"
+          placeholder={tx("000000")}
           className="otp-input text-center"
           value={code}
           onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
@@ -203,7 +202,7 @@ export function SignInForm({
       </Field>
 
       <Button type="submit" disabled={busy || code.length !== 6}>
-        {busy ? 'Checking…' : 'Continue'}
+        {tx(busy ? 'Checking…' : 'Continue')}
       </Button>
 
       <div className="flex flex-col gap-3 text-[15px]">
@@ -213,7 +212,7 @@ export function SignInForm({
           disabled={busy || cooldown > 0}
           className="text-left font-semibold text-blue disabled:font-normal disabled:text-ink-faint"
         >
-          {cooldown > 0 ? `Send a new code in ${cooldown}s` : 'Send a new code'}
+          {tx(cooldown > 0 ? `Send a new code in ${cooldown}s` : 'Send a new code')}
         </button>
         <button
           type="button"
@@ -223,9 +222,7 @@ export function SignInForm({
             setCode('')
           }}
           className="text-left text-ink-muted underline underline-offset-2"
-        >
-          Use a different number
-        </button>
+        >{tx("Use a different number")}</button>
       </div>
     </form>
   )

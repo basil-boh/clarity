@@ -1,3 +1,4 @@
+import { readLanguage } from '@/lib/language'
 import { NextResponse } from 'next/server'
 import { readSession } from '@/lib/session'
 import { findPatient } from '@/lib/patients'
@@ -20,7 +21,7 @@ export async function POST(request: Request) {
   try { images = await readMedicationImages(request) }
   catch (error) { return json({ error: error instanceof Error ? error.message : 'Choose supported photos and try again.' }, 400) }
   try {
-    const medications = await extractMedications(images, key, process.env.OPENAI_MEDICATION_MODEL ?? 'gpt-4o-mini')
+    const medications = await extractMedications(images, key, process.env.OPENAI_MEDICATION_MODEL ?? 'gpt-4o-mini', fetch, await readLanguage())
     return json({ medications, procedureDate: patient.procedure.date })
   } catch (error) {
     const failure = extractionFailure(error)

@@ -1,5 +1,7 @@
 'use client'
 
+import { useI18n, chooseAppLanguage } from '@/components/I18nProvider'
+
 import { useActionState, useState } from 'react'
 
 import { Button, Card, Field, Input, Select } from '@/components/ui'
@@ -35,6 +37,8 @@ export function WelcomeForm({
   date: string
   editing: boolean
 }) {
+  const { tx } = useI18n()
+
   const [language, setLanguage] = useState<Language>(initial)
   const [state, submit, pending] = useActionState(action, {})
   const t = DICTIONARIES[language]
@@ -43,13 +47,13 @@ export function WelcomeForm({
     setLanguage(next)
     // Same name, path and lifetime as `lib/language.ts` writes, so the server
     // reads back exactly what the browser just set.
-    document.cookie = `clarity_lang=${next}; path=/; max-age=${60 * 60 * 24 * 365}; samesite=lax`
+    chooseAppLanguage(next)
   }
 
   return (
     <form action={submit} className="space-y-5">
       <Card>
-        <Field label={t.language.question} hint={t.language.hint}>
+        <Field label={tx(t.language.question)} hint={tx(t.language.hint)}>
           <Select
             name="language"
             value={language}
@@ -57,7 +61,7 @@ export function WelcomeForm({
           >
             {LANGUAGES.map((code) => (
               <option key={code} value={code}>
-                {LANGUAGE_LABELS[code]}
+                {tx(LANGUAGE_LABELS[code])}
               </option>
             ))}
           </Select>
@@ -66,8 +70,8 @@ export function WelcomeForm({
 
       <Card>
         <Field
-          label={t.welcome.nameLabel}
-          error={state.errors?.name ? t.welcome[state.errors.name] : null}
+          label={tx(t.welcome.nameLabel)}
+          error={tx(state.errors?.name ? t.welcome[state.errors.name] : null)}
         >
           <Input
             name="name"
@@ -75,7 +79,7 @@ export function WelcomeForm({
             autoComplete="name"
             enterKeyHint="next"
             defaultValue={name}
-            placeholder={t.welcome.namePlaceholder}
+            placeholder={tx(t.welcome.namePlaceholder)}
             aria-invalid={Boolean(state.errors?.name)}
           />
         </Field>
@@ -83,9 +87,9 @@ export function WelcomeForm({
 
       <Card>
         <Field
-          label={t.welcome.dateLabel}
-          hint={t.welcome.dateHint}
-          error={state.errors?.date ? t.welcome[state.errors.date] : null}
+          label={tx(t.welcome.dateLabel)}
+          hint={tx(t.welcome.dateHint)}
+          error={tx(state.errors?.date ? t.welcome[state.errors.date] : null)}
         >
           <Input
             name="date"
@@ -98,13 +102,26 @@ export function WelcomeForm({
 
       {state.failed ? (
         <p role="alert" className="text-[15px] font-medium text-flag-red">
-          {t.welcome.saveFailed}
+          {tx(t.welcome.saveFailed)}
         </p>
       ) : null}
 
       <Button type="submit" disabled={pending}>
-        {pending ? t.welcome.saving : editing ? t.welcome.editSubmit : t.welcome.submit}
+        {tx(pending ? t.welcome.saving : editing ? t.welcome.editSubmit : t.welcome.submit)}
       </Button>
     </form>
   )
+}
+
+export function WelcomeIntro({ editing }: { editing: boolean }) {
+  const { language } = useI18n()
+  const t = DICTIONARIES[language]
+  return <>
+    <h1 className="mt-5 text-[30px] font-bold leading-[1.1] tracking-[-0.03em] text-ink">
+      {editing ? t.welcome.editTitle : t.welcome.title}
+    </h1>
+    <p className="mt-3 text-[17px] leading-relaxed text-ink-muted">
+      {editing ? t.welcome.editIntro : t.welcome.intro}
+    </p>
+  </>
 }
