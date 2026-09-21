@@ -209,7 +209,7 @@ export default async function Today() {
       <section>
         <SectionTitle>How your prep is going</SectionTitle>
         <Card>
-          {/* No "See details" any more: /verify is the photograph check and
+          {/* No "See details" any more: /verify is the guided stool check and
               nothing else, so the link led to a page with no details on it. */}
           <FlagRule colour={flag.colour} label={FLAG_LABEL[flag.colour]} width="short" />
         </Card>

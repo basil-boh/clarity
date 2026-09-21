@@ -1,8 +1,12 @@
 'use server'
 
+import { revalidatePath } from 'next/cache'
+import type { StoolCheck } from '@/domain/stool-check'
+import { recordStoolCheck } from '@/lib/progress'
+
 import type { ReviewedMedication } from '@/domain/medications'
 import { saveMedications } from '@/lib/medications-store'
-import { livePatient } from '@/lib/patients'
+import { findPatient, livePatient } from '@/lib/patients'
 import { prepTimingFrom, toggleStep } from '@/lib/progress'
 import { requireSession } from '@/lib/session'
 
@@ -22,4 +26,13 @@ export async function tickStep(uid: string): Promise<readonly string[]> {
 export async function saveMedicationPlan(entries: ReviewedMedication[]): Promise<boolean> {
   await requireSession()
   return saveMedications(entries)
+}
+
+export async function saveStoolCheck(check: StoolCheck): Promise<void> {
+  const { phone } = await requireSession()
+  const patient = await findPatient(phone)
+  if (!patient) throw new Error('No preparation plan found.')
+  await recordStoolCheck(check, patient.procedure.date)
+  revalidatePath('/readiness')
+  revalidatePath('/verify')
 }

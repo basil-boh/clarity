@@ -1,5 +1,7 @@
 import 'server-only'
 
+import { parseStoolCheck, stoolPointFor } from '@/domain/stool-check'
+
 import { GLASS_ML, dosesFor, todayIn, totalDoseMl } from '@/domain/prep'
 import { fluidOn, type BowelScalePoint, type DietAnswer } from '@/domain/progress'
 import { usingDatabase } from '@/lib/source'
@@ -135,4 +137,12 @@ export async function recordDietDay(offset: number, answer: DietAnswer): Promise
   }
   await writeProgress(next)
   return next
+}
+
+/** Save observations together; never derive a clear result from colour or frequency. */
+export async function recordStoolCheck(input: unknown, procedureDate: string): Promise<void> {
+  const check = parseStoolCheck(input)
+  if (!check) throw new Error('Please complete the stool check-in.')
+  const current = await readProgress()
+  await writeProgress({ ...current, stoolCheck: { ...check, recordedAt: new Date().toISOString(), procedureDate }, stoolPoint: stoolPointFor(check) })
 }

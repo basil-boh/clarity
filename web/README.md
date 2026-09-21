@@ -481,16 +481,34 @@ Two deliberate choices in there:
 
 ## What is not built
 
-Carried over from the Expo app but not yet ported: the meal-photograph check and
-the stool-scale reading. Onboarding is the four questions above; there is no
-walkthrough of the app itself.
+The meal-photograph check is not ported. Onboarding is the four questions above;
+there is no walkthrough of the app itself.
 
-All four signals behind the flag are writable and all four now persist against
-the patient's number rather than their browser. What is still missing is the
-*automatic* half of two of them: the meal photograph check and the stool
-photograph reading, which in the Expo app inferred diet compliance and bowel
-output from a picture. Here both are self-reported instead, which is honest but
-asks more of the patient.
+### Guided stool check-in
+
+`/readiness` and `/verify` use the same photo-free check-in. It first asks what
+patients are using to judge their progress, then asks about colour, consistency
+and (for watery output) whether the liquid is see-through. Brief guidance
+responds to their answers: colour and frequent trips alone never confirm
+readiness. Patients review and explicitly save their observations. The stool
+photo component and `/api/verify` endpoint have been removed; no AI key is needed
+for this check. Historical image assessments are retained for staff records.
+
+Apply `supabase/migrations/0006_stool_check.sql` before saving check-ins with
+Supabase. It adds `web_progress.stool_check` for the latest structured answers;
+demo mode stores these in the existing signed progress cookie. Existing records
+without this field remain readable. Missing migrations cause new check-in saves
+to fail visibly rather than silently discard the observations. The existing
+bowel scale is derived from consistency and clarity, never colour or frequency;
+uncertain and very dark/red observations do not create a clear score.
+
+Run `node --experimental-strip-types --test src/domain/stool-check.test.mjs` for
+validation, misconception and uncertain/concerning-output cases.
+
+Copy references: [Mayo Clinic on stool colour, foods, iron and bile](https://www.mayoclinic.org/diseases-conditions/diarrhea/expert-answers/stool-color/faq-20058080),
+and [NHS bowel-preparation guidance on watery, clear output](https://www.nth.nhs.uk/resources/colonoscopy-using-klean-prep/).
+The check-in does not adopt the latter’s product-specific dose instructions;
+patients continue to follow their own department’s prescribed plan.
 
 **Patients are entered one at a time.** `/admin` adds and edits them and shows
 everything held for each one, but there is no import from a hospital system, and
@@ -580,3 +598,33 @@ Run `npm run test:diet` to check all six prep-day/diet combinations. Check statu
 are hidden based on the selected diet column. Clear-liquid allowed foods also
 appear on low-residue days; clear-liquid-only avoid rows do not. Low-residue-only
 foods move to Avoid on clear-liquid days. Both-phase rows retain their diet status.
+
+### Overall readiness flag
+
+The bottom of `/readiness` uses the requested ordered product rules in
+`src/domain/readiness.ts`: poor purgative or not-ready morning stool → red;
+good purgative plus ready morning stool → green; otherwise amber. Diet affects
+supportive copy only. This is not a numerical average or an attendance decision.
+It does not replace the separate legacy staff triage score.
+
+Full recorded volumes and on-time confirmations for every dose establish good
+purgative adherence. Patients can explicitly report still completing, full prep
+with late timing, or missed/stopped preparation. These reports take precedence
+until the patient updates them or chooses to use the dose records again. An
+unfilled log is unknown, not proof of a missed dose. The status reports reuse
+reserved completed-step keys, so no additional database migration is needed.
+
+New stool check-ins receive a server timestamp and procedure date in the existing
+`stool_check` JSON. Only a check saved on the current procedure date contributes
+the morning stool result. Legacy observations without timestamps remain unknown
+until rechecked. Light-orange and small-particle options distinguish “almost”
+from murky or solid output. Uncertain observations remain amber unless another
+input triggers red; dark/blood-like output retains its separate contact-team
+message. Green never tells the patient to attend, and red never tells them to
+cancel or take extra purgative.
+
+Test the matrix and input rules with
+`node --experimental-strip-types --test src/domain/readiness.test.mjs`.
+Contact-team and prescribed-preparation wording is consistent with
+[Nottingham University Hospitals’ bowel-preparation guidance](https://www.nuh.nhs.uk/bowel-preparation);
+the exact decision matrix is the requested application logic.

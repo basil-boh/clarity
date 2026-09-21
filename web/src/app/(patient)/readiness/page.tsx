@@ -1,16 +1,18 @@
 import Link from 'next/link'
+import { ReadinessSummary } from '@/components/ReadinessSummary'
+import { dietRating, prepRating, stoolRating, PREP_REPORTS, type PrepReport } from '@/domain/readiness'
 import { SaveForm } from './SaveForm'
 import { revalidatePath } from 'next/cache'
 
 import { Card, SectionTitle } from '@/components/ui'
 import { NoPatient } from '@/components/NoPatient'
-import { StoolPhotoCheck } from '@/components/StoolPhotoCheck'
-import { dosesFor, offsetFor, hasDepartmentPhone } from '@/domain/prep'
-import { BOWEL_SCALE, DIET_ANSWERS, type DietAnswer, type BowelScalePoint } from '@/domain/progress'
+import { StoolCheck } from '@/components/StoolCheck'
+import { saveStoolCheck } from '../actions'
+import { dosesFor, offsetFor, hasDepartmentPhone, todayIn } from '@/domain/prep'
+import { DIET_ANSWERS, type DietAnswer } from '@/domain/progress'
 import { findPatient } from '@/lib/patients'
-import { readProgress, recordDietDay, recordStool, toggleStep } from '@/lib/progress'
+import { readProgress, recordDietDay, toggleStep, writeProgress } from '@/lib/progress'
 import { requireSession } from '@/lib/session'
-import { acceptVerification } from '@/lib/verification-store'
 
 export const metadata = { title: 'Readiness — Clarity' }
 const DIET_OFFSETS = [-3, -2, -1]
@@ -26,6 +28,24 @@ export default async function Readiness() {
   const dietRecorded = DIET_OFFSETS.filter(day => progress.dietDays[String(day)]).length
   const dietKept = DIET_OFFSETS.filter(day => progress.dietDays[String(day)] === 'yes').length
   const timingConfirmed = doses.filter(dose => progress.completed.includes(`-1:timing-${dose.id}`)).length
+
+  const prepReport = (['incomplete', 'completing', 'late'] as const).find(value => progress.completed.includes(`-1:readiness-${value}`)) ?? 'records'
+  const morningCheck = !!progress.stoolCheck?.recordedAt &&
+    progress.stoolCheck.procedureDate === patient.procedure.date &&
+    todayIn(new Date(progress.stoolCheck.recordedAt)) === todayIn(new Date(patient.procedure.date))
+
+  async function savePrepReport(form: FormData) {
+    'use server'
+    const { phone } = await requireSession()
+    const currentPatient = await findPatient(phone)
+    const value = form.get('report')
+    if (!currentPatient || offsetFor(currentPatient.procedure.date) < -1 || typeof value !== 'string' || !Object.hasOwn(PREP_REPORTS, value)) throw new Error('Choose a valid preparation status.')
+    const current = await readProgress()
+    const completed = current.completed.filter(uid => !['-1:readiness-incomplete', '-1:readiness-completing', '-1:readiness-late'].includes(uid))
+    if (value !== 'records') completed.push(`-1:readiness-${value}`)
+    await writeProgress({ ...current, completed })
+    revalidatePath('/readiness')
+  }
 
   async function saveDiet(form: FormData) {
     'use server'
@@ -53,15 +73,6 @@ export default async function Readiness() {
     const current = await readProgress()
     const confirmed = form.get('confirmed') === 'yes'
     if (current.completed.includes(uid) !== confirmed) await toggleStep(uid)
-    revalidatePath('/readiness')
-  }
-
-  async function acceptReading(id: string, point: BowelScalePoint) {
-    'use server'
-    const { phone } = await requireSession()
-    if (![1, 2, 3, 4, 5].includes(point)) throw new Error('Choose a point on the scale.')
-    if (id && !(await acceptVerification(phone, id, point))) throw new Error('The reading could not be saved. Please try again.')
-    await recordStool(point)
     revalidatePath('/readiness')
   }
 
@@ -126,36 +137,40 @@ export default async function Readiness() {
               )
             })}
           </div>
+          <SaveForm action={savePrepReport} className="mt-5">
+            <fieldset disabled={offset < -1}>
+              <legend className="mb-2 text-[16px] font-semibold text-ink">Anything different from your dose records?</legend>
+              <p className="mb-3 text-[14px] text-ink-muted">Choose your current status. Update it when things change; this report takes priority over the dose log.</p>
+              <div className="space-y-2">
+                {(Object.entries(PREP_REPORTS) as [PrepReport, string][]).map(([value, label]) => (
+                  <button key={value} name="report" value={value} aria-pressed={prepReport === value}
+                    className={`${actionStyle} w-full justify-start text-left disabled:opacity-45 ${prepReport === value ? 'border-blue bg-blue-wash text-blue' : 'border-hairline-strong text-ink'}`}>{label}</button>
+                ))}
+              </div>
+            </fieldset>
+          </SaveForm>
           <Link href="/doses" className="mt-4 inline-flex min-h-[44px] items-center font-semibold text-blue">Record my glasses →</Link>
           <p className="text-[14px] leading-relaxed text-ink-faint">Missed a dose or unsure about timing? Contact your department. Do not take extra preparation.</p>
         </Card>
 
         <section aria-labelledby="stool-heading">
-          <SectionTitle>03 · Stool photo check</SectionTitle>
-          <h2 id="stool-heading" className="text-[22px] font-bold tracking-[-0.02em] text-ink">See how things are progressing</h2>
-          <p className="mb-4 mt-2 text-[15px] leading-relaxed text-ink-muted">Upload a clear photo of the bowl once your preparation has started working. Review the suggested reading before saving it.</p>
-          {progress.stoolPoint ? <p className="mb-4 text-[15px] font-semibold text-blue">Last recorded: {progress.stoolPoint} · {BOWEL_SCALE[progress.stoolPoint].label}</p> : null}
-          <StoolPhotoCheck onAccept={acceptReading} />
-          <Card className="mt-4">
-            <h3 className="font-semibold text-ink">Or choose what you see</h3>
-            <p className="mt-1 text-[15px] text-ink-muted">You can record a check without a photo.</p>
-            <div className="mt-3 space-y-2">
-              {([1, 2, 3, 4, 5] as BowelScalePoint[]).map(point => (
-                <SaveForm key={point} action={async () => { 'use server'; await acceptReading('', point) }}>
-                  <button aria-pressed={progress.stoolPoint === point} className={`${actionStyle} w-full justify-start gap-3 ${progress.stoolPoint === point ? 'border-blue bg-blue-wash text-blue' : 'border-hairline text-ink'}`}>
-                    <span aria-hidden className="h-6 w-6 rounded-full" style={{ background: BOWEL_SCALE[point].swatch }} />{point} · {BOWEL_SCALE[point].label}
-                  </button>
-                </SaveForm>
-              ))}
-            </div>
-          </Card>
+          <SectionTitle>03 · Stool check-in</SectionTitle>
+          <h2 id="stool-heading" className="text-[22px] font-bold tracking-[-0.02em] text-ink">Let’s check your latest output</h2>
+          <p className="mb-4 mt-2 text-[15px] leading-relaxed text-ink-muted">A few short questions about what you see. No photo needed.</p>
+          <StoolCheck saved={progress.stoolCheck ?? null} onSave={saveStoolCheck}
+            departmentPhone={hasDepartmentPhone(patient.procedure) ? patient.procedure.departmentPhone : undefined} />
         </section>
         <Card>
           <h2 className="text-[17px] font-semibold text-ink">Your team makes the final call</h2>
-          <p className="mt-2 text-[15px] leading-relaxed text-ink-muted">These check-ins help you share your progress. A photo cannot confirm whether you are ready for your colonoscopy.</p>
+          <p className="mt-2 text-[15px] leading-relaxed text-ink-muted">These check-ins help you share your progress. Colour or frequent toilet trips alone cannot confirm readiness for your colonoscopy.</p>
           <Link href="/ask" className="mt-3 inline-flex min-h-[44px] items-center font-semibold text-blue">Ask a question →</Link>
           {hasDepartmentPhone(patient.procedure) ? <a href={`tel:${patient.procedure.departmentPhone}`} className="mt-2 flex min-h-[48px] items-center justify-center rounded-lg border border-hairline-strong font-semibold text-ink">Call the department</a> : null}
         </Card>
+        <ReadinessSummary diet={dietRating(progress.dietDays)}
+          prep={prepRating(doses, progress.doses, progress.completed)}
+          stool={stoolRating(progress.stoolCheck, morningCheck)}
+          concerning={progress.stoolCheck?.colour === 'dark' || progress.stoolCheck?.colour === 'red'}
+          phone={hasDepartmentPhone(patient.procedure) ? patient.procedure.departmentPhone : undefined} />
       </div>
     </>
   )

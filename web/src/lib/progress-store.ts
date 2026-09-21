@@ -1,5 +1,7 @@
 import 'server-only'
 
+import { parseStoolCheck, type StoolCheck } from '@/domain/stool-check'
+
 import { createHmac, timingSafeEqual } from 'node:crypto'
 import { cookies } from 'next/headers'
 
@@ -37,6 +39,8 @@ import { readSession } from '@/lib/session'
  */
 
 export type Progress = {
+  /** Latest guided, patient-reported stool observations. */
+  readonly stoolCheck?: StoolCheck | null
   /** Dose id → millilitres recorded. */
   readonly doses: Record<string, number>
   /** Step uids (`offset:id`) the patient has ticked off. */
@@ -114,6 +118,7 @@ function normalise(raw: Partial<Progress> | null | undefined): Progress {
     completed: cleanCompleted(raw.completed),
     fluidDays: cleanFluidDays(raw.fluidDays),
     stoolPoint: cleanStoolPoint(raw.stoolPoint),
+    stoolCheck: parseStoolCheck(raw.stoolCheck),
     dietDays: cleanDietDays(raw.dietDays),
   }
 }
@@ -172,6 +177,7 @@ async function writeCookie(next: Progress): Promise<void> {
 // ---------------------------------------------------------------------------
 
 type ProgressRow = {
+  stool_check?: unknown
   completed: string[] | null
   fluid_glasses: number | null
   /** Absent until `0002_medications_and_fluid_days.sql` has been applied. */
@@ -181,7 +187,7 @@ type ProgressRow = {
   updated_at: string | null
 }
 
-const PROGRESS_COLUMNS = 'completed, fluid_glasses, fluid_days, stool_point, diet_days, updated_at'
+const PROGRESS_COLUMNS = 'stool_check, completed, fluid_glasses, fluid_days, stool_point, diet_days, updated_at'
 /** Before `0002_medications_and_fluid_days.sql` added `fluid_days`. */
 const LEGACY_PROGRESS_COLUMNS = 'completed, fluid_glasses, stool_point, diet_days, updated_at'
 
@@ -212,9 +218,12 @@ async function readDb(phone: string): Promise<Progress> {
 
   // A database the new migration has not reached yet still reads, on the old
   // columns, rather than showing the patient an empty record.
-  const progressResult = missingColumn(firstRead.error)
-    ? await scope.select<ProgressRow>('web_progress', LEGACY_PROGRESS_COLUMNS).maybeSingle()
+  const withoutStoolCheck = missingColumn(firstRead.error)
+    ? await scope.select<ProgressRow>('web_progress', PROGRESS_COLUMNS.replace('stool_check, ', '')).maybeSingle()
     : firstRead
+  const progressResult = missingColumn(withoutStoolCheck.error)
+    ? await scope.select<ProgressRow>('web_progress', LEGACY_PROGRESS_COLUMNS).maybeSingle()
+    : withoutStoolCheck
 
   // A read failure here is recoverable in a way `findPatient`'s is not: the
   // worst case is a screen showing "not recorded" for a signal that was in fact
@@ -235,6 +244,7 @@ async function readDb(phone: string): Promise<Progress> {
     completed: row?.completed ?? [],
     fluidDays: fluidDaysOf(row) as FluidDays,
     stoolPoint: cleanStoolPoint(row?.stool_point),
+    stoolCheck: parseStoolCheck(row?.stool_check),
     dietDays: cleanDietDays(row?.diet_days),
   })
 }
@@ -275,6 +285,7 @@ async function writeDb(phone: string, next: Progress): Promise<void> {
     fluid_glasses: fluidOn(next.fluidDays, todayIn()),
     fluid_days: next.fluidDays,
     stool_point: next.stoolPoint,
+    ...(next.stoolCheck ? { stool_check: next.stoolCheck } : {}),
     diet_days: next.dietDays,
     updated_at: new Date().toISOString(),
   }

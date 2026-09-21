@@ -14,6 +14,7 @@ import {
   phaseFor,
 } from '@/domain/prep'
 import { resolveMedicationDate } from '@/domain/medications'
+import { COLOURS, CONSISTENCIES, CLARITIES } from '@/domain/stool-check'
 import { describeAnswers } from '@/domain/questionnaire'
 import {
   BOWEL_SCALE,
@@ -328,6 +329,15 @@ function Recorded({ details }: { details: PatientDetails }) {
             NOT_RECORDED
           )}
         </Row>
+
+        {progress.stoolCheck ? (
+          <Row label="Patient stool observations">
+            <span className="text-right">
+              {COLOURS[progress.stoolCheck.colour]} · {CONSISTENCIES[progress.stoolCheck.consistency]}
+              {progress.stoolCheck.clarity ? ` · ${CLARITIES[progress.stoolCheck.clarity]}` : ''}
+            </span>
+          </Row>
+        ) : null}
 
         <Row label="Diet days">
           {dietDays.length > 0 && patient.procedure ? (
