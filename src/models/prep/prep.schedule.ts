@@ -86,7 +86,7 @@ function step(id: string,
  * the outcome) is legible on its own rather than buried in a switch that also
  * handles "book your transport".
  */
-function stepsFor(offset: number): Step[] {
+export function stepsFor(offset: number): Step[] {
   switch (phaseFor(offset)) {
     case 'week_before':
       return [
