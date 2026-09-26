@@ -4,16 +4,16 @@ import { useI18n } from '@/components/I18nProvider'
 
 import { useEffect, useRef, useState } from 'react'
 import { Button, Card } from '@/components/ui'
+import { StoolPicture } from '@/components/StoolPicture'
 import { CLARITIES, COLOURS, CONSISTENCIES, REASONS, REASON_HINTS, guidanceFor, parseStoolCheck, type StoolCheck as Check } from '@/domain/stool-check'
 
 const SWATCHES: Partial<Record<Check['colour'], string>> = {
   orange: '#E6B36C', yellow: '#F2E6B4', green: '#B5BB70', brown: '#987344', dark: '#3B3633', red: '#B65252', colourless: '#F3F5F4',
 }
 
-export function StoolCheck({ saved, onSave, departmentPhone }: {
+export function StoolCheck({ saved, onSave }: {
   saved: Check | null
   onSave: (check: Check) => Promise<void>
-  departmentPhone?: string
 }) {
   const { tx } = useI18n()
 
@@ -60,6 +60,7 @@ export function StoolCheck({ saved, onSave, departmentPhone }: {
       {step === 0 ? <p className="mt-2 text-[15px] text-ink-muted">{tx("Choose the closest answer. We will guide you from there.")}</p> : null}
       {step === 1 && answers.reason ? <p className="mt-3 rounded-lg bg-blue-wash p-3 text-[15px] leading-relaxed text-ink">{tx(REASON_HINTS[answers.reason])}</p> : null}
       {step === 2 ? <p className="mt-3 text-[15px] leading-relaxed text-ink-muted">{tx("Iron tablets and some foods can darken output; bile can tint it yellow-green. Colour alone cannot tell us whether your bowel is clear.")}</p> : null}
+      {step === 2 || step === 3 ? <p className="mt-3 text-[15px] leading-relaxed text-ink-muted">{tx("Compare what you see with the pictures, and choose the closest one.")}</p> : null}
       {step < 4 ? (
         <>
           <div role="group" aria-label={tx(questions[step])} className="my-5 space-y-2">
@@ -67,6 +68,7 @@ export function StoolCheck({ saved, onSave, departmentPhone }: {
               <button key={value} type="button" aria-pressed={answers[key] === value} onClick={() => choose(value)}
                 className={`flex min-h-[52px] w-full items-center gap-3 rounded-lg border px-4 py-3 text-left text-[16px] font-medium ${answers[key] === value ? 'border-blue bg-blue-wash text-blue' : 'border-hairline-strong text-ink hover:bg-paper-sunken'}`}>
                 {step === 1 && SWATCHES[value as Check['colour']] ? <span aria-hidden className="h-6 w-6 shrink-0 rounded-full border border-hairline" style={{ background: SWATCHES[value as Check['colour']] }} /> : null}
+                {step === 2 || step === 3 ? <StoolPicture kind={value as Check['consistency'] | NonNullable<Check['clarity']>} tint={answers.colour ? SWATCHES[answers.colour] : undefined} /> : null}
                 {tx(label)}
               </button>
             ))}
@@ -81,7 +83,6 @@ export function StoolCheck({ saved, onSave, departmentPhone }: {
           <Button type="button" disabled={busy || recorded} onClick={() => void save()}>{tx(busy ? 'Saving…' : recorded ? 'Check-in saved' : 'Save my check-in')}</Button>
           <p role="status" className="mt-2 text-[14px] text-ink-muted">{tx(recorded ? 'Saved. You can check again after your next trip.' : '')}</p>
           {error ? <p role="alert" className="mt-2 text-[15px] text-flag-red">{tx(error)}</p> : null}
-          {result.contact ? (departmentPhone ? <a href={`tel:${departmentPhone}`} className="mt-3 inline-flex min-h-[48px] items-center font-semibold text-blue">{tx("Call the hospital/clinic →")}</a> : <p className="mt-3 text-[15px] text-ink-muted">{tx("Use the hospital/clinic number on your appointment letter.")}</p>) : null}
           <p className="mt-4 text-[14px] leading-relaxed text-ink-faint">{tx("Do not take extra preparation or change medicines based on this check. Your clinical team decides whether your bowel preparation is adequate.")}</p>
           {recorded ? <button type="button" className="mt-3 min-h-[44px] font-semibold text-blue" onClick={() => { setStep(0); setAnswers({}); setRecorded(false) }}>{tx("Start a new check-in")}</button> : null}
         </>

@@ -24,11 +24,12 @@ test('missing observations stay amber, but never mask a known red trigger', () =
 const doses = [{ id: 'dose-1', volumeMl: 1000 }, { id: 'dose-2', volumeMl: 1000 }]
 const full = { 'dose-1': 1000, 'dose-2': 1000 }
 const timed = ['-1:timing-dose-1', '-1:timing-dose-2']
-test('good prep requires full volume and timing for every dose; reports take priority', () => {
+test('good prep requires every dose confirmed finished on time; reports take priority', () => {
   assert.equal(prepRating(doses, full, timed), 'good')
+  assert.equal(prepRating(doses, {}, timed), 'good')
   assert.equal(prepRating(doses, full, []), 'unknown')
   assert.equal(prepRating(doses, {}, []), 'unknown')
-  assert.equal(prepRating(doses, { 'dose-1': 1000 }, timed), 'unknown')
+  assert.equal(prepRating(doses, {}, ['-1:timing-dose-1']), 'unknown')
   assert.equal(prepRating(doses, full, [...timed, '-1:readiness-incomplete']), 'poor')
   assert.equal(prepRating(doses, {}, ['-1:readiness-completing']), 'partial')
   assert.equal(prepRating(doses, {}, ['-1:readiness-late']), 'partial')

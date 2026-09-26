@@ -45,7 +45,7 @@ export function createI18n(language: Language) {
     const key = normalise(value)
     const exact = lookup[language].get(key)
     if (exact) return exact
-    // Medication descriptions are assembled as separate lines by the domain.
+    // Multi-line text is translated a line at a time.
     if (value.includes('\n')) return value.split('\n').map(text).join('\n')
     for (const template of templates) {
       const match = template.pattern.exec(key)

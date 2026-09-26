@@ -13,7 +13,6 @@ import {
   offsetFor,
   phaseFor,
 } from '@/domain/prep'
-import { resolveMedicationDate } from '@/domain/medications'
 import { COLOURS, CONSISTENCIES, CLARITIES } from '@/domain/stool-check'
 import { describeAnswers } from '@/domain/questionnaire'
 import {
@@ -108,7 +107,6 @@ export default async function PatientPage({
         <About details={details} />
         {details.live ? <Readiness live={details.live} /> : null}
         <Recorded details={details} />
-        <Medications details={details} />
         <Chat messages={details.chat} />
         <Codes codes={details.codes} />
         <Reset details={details} />
@@ -416,55 +414,6 @@ function Steps({ live }: { live: LivePatient }) {
   )
 }
 
-/** What the patient confirmed from their department's sheet -- their words, not the app's. */
-function Medications({ details }: { details: PatientDetails }) {
-  const { medications, patient } = details
-  const procedureDate = patient.procedure?.date ?? null
-  const day = (value: string | null) => {
-    const date = procedureDate ? resolveMedicationDate(value, procedureDate) : null
-    return date ? format(parseISO(date), 'EEE d MMM') : null
-  }
-
-  return (
-    <Card>
-      <SectionTitle>Medication instructions</SectionTitle>
-      {medications.length === 0 ? (
-        <p className="text-[17px] text-ink-muted">None added to their plan.</p>
-      ) : (
-        <ul className="divide-y divide-hairline">
-          {medications.map((entry) => {
-            const d = entry.draft
-            const from = day(d.start)
-            const until = d.end ? day(d.end) : null
-            return (
-              <li key={entry.id} className="py-3 first:pt-0 last:pb-0">
-                <p className="text-[16px] font-semibold text-ink">
-                  {d.action === 'hold' ? 'Do not take' : 'Take'} {d.name}
-                  {d.strength ? <span className="font-normal text-ink-muted"> · {d.strength}</span> : null}
-                </p>
-                <p className="mt-0.5 text-[15px] text-ink-muted">
-                  {d.action === 'hold'
-                    ? `From ${from ?? d.start}${d.startTime ? ` at ${d.startTime}` : ''}`
-                    : entry.reminderTimes
-                        .map((time, i) => `${entry.doseAmounts[i] || 'Dose'} at ${time}`)
-                        .join(', ')}
-                  {d.action === 'take' && from ? `, from ${from}` : ''}
-                  {until ? ` until ${until}` : ''}
-                </p>
-                {d.sourceText ? (
-                  <p className="mt-1.5 border-l-2 border-hairline-strong pl-3 text-[14px] leading-relaxed text-ink-faint">
-                    &ldquo;{d.sourceText}&rdquo;
-                  </p>
-                ) : null}
-              </li>
-            )
-          })}
-        </ul>
-      )}
-    </Card>
-  )
-}
-
 function Chat({ messages }: { messages: readonly ChatMessage[] }) {
   const escalated = messages.filter((m) => m.escalated).length
 
@@ -544,7 +493,7 @@ function Reset({ details }: { details: PatientDetails }) {
       <SectionTitle>Start the prep again</SectionTitle>
       <p className="text-[17px] leading-relaxed text-ink-muted">
         {anything
-          ? 'Clears the doses, fluids, diet answers, bowel scale, ticked steps and assistant chat above, and their questionnaire, so they are asked it again at their next sign-in. Their details, procedure and medication instructions stay.'
+          ? 'Clears the doses, fluids, diet answers, bowel scale, ticked steps and assistant chat above, and their questionnaire, so they are asked it again at their next sign-in. Their details and procedure stay.'
           : 'There is nothing recorded to clear.'}
       </p>
       <form action={resetPatient} className="mt-4">

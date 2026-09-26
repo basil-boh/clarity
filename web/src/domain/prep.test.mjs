@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import test from 'node:test'
 
-import { buildPlan, currentDay, dateFromToday, headingFor, offsetFor, todayIn } from './prep.ts'
+import { buildPlan, currentDay, dateFromToday, headingFor, offsetFor, todayIn, upcomingPlan } from './prep.ts'
 
 // Run under TZ=UTC (see `test:prep`): the zone most hosts use, and the one
 // where reading "today" off the server clock put the plan a day behind.
@@ -42,4 +42,20 @@ test('the plan marks the Singapore day as today', () => {
   const today = currentDay(plan, offsetFor(procedure, eveningBefore))
   assert.equal(today?.date, '2026-10-11')
   assert.equal(today?.phase, 'purge_night')
+})
+
+test('the upcoming plan drops the days already done', () => {
+  const dietDay = new Date('2026-10-09T02:00:00Z') // 10:00 on the 9th in Singapore, D-3
+  const days = upcomingPlan(buildPlan(procedure, dietDay), dietDay)
+  assert.deepEqual(days.map((d) => d.offset), [-3, -2, -1, 0])
+})
+
+test('the 2am second dose stays visible after midnight, then goes', () => {
+  const oneAm = new Date('2026-10-11T17:00:00Z') // 01:00 on the 12th in Singapore
+  const atOne = upcomingPlan(buildPlan(procedure, oneAm), oneAm)
+  assert.deepEqual(atOne.map((d) => d.offset), [-1, 0])
+  assert.deepEqual(atOne[0].steps.map((s) => s.id), ['dose-2'])
+
+  const sevenAm = new Date('2026-10-11T23:00:00Z') // 07:00 on the 12th in Singapore
+  assert.deepEqual(upcomingPlan(buildPlan(procedure, sevenAm), sevenAm).map((d) => d.offset), [0])
 })

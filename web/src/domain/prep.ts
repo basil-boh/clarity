@@ -383,6 +383,39 @@ export function currentDay(plan: readonly PlanDay[], offset: number): PlanDay | 
   return plan.find((day) => day.offset === offset)
 }
 
+/**
+ * How long an after-midnight step stays on screen once its time has come. The
+ * second dose takes an hour or two to drink; hiding it at 02:01 would drop it
+ * from view while the patient is still working through it.
+ */
+const CARRY_OVER_HOURS = 3
+
+/** The real instant a timed step happens, read as Singapore wall-clock time. */
+function stepInstant(step: Step & { at: string }): Date {
+  return new Date(`${step.date}T${step.at}:00+08:00`)
+}
+
+/**
+ * The plan from today on, with the days already done removed.
+ *
+ * A patient only needs what is coming, not a record of what has passed. The
+ * one exception is a step listed under yesterday whose clock time falls today:
+ * at 01:30 on procedure day the 2am second dose is still ahead, and dropping
+ * the purge night at midnight would hide the dose most often skipped. Such a
+ * step is kept, under its own day, until a few hours after its time.
+ */
+export function upcomingPlan(plan: readonly PlanDay[], now = new Date()): PlanDay[] {
+  const today = todayIn(now)
+  const cutoff = now.getTime() - CARRY_OVER_HOURS * 60 * 60 * 1000
+  return plan.flatMap((day) => {
+    if (day.date >= today) return [day]
+    const carried = day.steps.filter(
+      (step) => step.date >= today && step.at !== null && stepInstant(step as Step & { at: string }).getTime() > cutoff,
+    )
+    return carried.length > 0 ? [{ ...day, steps: carried }] : []
+  })
+}
+
 // ---------------------------------------------------------------------------
 // The purgative (the part that decides the outcome)
 // ---------------------------------------------------------------------------

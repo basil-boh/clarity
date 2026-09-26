@@ -53,8 +53,7 @@ const BLOCK: Partial<Record<Step['kind'], string>> = {
  * Ticking a step off.
  *
  * Only the steps in `tickable` get a box -- today's and earlier, so nothing can
- * be marked done before its day, and never a medication reminder, which is a
- * reminder rather than a step in the plan. The tick shows at once and is put
+ * be marked done before its day. The tick shows at once and is put
  * back if the save fails: on the purge night a box that silently did not save
  * is worse than one that says so. One save at a time, because each is a
  * read-then-write of the whole record and two in flight could undo each other.

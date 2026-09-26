@@ -25,10 +25,12 @@ export const PREP_REPORTS = {
   incomplete: 'I missed a dose or stopped without completing it',
 } as const
 export type PrepReport = keyof typeof PREP_REPORTS
-export function prepRating(doses: readonly { id: string; volumeMl: number }[], volumes: Record<string, number>, completed: readonly string[]): PrepRating {
+export function prepRating(doses: readonly { id: string; volumeMl: number }[], _volumes: Record<string, number>, completed: readonly string[]): PrepRating {
   if (completed.includes('-1:readiness-incomplete')) return 'poor'
   if (completed.includes('-1:readiness-completing') || completed.includes('-1:readiness-late')) return 'partial'
-  if (doses.length > 0 && doses.every(dose => (volumes[dose.id] ?? 0) >= dose.volumeMl && completed.includes(`-1:timing-${dose.id}`))) return 'good'
+  // Confirming a dose means "I finished it, on time". Counting glasses was
+  // dropped from Readiness as too much work, so recorded volume is not needed.
+  if (doses.length > 0 && doses.every(dose => completed.includes(`-1:timing-${dose.id}`))) return 'good'
   // An empty or partial log is not evidence that the patient stopped taking prep.
   return 'unknown'
 }

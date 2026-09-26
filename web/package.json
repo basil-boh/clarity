@@ -9,7 +9,6 @@
     "typecheck": "tsc --noEmit",
     "test:prep": "TZ=UTC node --experimental-strip-types --test src/domain/prep.test.mjs",
     "test:progress": "node --experimental-strip-types --test src/domain/progress.test.mjs",
-    "test:medications": "node --experimental-strip-types --test src/domain/medications.test.mjs src/lib/medication-extraction.test.mjs",
     "test:guardrails": "node src/app/api/ask/guardrails.test.mjs",
     "lint": "next lint",
     "import:diet": "python3 scripts/import-diet.py",

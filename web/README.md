@@ -38,45 +38,6 @@ That is deliberate — see *Not leaking bookings* below.
 
 Copy `.env.example` to `.env.local`.
 
-### Enabling medication photo reading
-
-Create `web/.env.local` (inside this web app, not the repository root) and set
-`OPENAI_API_KEY` to your API key. Optionally set `OPENAI_MEDICATION_MODEL`; the
-default is `gpt-4o-mini`. Restart `npm run dev` after changing configuration.
-For a hosted build, set these server environment variables on the hosting
-service and restart/redeploy it. Never use a `NEXT_PUBLIC_` prefix for the key.
-
-“Photo reading is not switched on in this build” means the running server has
-no `OPENAI_API_KEY`. It is not a restriction on demo patients. Without the key,
-the preparation plan and its original calendar export still work.
-
-On the Plan page, choose **Add medication instructions**, upload up to three
-department instruction photos, and read them. Review each transcription against
-the original photo, then confirm individual entries. For **Do not take**, enter
-the instructed start day/time and a separate daily reminder time. On the first
-day, a reminder earlier than the hold starts is moved to the hold's start time.
-For **Take**, enter a start day and one dose-and-time row for each daily dose;
-these times also set the reminders. There are no duplicate clock-time fields.
-Reminders run through procedure day unless an earlier last day is provided in
-the optional last-day field. This calendar boundary does not prescribe an end
-or restart date. Confirmed take/hold instructions appear in the
-timeline and calendar download. Ambiguous or conflicting instructions cannot
-be added; use a clearer department sheet. Medication alerts occur at the chosen
-time, in Singapore time. Post-procedure scheduling is excluded.
-
-Photos are never stored. With Supabase configured, the instructions a patient
-confirms are saved to their record (`web_medications`), so they survive a reload
-and staff see them in `/admin`; entries still being reviewed are not saved. On
-the demo source there is nowhere to keep them, and leaving or refreshing clears
-them as before. A procedure-date change requires review again. Downloads do not
-update previously imported calendar events. Photos are sent to OpenAI for
-processing, subject to that service's data controls. No clinician approval
-workflow or prescription inference is included.
-
-Run `npm run test:medications` for scheduling, upload validation, and mocked
-provider tests. Real extraction requires a configured API key; test with
-synthetic instruction sheets before trying actual patient documents.
-
 | Variable                     | Purpose                                              |
 | ---------------------------- | ---------------------------------------------------- |
 | `SESSION_SECRET`             | Signs the session and cooldown cookies. **Required in production.** `openssl rand -base64 32` |
@@ -109,8 +70,8 @@ boundaries.
 
 Then `supabase/migrations/0002_medications_and_fluid_days.sql`, the same way.
 It adds `web_progress.fluid_days` (clear fluid per day) and `web_medications`
-(the medication instructions a patient confirmed — never the photographs), and
-is also safe to re-run. Until it has run the app keeps working on the old
+(left from the retired medication-photo feature; nothing reads or writes it
+now), and is also safe to re-run. Until it has run the app keeps working on the old
 behaviour and logs which file to apply.
 
 Then `supabase/migrations/0003_questionnaire.sql`, for the first-sign-in
@@ -166,8 +127,7 @@ path means making the verified number a patient.
 Set `ADMIN_PASSWORD` and open `/admin`. It lists every patient with their
 procedure date and the phase they are in today, and adds, edits and deletes
 them. Each patient's page shows everything held for them — booking and stage,
-the readiness flag and its four signals, what they recorded, the medication
-instructions they confirmed, their assistant chat and sign-in codes — with
+the readiness flag and its four signals, what they recorded, their assistant chat and sign-in codes — with
 editing one step away behind **Edit details**. The stage shortcuts on the form set the date so the patient lands in a
 given phase — the purge night, say — which is the quickest way to see a screen
 at a boundary. "Clear recorded progress" wipes what a patient logged and keeps
@@ -326,9 +286,7 @@ procedure morning, before a glass is poured, that is the purge night.
 would otherwise put the whole plan a day late from midnight to 8am.
 
 Steps are ticked off on Today and the Plan: today's and earlier ones, never a
-day ahead. Medication instructions a patient confirms on the Plan are kept in
-`web_medications` (`lib/medications-store.ts`) and shown to staff in `/admin`;
-the photographs they were read from are not kept anywhere.
+day ahead. The Plan shows only today and the days ahead.
 
 Prep timing is the odd one out: it is *measured* from dose volume rather than
 self-reported, which is why it lives in `lib/progress.ts` and the other three
