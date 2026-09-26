@@ -66,95 +66,10 @@ export const PATIENT_COPY: Readonly<Record<string, readonly [string, string, str
     "Menyimpan",
     "சேமிக்கிறது"
   ],
-  "Choose up to three photos. Remove a photo before adding another.": [
-    "最多选择三张照片。添加新照片前，请先移除一张。",
-    "Pilih sehingga tiga foto. Buang satu foto sebelum menambah yang lain.",
-    "மூன்று படங்கள் வரை தேர்ந்தெடுக்கலாம். மற்றொன்றைச் சேர்க்கும் முன் ஒரு படத்தை நீக்கவும்."
-  ],
-  "Use JPEG, PNG or WebP photos, up to 5 MB each. For HEIC or other formats, retake the photo using the camera.": [
-    "请使用 JPEG、PNG 或 WebP 照片，每张不超过 5 MB。HEIC 或其他格式请用相机重新拍摄。",
-    "Gunakan foto JPEG, PNG atau WebP, sehingga 5 MB setiap satu. Untuk HEIC atau format lain, ambil semula dengan kamera.",
-    "JPEG, PNG அல்லது WebP படங்களைப் பயன்படுத்தவும்; ஒவ்வொன்றும் 5 MB வரை இருக்கலாம். HEIC அல்லது பிற வடிவங்களுக்கு கேமராவால் மீண்டும் படம் எடுக்கவும்."
-  ],
-  "Photo reading failed. Please try again.": [
-    "照片读取失败，请重试。",
-    "Gagal membaca foto. Sila cuba lagi.",
-    "படத்தைப் படிக்க முடியவில்லை. மீண்டும் முயலவும்."
-  ],
-  "Your procedure date changed. Refresh the page and review the instructions again.": [
-    "您的检查日期已更改。请刷新页面并重新核对说明。",
-    "Tarikh prosedur anda telah berubah. Muat semula halaman dan semak arahan sekali lagi.",
-    "உங்கள் பரிசோதனைத் தேதி மாறியுள்ளது. பக்கத்தைப் புதுப்பித்து அறிவுறுத்தல்களை மீண்டும் சரிபார்க்கவும்."
-  ],
-  "No medication instructions were readable. Try a clearer photo of the hospital/clinic’s instructions.": [
-    "无法读取用药说明。请拍摄更清晰的医院/诊所说明照片。",
-    "Arahan ubat tidak dapat dibaca. Cuba foto arahan hospital/klinik yang lebih jelas.",
-    "மருந்து அறிவுறுத்தல்களைப் படிக்க முடியவில்லை. மருத்துவமனை/கிளினிக் அறிவுறுத்தல்களைத் தெளிவாகப் படம் எடுக்கவும்."
-  ],
-  "Instructions read. Check each entry against your sheet before adding it.": [
-    "说明已读取。添加前请逐项对照纸本说明。",
-    "Arahan telah dibaca. Semak setiap entri dengan helaian anda sebelum menambahnya.",
-    "அறிவுறுத்தல்கள் படிக்கப்பட்டன. சேர்க்கும் முன் ஒவ்வொரு பதிவையும் உங்கள் தாளுடன் ஒப்பிடவும்."
-  ],
-  "Changes need confirmation before they appear in your plan.": [
-    "更改须经确认后才会显示在计划中。",
-    "Perubahan perlu disahkan sebelum dipaparkan dalam pelan anda.",
-    "மாற்றங்கள் திட்டத்தில் தோன்றும் முன் உறுதிப்படுத்த வேண்டும்."
-  ],
-  "Medication instructions": [
-    "用药说明",
-    "Arahan ubat",
-    "மருந்து அறிவுறுத்தல்கள்"
-  ],
-  "Your medication instructions": [
-    "您的用药说明",
-    "Arahan ubat anda",
-    "உங்கள் மருந்து அறிவுறுத்தல்கள்"
-  ],
-  "Add medication instructions": [
-    "添加用药说明",
-    "Tambah arahan ubat",
-    "மருந்து அறிவுறுத்தல்களைச் சேர்"
-  ],
   "{0} added to your plan": [
     "已向计划添加 {0} 项",
     "{0} ditambah pada pelan anda",
     "உங்கள் திட்டத்தில் {0} சேர்க்கப்பட்டன"
-  ],
-  "Photograph the instructions that say which medicines to take or hold before your colonoscopy. A usual prescription list alone is not enough.": [
-    "请拍摄结肠镜检查前应服用或暂停哪些药物的说明。只有日常处方药清单并不足够。",
-    "Ambil foto arahan tentang ubat yang perlu diambil atau dihentikan sebelum kolonoskopi. Senarai preskripsi biasa sahaja tidak mencukupi.",
-    "பெருங்குடல் நோக்கிப் பரிசோதனைக்கு முன் எந்த மருந்துகளை எடுக்க அல்லது நிறுத்த வேண்டும் என்ற அறிவுறுத்தல்களைப் படம் எடுக்கவும். வழக்கமான மருந்துப் பட்டியல் மட்டும் போதாது."
-  ],
-  "Photos are sent to OpenAI for automated reading and are not stored by Colonaid. Check the result against your sheet. Instructions you add to your plan are saved to your record, so they are still here next time, and your hospital/clinic can see them.": [
-    "照片会发送至 OpenAI 自动读取，Colonaid 不会保存照片。请对照纸本核对结果。添加到计划的说明会保存至您的记录，方便下次查看，医院/诊所也能查看。",
-    "Foto dihantar ke OpenAI untuk dibaca secara automatik dan tidak disimpan oleh Colonaid. Semak hasil dengan helaian anda. Arahan yang ditambah pada pelan disimpan dalam rekod anda untuk lawatan seterusnya dan boleh dilihat oleh hospital/klinik anda.",
-    "படங்கள் தானாகப் படிப்பதற்காக OpenAI-க்கு அனுப்பப்படுகின்றன; Colonaid அவற்றைச் சேமிக்காது. முடிவை உங்கள் தாளுடன் சரிபார்க்கவும். திட்டத்தில் சேர்த்த அறிவுறுத்தல்கள் உங்கள் பதிவில் சேமிக்கப்படும்; அடுத்த முறையும் மருத்துவமனை/கிளினிக்கும் அவற்றைப் பார்க்கலாம்."
-  ],
-  "Photos are sent to OpenAI for automated reading. Check the result against your sheet. Photos and reviewed instructions are not saved by Colonaid; leaving or refreshing this page clears them.": [
-    "照片会发送至 OpenAI 自动读取。请对照纸本核对结果。Colonaid 不会保存照片或已核对的说明；离开或刷新此页后，这些内容会清除。",
-    "Foto dihantar ke OpenAI untuk bacaan automatik. Semak hasil dengan helaian anda. Foto dan arahan yang disemak tidak disimpan oleh Colonaid; meninggalkan atau memuat semula halaman akan memadamkannya.",
-    "படங்கள் தானாகப் படிப்பதற்காக OpenAI-க்கு அனுப்பப்படுகின்றன. முடிவை உங்கள் தாளுடன் சரிபார்க்கவும். படங்களும் சரிபார்த்த அறிவுறுத்தல்களும் சேமிக்கப்படாது; பக்கத்தை விட்டு வெளியேறினால் அல்லது புதுப்பித்தால் அவை அழிக்கப்படும்."
-  ],
-  "Take medication photo": [
-    "拍摄用药照片",
-    "Ambil foto ubat",
-    "மருந்துப் படம் எடு"
-  ],
-  "Choose medication photos": [
-    "选择用药照片",
-    "Pilih foto ubat",
-    "மருந்துப் படங்களைத் தேர்ந்தெடு"
-  ],
-  "Take a photo": [
-    "拍照",
-    "Ambil foto",
-    "படம் எடு"
-  ],
-  "Up to 3 photos · JPEG, PNG or WebP · 5 MB each. Changing photos clears entries you have not added yet.": [
-    "最多 3 张照片 · JPEG、PNG 或 WebP · 每张 5 MB。更换照片会清除尚未添加的条目。",
-    "Sehingga 3 foto · JPEG, PNG atau WebP · 5 MB setiap satu. Menukar foto memadamkan entri yang belum ditambah.",
-    "அதிகபட்சம் 3 படங்கள் · JPEG, PNG அல்லது WebP · ஒவ்வொன்றும் 5 MB. படங்களை மாற்றினால் இன்னும் சேர்க்காத பதிவுகள் அழியும்."
   ],
   "Enlarge photo {0}": [
     "放大第 {0} 张照片",
@@ -166,46 +81,6 @@ export const PATIENT_COPY: Readonly<Record<string, readonly [string, string, str
     "Helaian arahan, foto {0}",
     "அறிவுறுத்தல் தாள், படம் {0}"
   ],
-  "Remove photo": [
-    "移除照片",
-    "Buang foto",
-    "படத்தை நீக்கு"
-  ],
-  "Reading your instructions…": [
-    "正在读取您的说明…",
-    "Sedang membaca arahan anda…",
-    "உங்கள் அறிவுறுத்தல்களைப் படிக்கிறது…"
-  ],
-  "Read photos again": [
-    "重新读取照片",
-    "Baca foto semula",
-    "படங்களை மீண்டும் படி"
-  ],
-  "Read these photos": [
-    "读取这些照片",
-    "Baca foto ini",
-    "இந்தப் படங்களைப் படி"
-  ],
-  "Cancel reading": [
-    "取消读取",
-    "Batalkan bacaan",
-    "படிப்பதை ரத்துசெய்"
-  ],
-  "Check against your sheet": [
-    "对照您的说明单核对",
-    "Semak dengan helaian anda",
-    "உங்கள் தாளுடன் சரிபார்"
-  ],
-  "Correct transcription errors using the written instructions. If a dose or date is missing, ask your hospital/clinic. The app cannot decide it.": [
-    "请根据纸本说明纠正读取错误。如缺少剂量或日期，请询问医院/诊所。应用程序不能自行决定。",
-    "Betulkan kesilapan bacaan mengikut arahan bertulis. Jika dos atau tarikh tiada, tanya hospital/klinik anda. Aplikasi tidak boleh menentukannya.",
-    "எழுத்து அறிவுறுத்தல்களைக் கொண்டு படித்ததில் உள்ள பிழைகளைத் திருத்தவும். அளவு அல்லது தேதி இல்லையெனில் மருத்துவமனை/கிளினிக்கைக் கேட்கவும். செயலி அதை முடிவு செய்ய முடியாது."
-  ],
-  "Unreadable medicine": [
-    "无法辨认的药物",
-    "Ubat tidak dapat dibaca",
-    "படிக்க முடியாத மருந்து"
-  ],
   "Remove {0}": [
     "移除 {0}",
     "Buang {0}",
@@ -216,40 +91,10 @@ export const PATIENT_COPY: Readonly<Record<string, readonly [string, string, str
     "Buang",
     "நீக்கு"
   ],
-  "No readable source text": [
-    "无可读取的原文",
-    "Tiada teks sumber yang boleh dibaca",
-    "படிக்கக்கூடிய மூல உரை இல்லை"
-  ],
   "Photo": [
     "照片",
     "Foto",
     "படம்"
-  ],
-  "Added to your plan ·": [
-    "已添加至计划 ·",
-    "Ditambah pada pelan anda ·",
-    "உங்கள் திட்டத்தில் சேர்க்கப்பட்டது ·"
-  ],
-  "Edit instructions": [
-    "编辑说明",
-    "Edit arahan",
-    "அறிவுறுத்தல்களைத் திருத்து"
-  ],
-  "Medicine name": [
-    "药物名称",
-    "Nama ubat",
-    "மருந்துப் பெயர்"
-  ],
-  "Hospital/clinic instruction": [
-    "医院/诊所说明",
-    "Arahan hospital/klinik",
-    "மருத்துவமனை/கிளினிக் அறிவுறுத்தல்"
-  ],
-  "Choose the instruction": [
-    "选择说明",
-    "Pilih arahan",
-    "அறிவுறுத்தலைத் தேர்ந்தெடு"
   ],
   "Take": [
     "服用",
@@ -261,56 +106,6 @@ export const PATIENT_COPY: Readonly<Record<string, readonly [string, string, str
     "Jangan ambil",
     "எடுத்துக்கொள்ள வேண்டாம்"
   ],
-  "Medicine details on sheet:": [
-    "说明单上的药物详情：",
-    "Butiran ubat pada helaian:",
-    "தாளில் உள்ள மருந்து விவரங்கள்:"
-  ],
-  "Stop taking from": [
-    "开始暂停服用的时间",
-    "Berhenti mengambil mulai",
-    "எடுப்பதை நிறுத்தத் தொடங்கும் நேரம்"
-  ],
-  "Choose the date and time your hospital/clinic gave you (Singapore time).": [
-    "选择医院/诊所提供的日期和时间（新加坡时间）。",
-    "Pilih tarikh dan masa yang diberikan hospital/klinik anda (waktu Singapura).",
-    "மருத்துவமனை/கிளினிக் கொடுத்த தேதி மற்றும் நேரத்தைத் தேர்ந்தெடுக்கவும் (சிங்கப்பூர் நேரம்)."
-  ],
-  "Start date on sheet:": [
-    "说明单上的开始日期：",
-    "Tarikh mula pada helaian:",
-    "தாளில் உள்ள தொடக்கத் தேதி:"
-  ],
-  ". Complete the date and time above.": [
-    "。请补全上方的日期和时间。",
-    ". Lengkapkan tarikh dan masa di atas.",
-    ". மேலே தேதியையும் நேரத்தையும் நிரப்பவும்."
-  ],
-  "Start taking on": [
-    "开始服用日期",
-    "Mula mengambil pada",
-    "எடுக்கத் தொடங்கும் தேதி"
-  ],
-  "Remind me each day at": [
-    "每天提醒时间",
-    "Ingatkan saya setiap hari pada",
-    "தினமும் நினைவூட்டும் நேரம்"
-  ],
-  "Choose when you want a reminder not to take this medicine.": [
-    "选择每天提醒您暂停此药的时间。",
-    "Pilih masa peringatan untuk tidak mengambil ubat ini.",
-    "இந்த மருந்தை எடுக்க வேண்டாம் என்று நினைவூட்டும் நேரத்தைத் தேர்ந்தெடுக்கவும்."
-  ],
-  "If your reminder time is earlier than the hold starts, the first reminder will arrive when the hold starts.": [
-    "如果提醒时间早于暂停用药的开始时间，首次提醒会在开始暂停时发送。",
-    "Jika masa peringatan lebih awal daripada masa mula berhenti, peringatan pertama tiba apabila tempoh berhenti bermula.",
-    "நினைவூட்டல் நேரம் மருந்தை நிறுத்தும் நேரத்திற்கு முன்பாக இருந்தால், முதல் நினைவூட்டல் நிறுத்தத் தொடங்கும் நேரத்தில் வரும்."
-  ],
-  "How much to take, and when": [
-    "服用多少，以及何时服用",
-    "Berapa banyak dan bila perlu diambil",
-    "எவ்வளவு, எப்போது எடுக்க வேண்டும்"
-  ],
   "Dose {0}": [
     "第 {0} 剂",
     "Dos {0}",
@@ -321,70 +116,10 @@ export const PATIENT_COPY: Readonly<Record<string, readonly [string, string, str
     "Ambil dos {0} pada",
     "வேளை {0} எடுக்கும் நேரம்"
   ],
-  "Remove dose": [
-    "移除此剂",
-    "Buang dos",
-    "வேளையை நீக்கு"
-  ],
-  "Add another daily dose": [
-    "添加另一次每日用药",
-    "Tambah satu lagi dos harian",
-    "மற்றொரு தினசரி வேளையைச் சேர்"
-  ],
-  "Written instructions:": [
-    "纸本说明：",
-    "Arahan bertulis:",
-    "எழுத்து அறிவுறுத்தல்கள்:"
-  ],
-  "All times are Singapore time. Reminders run through": [
-    "所有时间均为新加坡时间。提醒持续至",
-    "Semua masa ialah waktu Singapura. Peringatan sehingga",
-    "அனைத்து நேரங்களும் சிங்கப்பூர் நேரம். நினைவூட்டல்கள் தொடரும் இறுதி நாள்"
-  ],
-  ". Follow the hospital/clinic’s instructions after that; this does not set a restart date.": [
-    "。之后请遵循医院/诊所的说明；这并非恢复用药日期。",
-    ". Ikut arahan hospital/klinik selepas itu; ini bukan tarikh untuk mula mengambil semula.",
-    ". அதன் பிறகு மருத்துவமனை/கிளினிக் அறிவுறுத்தல்களைப் பின்பற்றவும்; இது மருந்தை மீண்டும் தொடங்கும் தேதியல்ல."
-  ],
-  "Earlier last day on your sheet?": [
-    "说明单上的结束日期更早？",
-    "Tarikh akhir pada helaian lebih awal?",
-    "உங்கள் தாளில் இறுதி நாள் முன்னதாக உள்ளதா?"
-  ],
-  "Last day these instructions apply (if specified)": [
-    "说明适用的最后日期（如有注明）",
-    "Hari terakhir arahan terpakai (jika dinyatakan)",
-    "அறிவுறுத்தல்கள் பொருந்தும் கடைசி நாள் (குறிப்பிட்டிருந்தால்)"
-  ],
-  "Leave blank to show reminders through procedure day.": [
-    "留空则提醒持续至检查当天。",
-    "Biarkan kosong untuk peringatan sehingga hari prosedur.",
-    "பரிசோதனை நாள் வரை நினைவூட்ட வேண்டுமெனில் காலியாக விடவும்."
-  ],
-  "Not ready to add": [
-    "尚不能添加",
-    "Belum sedia untuk ditambah",
-    "சேர்க்க இன்னும் தயாரில்லை"
-  ],
-  "Retake the photo with clearer instructions to resolve the flagged items.": [
-    "请重新拍摄更清晰的说明，以解决标记的问题。",
-    "Ambil semula foto arahan yang lebih jelas untuk menyelesaikan perkara yang ditandakan.",
-    "குறிக்கப்பட்ட சிக்கல்களைத் தீர்க்க அறிவுறுத்தல்களைத் தெளிவாக மீண்டும் படம் எடுக்கவும்."
-  ],
   "{0} added. Your plan now includes these reminders.": [
     "已添加 {0}。您的计划现已包含这些提醒。",
     "{0} ditambah. Pelan anda kini mengandungi peringatan ini.",
     "{0} சேர்க்கப்பட்டது. உங்கள் திட்டத்தில் இந்த நினைவூட்டல்கள் இப்போது உள்ளன."
-  ],
-  "I checked this — add to my plan": [
-    "我已核对 — 添加至计划",
-    "Saya sudah semak — tambah pada pelan",
-    "சரிபார்த்துவிட்டேன் — திட்டத்தில் சேர்"
-  ],
-  "Questions about your medicines? Call the hospital/clinic": [
-    "用药有疑问？请致电医院/诊所",
-    "Soalan tentang ubat? Hubungi hospital/klinik",
-    "மருந்துகள் பற்றி கேள்விகளா? மருத்துவமனை/கிளினிக்கை அழைக்கவும்"
   ],
   "Nothing booked under this number": [
     "此号码下没有预约",
@@ -421,20 +156,10 @@ export const PATIENT_COPY: Readonly<Record<string, readonly [string, string, str
     "Setiap hari sebelum prosedur, mengikut urutan. Hari ini ditandakan.",
     "பரிசோதனைக்கு முன் ஒவ்வொரு நாளும் வரிசையாக. இன்று குறிக்கப்பட்டுள்ளது."
   ],
-  "Your medication reminders could not be saved, so they last only until you leave this page. Please try saving them again before leaving.": [
-    "用药提醒未能保存，离开此页后将消失。请离开前再次尝试保存。",
-    "Peringatan ubat tidak dapat disimpan dan hanya kekal sehingga anda meninggalkan halaman ini. Cuba simpan semula sebelum keluar.",
-    "மருந்து நினைவூட்டல்களைச் சேமிக்க முடியவில்லை; இந்தப் பக்கத்தை விட்டு வெளியேறியதும் அவை மறையும். வெளியேறும் முன் மீண்டும் சேமிக்க முயலவும்."
-  ],
   "Includes": [
     "包含",
     "Termasuk",
     "உள்ளடக்கம்:"
-  ],
-  "medication reminders.": [
-    "条用药提醒。",
-    "peringatan ubat.",
-    "மருந்து நினைவூட்டல்கள்."
   ],
   "The second dose of purgative is the one most often skipped, and it is the one that clears the right side of the colon. Finish both.": [
     "第二剂清肠药最容易被漏服，也是清洁结肠右侧的关键。请完成两剂。",
@@ -1951,61 +1676,6 @@ export const PATIENT_COPY: Readonly<Record<string, readonly [string, string, str
     "Ini menerangkan kejernihan, bukan pengesahan kesediaan. Lengkapkan persediaan seperti dipreskripsikan dan ikut arahan hospital/klinik.",
     "இது தெளிவை விவரிக்கிறது; தயாராகிவிட்டதை உறுதிசெய்யவில்லை. பரிந்துரைத்தபடி தயாரிப்பை முடித்து மருத்துவமனை/கிளினிக் அறிவுறுத்தல்களைப் பின்பற்றவும்."
   ],
-  "Invalid medication extraction": [
-    "用药资料读取结果无效",
-    "Hasil bacaan ubat tidak sah",
-    "மருந்து வாசிப்பு முடிவு செல்லாது"
-  ],
-  "The procedure date changed. Read and review the instructions again.": [
-    "检查日期已更改。请重新阅读并核对说明。",
-    "Tarikh prosedur berubah. Baca dan semak arahan semula.",
-    "பரிசோதனைத் தேதி மாறியது. அறிவுறுத்தல்களை மீண்டும் படித்துச் சரிபார்க்கவும்."
-  ],
-  "This sheet does not provide procedure-specific instructions for this medicine.": [
-    "此说明单未提供该药在检查前后的专门用药指示。",
-    "Helaian ini tidak memberikan arahan khusus prosedur untuk ubat ini.",
-    "இந்தத் தாளில் இந்த மருந்துக்கான பரிசோதனை சார்ந்த அறிவுறுத்தல்கள் இல்லை."
-  ],
-  "A medicine name and readable source instruction are required.": [
-    "必须有药物名称及可读取的原始说明。",
-    "Nama ubat dan arahan sumber yang boleh dibaca diperlukan.",
-    "மருந்துப் பெயரும் படிக்கக்கூடிய மூல அறிவுறுத்தலும் தேவை."
-  ],
-  "The hospital/clinic must specify whether to take or hold this medicine.": [
-    "医院/诊所必须明确说明服用还是暂停此药。",
-    "Hospital/klinik mesti menyatakan sama ada ubat perlu diambil atau dihentikan.",
-    "மருந்தை எடுக்க வேண்டுமா நிறுத்த வேண்டுமா என்பதை மருத்துவமனை/கிளினிக் குறிப்பிட வேண்டும்."
-  ],
-  "Enter the day these instructions start.": [
-    "输入这些说明开始适用的日期。",
-    "Masukkan hari arahan ini bermula.",
-    "இந்த அறிவுறுத்தல்கள் தொடங்கும் நாளை உள்ளிடவும்."
-  ],
-  "Enter the time you were instructed to stop taking this medicine.": [
-    "输入医嘱要求停止服用此药的时间。",
-    "Masukkan masa anda diarahkan berhenti mengambil ubat ini.",
-    "இந்த மருந்தை நிறுத்தச் சொன்ன நேரத்தை உள்ளிடவும்."
-  ],
-  "This schedule must start on or before the procedure, end after it starts, and span at most a year.": [
-    "此安排须在检查当天或之前开始、在开始之后结束，且跨度不超过一年。",
-    "Jadual mesti bermula pada atau sebelum prosedur, berakhir selepas ia bermula, dan tidak melebihi setahun.",
-    "அட்டவணை பரிசோதனை நாளிலோ அதற்கு முன்போ தொடங்கி, தொடங்கிய பிறகு முடிய வேண்டும்; ஒரு ஆண்டை மீறக்கூடாது."
-  ],
-  "The number of daily doses must be stated in the instructions.": [
-    "说明中必须注明每日服用次数。",
-    "Bilangan dos harian mesti dinyatakan dalam arahan.",
-    "தினசரி வேளைகளின் எண்ணிக்கை அறிவுறுத்தல்களில் இருக்க வேண்டும்."
-  ],
-  "Choose a distinct reminder time for each daily instruction.": [
-    "为每天每次用药选择不同的提醒时间。",
-    "Pilih masa peringatan berbeza bagi setiap arahan harian.",
-    "ஒவ்வொரு தினசரி அறிவுறுத்தலுக்கும் தனித்தனி நினைவூட்டல் நேரத்தைத் தேர்ந்தெடுக்கவும்."
-  ],
-  "Enter the prescribed dose for each time you take this medicine.": [
-    "输入每次服药的医嘱剂量。",
-    "Masukkan dos preskripsi setiap kali ubat diambil.",
-    "ஒவ்வொரு முறை எடுக்கும் பரிந்துரைத்த மருந்தளவை உள்ளிடவும்."
-  ],
   "Medicine details: {0}": [
     "药物详情：{0}",
     "Butiran ubat: {0}",
@@ -2091,26 +1761,6 @@ export const PATIENT_COPY: Readonly<Record<string, readonly [string, string, str
     "Kami tidak dapat menyemak kod. Sila cuba lagi.",
     "குறியீட்டைச் சரிபார்க்க முடியவில்லை. மீண்டும் முயலவும்."
   ],
-  "Please sign in again before uploading.": [
-    "请重新登录后再上传。",
-    "Sila log masuk semula sebelum memuat naik.",
-    "பதிவேற்றும் முன் மீண்டும் உள்நுழையவும்."
-  ],
-  "No procedure is available for this account.": [
-    "此账户没有检查资料。",
-    "Tiada prosedur tersedia untuk akaun ini.",
-    "இந்தக் கணக்கிற்கு பரிசோதனை விவரம் இல்லை."
-  ],
-  "Photo reading is not switched on in this build. Your existing preparation plan is still available.": [
-    "此版本尚未启用照片读取，您仍可使用现有准备计划。",
-    "Bacaan foto belum diaktifkan dalam versi ini. Pelan persediaan sedia ada masih tersedia.",
-    "இந்தப் பதிப்பில் படம் படித்தல் இயக்கப்படவில்லை. உங்கள் தற்போதைய தயாரிப்புத் திட்டம் இன்னும் கிடைக்கும்."
-  ],
-  "Choose supported photos and try again.": [
-    "请选择支持的照片格式并重试。",
-    "Pilih foto yang disokong dan cuba lagi.",
-    "ஆதரிக்கப்படும் படங்களைத் தேர்ந்தெடுத்து மீண்டும் முயலவும்."
-  ],
   "of": [
     "／",
     "daripada",
@@ -2126,25 +1776,10 @@ export const PATIENT_COPY: Readonly<Record<string, readonly [string, string, str
     "gelas",
     "குவளைகள்"
   ],
-  "Optional · from your hospital/clinic’s preparation sheet": [
-    "可选 · 来自医院/诊所的准备说明单",
-    "Pilihan · daripada helaian persediaan hospital/klinik anda",
-    "விருப்பத்தேர்வு · மருத்துவமனை/கிளினிக்கின் தயாரிப்புத் தாளிலிருந்து"
-  ],
-  "Choose from gallery": [
-    "从相册选择",
-    "Pilih daripada galeri",
-    "படத் தொகுப்பிலிருந்து தேர்ந்தெடு"
-  ],
   "entry": [
     "条目",
     "entri",
     "பதிவு"
-  ],
-  "hold reminders": [
-    "暂停用药提醒",
-    "peringatan berhenti ubat",
-    "மருந்தை நிறுத்தும் நினைவூட்டல்கள்"
   ],
   "doses": [
     "剂量",
@@ -2155,16 +1790,6 @@ export const PATIENT_COPY: Readonly<Record<string, readonly [string, string, str
     "时间",
     "pada",
     "நேரம்"
-  ],
-  "Copy each dose from your instructions. These times set your medication reminders.": [
-    "按说明填写每次剂量。这些时间用于用药提醒。",
-    "Salin setiap dos daripada arahan. Masa ini menetapkan peringatan ubat anda.",
-    "உங்கள் அறிவுறுத்தலிலிருந்து ஒவ்வொரு அளவையும் நகலெடுக்கவும். இந்த நேரங்களே மருந்து நினைவூட்டல்களை அமைக்கும்."
-  ],
-  "e.g. 1 tablet": [
-    "例如：1 片",
-    "cth. 1 tablet",
-    "எ.கா. 1 மாத்திரை"
   ],
   " · Today": [
     " · 今天",
@@ -2256,11 +1881,6 @@ export const PATIENT_COPY: Readonly<Record<string, readonly [string, string, str
     "Cecair jernih sahaja mulai sekarang",
     "இனி தெளிந்த திரவங்கள் மட்டும்"
   ],
-  "Check the earlier last day copied from the sheet.": [
-    "核对从说明单抄录的较早结束日期。",
-    "Semak tarikh akhir lebih awal yang disalin daripada helaian.",
-    "தாளிலிருந்து நகலெடுத்த முந்தைய இறுதி நாளைச் சரிபார்க்கவும்."
-  ],
   "Dose: {0}": [
     "剂量：{0}",
     "Dos: {0}",
@@ -2275,11 +1895,6 @@ export const PATIENT_COPY: Readonly<Record<string, readonly [string, string, str
     "暂停服用 {0}",
     "Jangan ambil {0}",
     "{0} எடுக்க வேண்டாம்"
-  ],
-  "Entry removed from the plan.": [
-    "已从计划移除条目。",
-    "Entri dibuang daripada pelan.",
-    "திட்டத்திலிருந்து பதிவு நீக்கப்பட்டது."
   ],
   "{0}: {1} percent": [
     "{0}：百分之 {1}",
@@ -2305,86 +1920,6 @@ export const PATIENT_COPY: Readonly<Record<string, readonly [string, string, str
     "尚未登录。",
     "Belum log masuk.",
     "உள்நுழையவில்லை."
-  ],
-  "Upload from the Plan page.": [
-    "请从计划页面上传。",
-    "Muat naik daripada halaman Pelan.",
-    "திட்டப் பக்கத்திலிருந்து பதிவேற்றவும்."
-  ],
-  "Choose image files to upload.": [
-    "请选择要上传的图片文件。",
-    "Pilih fail imej untuk dimuat naik.",
-    "பதிவேற்றப் படக் கோப்புகளைத் தேர்ந்தெடுக்கவும்."
-  ],
-  "Choose up to three photos, no more than 5 MB each.": [
-    "最多选择三张照片，每张不超过 5 MB。",
-    "Pilih sehingga tiga foto, tidak melebihi 5 MB setiap satu.",
-    "மூன்று படங்கள் வரை தேர்ந்தெடுக்கவும்; ஒவ்வொன்றும் 5 MB-ஐ மீறக்கூடாது."
-  ],
-  "Choose between one and three photos.": [
-    "请选择一至三张照片。",
-    "Pilih antara satu hingga tiga foto.",
-    "ஒன்று முதல் மூன்று படங்களைத் தேர்ந்தெடுக்கவும்."
-  ],
-  "Use JPEG, PNG or WebP photos, no more than 5 MB each. Retake unsupported photos with your camera.": [
-    "使用 JPEG、PNG 或 WebP 照片，每张不超过 5 MB。不支持的照片请用相机重拍。",
-    "Gunakan foto JPEG, PNG atau WebP, tidak melebihi 5 MB setiap satu. Ambil semula foto yang tidak disokong dengan kamera.",
-    "JPEG, PNG அல்லது WebP படங்களைப் பயன்படுத்தவும்; ஒவ்வொன்றும் 5 MB வரை. ஆதரிக்கப்படாத படங்களை கேமராவால் மீண்டும் எடுக்கவும்."
-  ],
-  "This file is not a supported photo. Please retake it.": [
-    "不支持此照片文件，请重新拍摄。",
-    "Fail ini bukan foto yang disokong. Sila ambil semula.",
-    "இந்தப் படம் ஆதரிக்கப்படவில்லை. மீண்டும் படம் எடுக்கவும்."
-  ],
-  "Photo reading cannot connect because its API credentials were rejected. The app configuration needs attention.": [
-    "照片读取无法连接，因为 API 凭据被拒绝。需要检查应用配置。",
-    "Bacaan foto tidak dapat disambungkan kerana kelayakan API ditolak. Konfigurasi aplikasi perlu diperiksa.",
-    "API சான்றுகள் நிராகரிக்கப்பட்டதால் படம் படிக்கும் சேவையுடன் இணைய முடியவில்லை. செயலியின் அமைப்பைச் சரிபார்க்க வேண்டும்."
-  ],
-  "Photo reading is unavailable because the API account has no remaining quota. Check the API billing and usage limits.": [
-    "API 账户额度已用尽，无法读取照片。请检查 API 账单及用量限制。",
-    "Bacaan foto tidak tersedia kerana kuota akaun API telah habis. Semak bil dan had penggunaan API.",
-    "API கணக்கில் ஒதுக்கீடு மீதமில்லாததால் படம் படித்தல் கிடைக்கவில்லை. API கட்டணம் மற்றும் பயன்பாட்டு வரம்புகளைச் சரிபார்க்கவும்."
-  ],
-  "Photo reading is receiving too many requests. Wait a minute before trying again.": [
-    "照片读取请求过多，请等一分钟再试。",
-    "Terlalu banyak permintaan bacaan foto. Tunggu seminit sebelum cuba lagi.",
-    "படம் படிக்க அதிக கோரிக்கைகள் வருகின்றன. ஒரு நிமிடம் காத்திருந்து மீண்டும் முயலவும்."
-  ],
-  "The photo-reading service rejected the request. Please check the server diagnostic code.": [
-    "照片读取服务拒绝请求，请检查服务器诊断代码。",
-    "Perkhidmatan bacaan foto menolak permintaan. Semak kod diagnostik pelayan.",
-    "படம் படிக்கும் சேவை கோரிக்கையை நிராகரித்தது. சேவையகச் சிக்கல் குறியீட்டைச் சரிபார்க்கவும்."
-  ],
-  "The photo-reading service could not complete the request. Please try again shortly.": [
-    "照片读取服务未能完成请求，请稍后重试。",
-    "Perkhidmatan bacaan foto tidak dapat melengkapkan permintaan. Cuba lagi sebentar nanti.",
-    "படம் படிக்கும் சேவையால் கோரிக்கையை முடிக்க முடியவில்லை. சிறிது நேரத்தில் மீண்டும் முயலவும்."
-  ],
-  "The server could not connect to the photo-reading service. Please try again shortly.": [
-    "服务器无法连接照片读取服务，请稍后重试。",
-    "Pelayan tidak dapat menyambung ke perkhidmatan bacaan foto. Cuba lagi sebentar nanti.",
-    "சேவையகத்தால் படம் படிக்கும் சேவையுடன் இணைய முடியவில்லை. சிறிது நேரத்தில் மீண்டும் முயலவும்."
-  ],
-  "Photo reading took longer than 45 seconds. Try again with one clear photo.": [
-    "照片读取超过 45 秒。请用一张清晰照片重试。",
-    "Bacaan foto melebihi 45 saat. Cuba lagi dengan satu foto yang jelas.",
-    "படம் படிக்க 45 விநாடிகளுக்கு மேல் ஆனது. ஒரு தெளிவான படத்துடன் மீண்டும் முயலவும்."
-  ],
-  "The service could not read this document. Try a clear photo of the written medication instructions.": [
-    "无法读取此文件，请使用清晰的纸本用药说明照片。",
-    "Perkhidmatan tidak dapat membaca dokumen ini. Cuba foto jelas arahan ubat bertulis.",
-    "இந்த ஆவணத்தைச் சேவையால் படிக்க முடியவில்லை. எழுத்து மருந்து அறிவுறுத்தல்களின் தெளிவான படத்தை முயலவும்."
-  ],
-  "The reading was incomplete. Try one page at a time. No instructions have been added.": [
-    "读取未完成。请一次上传一页。目前未添加任何说明。",
-    "Bacaan tidak lengkap. Cuba satu halaman pada satu masa. Tiada arahan ditambah.",
-    "படித்தல் முழுமையடையவில்லை. ஒரு நேரத்தில் ஒரு பக்கத்தை முயலவும். அறிவுறுத்தல்கள் சேர்க்கப்படவில்லை."
-  ],
-  "The service returned an unexpected reading format. No instructions have been added. Please try again.": [
-    "服务返回了不符合预期的格式，未添加任何说明。请重试。",
-    "Perkhidmatan memberikan format bacaan yang tidak dijangka. Tiada arahan ditambah. Sila cuba lagi.",
-    "சேவை எதிர்பாராத வடிவத்தில் முடிவளித்தது. அறிவுறுத்தல்கள் சேர்க்கப்படவில்லை. மீண்டும் முயலவும்."
   ],
   "The assistant is not switched on in this build, so I cannot answer that here.": [
     "此版本尚未启用助手，暂时无法回答。",
@@ -2451,11 +1986,6 @@ export const PATIENT_COPY: Readonly<Record<string, readonly [string, string, str
     "{0} / {1} gelas",
     "{0} / {1} குவளைகள்"
   ],
-  "Includes {0} medication reminders.": [
-    "包含 {0} 条用药提醒。",
-    "Termasuk {0} peringatan ubat.",
-    "{0} மருந்து நினைவூட்டல்கள் உள்ளன."
-  ],
   "{0} days before": [
     "{0} 天前",
     "{0} hari sebelum",
@@ -2465,5 +1995,95 @@ export const PATIENT_COPY: Readonly<Record<string, readonly [string, string, str
     "1 天前",
     "1 hari sebelum",
     "1 நாளுக்கு முன்பு"
-  ]
+  ],
+  "What is coming up, from today. Days already done are hidden.": [
+    "从今天起即将进行的步骤。已完成的日子不再显示。",
+    "Apa yang akan datang, mulai hari ini. Hari yang sudah selesai disembunyikan.",
+    "இன்று முதல் வரவிருப்பவை. முடிந்த நாட்கள் மறைக்கப்பட்டுள்ளன."
+  ],
+  "Nothing left to do in your preparation plan.": [
+    "您的准备计划中已没有需要做的事项。",
+    "Tiada lagi yang perlu dilakukan dalam pelan persediaan anda.",
+    "உங்கள் தயாரிப்புத் திட்டத்தில் செய்ய வேண்டியது எதுவும் இல்லை."
+  ],
+  "01 · Purgative schedule": [
+    "01 · 泻药时间表",
+    "01 · Jadual julap",
+    "01 · பேதி மருந்து அட்டவணை"
+  ],
+  "02 · Stool check-in": [
+    "02 · 粪便检查记录",
+    "02 · Semakan najis",
+    "02 · மலப் பரிசோதனைப் பதிவு"
+  ],
+  "03 · Overall bowel readiness": [
+    "03 · 整体肠道准备情况",
+    "03 · Kesediaan usus keseluruhan",
+    "03 · ஒட்டுமொத்த குடல் தயார்நிலை"
+  ],
+  "Only confirm a dose after you have finished the whole volume.": [
+    "请在喝完全部分量后，才确认该剂。",
+    "Sahkan dos hanya selepas anda menghabiskan keseluruhan isipadu.",
+    "முழு அளவையும் குடித்து முடித்த பிறகே ஒரு டோஸை உறுதிப்படுத்துங்கள்."
+  ],
+  "Same night, after midnight": [
+    "同一晚，午夜之后",
+    "Malam yang sama, selepas tengah malam",
+    "அதே இரவு, நள்ளிரவுக்குப் பிறகு"
+  ],
+  "{0} ml": [
+    "{0} 毫升",
+    "{0} ml",
+    "{0} மி.லி."
+  ],
+  "✓ Finished on time · Undo": [
+    "✓ 已按时喝完 · 撤销",
+    "✓ Selesai tepat pada masanya · Buat asal",
+    "✓ சரியான நேரத்தில் முடிந்தது · செயல்தவிர்"
+  ],
+  "I finished this dose on time": [
+    "我已按时喝完这一剂",
+    "Saya telah menghabiskan dos ini tepat pada masanya",
+    "இந்த டோஸை சரியான நேரத்தில் குடித்து முடித்தேன்"
+  ],
+  "Missed a dose? Do not take extra preparation to make up for it.": [
+    "漏服了一剂？不要额外服用泻药来弥补。",
+    "Terlepas dos? Jangan ambil persediaan tambahan untuk menggantikannya.",
+    "ஒரு டோஸைத் தவறவிட்டீர்களா? அதை ஈடுசெய்ய கூடுதல் மருந்து எடுக்க வேண்டாம்."
+  ],
+  "Compare what you see with the pictures, and choose the closest one.": [
+    "将您看到的与图片对比，选择最接近的一项。",
+    "Bandingkan apa yang anda lihat dengan gambar, dan pilih yang paling hampir.",
+    "நீங்கள் பார்ப்பதைப் படங்களுடன் ஒப்பிட்டு, மிக நெருக்கமானதைத் தேர்ந்தெடுங்கள்."
+  ],
+  "Finishing the full volume is what decides whether the scope works. If you cannot keep it down, do not take extra to make up for it.": [
+    "喝完全部分量决定了肠镜检查能否顺利进行。如果您喝下后呕吐，不要额外服用来弥补。",
+    "Menghabiskan keseluruhan isipadu menentukan sama ada skop berjaya. Jika anda muntah, jangan ambil tambahan untuk menggantikannya.",
+    "முழு அளவையும் குடித்து முடிப்பதே பரிசோதனை வெற்றிபெறுமா என்பதைத் தீர்மானிக்கிறது. வாந்தி எடுத்தால், அதை ஈடுசெய்ய கூடுதலாக எடுக்க வேண்டாம்."
+  ],
+  "Ask in chat about a food you cannot find here.": [
+    "如果这里找不到某种食物，请在聊天中询问。",
+    "Tanya dalam sembang tentang makanan yang tiada di sini.",
+    "இங்கே காணாத உணவைப் பற்றி அரட்டையில் கேளுங்கள்."
+  ],
+  "Do not assume very dark, black or red output is caused by food or iron, even if it is watery or you have been many times. See Overall bowel readiness in the Readiness tab for what to do.": [
+    "即使排出物呈水状或您已多次如厕，也不要以为非常深色、黑色或红色的排出物是食物或铁剂引起的。请查看“准备情况”标签中的“整体肠道准备情况”了解应该怎么做。",
+    "Jangan anggap najis yang sangat gelap, hitam atau merah disebabkan oleh makanan atau zat besi, walaupun ia berair atau anda sudah ke tandas berkali-kali. Lihat Kesediaan usus keseluruhan dalam tab Kesediaan untuk tindakan seterusnya.",
+    "நீர்போல் இருந்தாலும் அல்லது பலமுறை கழிவறைக்குச் சென்றிருந்தாலும், மிகவும் அடர்ந்த, கருப்பு அல்லது சிவப்பு வெளியேற்றம் உணவு அல்லது இரும்புச்சத்தால் ஏற்பட்டது என்று எண்ண வேண்டாம். என்ன செய்வது என்பதற்கு தயார்நிலை தாவலில் உள்ள ஒட்டுமொத்த குடல் தயார்நிலையைப் பாருங்கள்."
+  ],
+  "On your next trip, look for solid pieces and whether you can see through the liquid. If you still cannot tell, record “I cannot tell”.": [
+    "下次如厕时，留意是否有固体块，以及液体是否透明。如果仍无法判断，请选择“我无法判断”。",
+    "Pada lawatan seterusnya, perhatikan kepingan pepejal dan sama ada anda boleh melihat menembusi cecair. Jika masih tidak pasti, pilih “Saya tidak dapat pastikan”.",
+    "அடுத்த முறை, திடத் துண்டுகள் உள்ளதா, திரவத்தின் வழியே பார்க்க முடிகிறதா என்று கவனியுங்கள். இன்னும் சொல்ல முடியாவிட்டால், “என்னால் சொல்ல முடியவில்லை” என்று பதிவு செய்யுங்கள்."
+  ],
+  "The latest output is not yet watery and clear. Follow your prescribed plan and check again after your next trip.": [
+    "最近一次的排出物还不是水状且清澈。请按照处方计划进行，并在下次如厕后再检查。",
+    "Najis terkini belum berair dan jernih. Ikut pelan yang ditetapkan dan semak semula selepas lawatan seterusnya.",
+    "சமீபத்திய வெளியேற்றம் இன்னும் நீர்போலவும் தெளிவாகவும் இல்லை. பரிந்துரைக்கப்பட்ட திட்டத்தைப் பின்பற்றி, அடுத்த முறைக்குப் பிறகு மீண்டும் சரிபாருங்கள்."
+  ],
+  "Watery and see-through are different. Cloudy liquid can still contain material. Follow your prescribed plan and check again after your next trip.": [
+    "水状和透明是不同的。浑浊的液体仍可能含有残留物。请按照处方计划进行，并在下次如厕后再检查。",
+    "Berair dan jernih adalah berbeza. Cecair keruh masih boleh mengandungi sisa. Ikut pelan yang ditetapkan dan semak semula selepas lawatan seterusnya.",
+    "நீர்போல் இருப்பதும் தெளிவாக இருப்பதும் வேறு. கலங்கலான திரவத்தில் இன்னும் கழிவு இருக்கலாம். பரிந்துரைக்கப்பட்ட திட்டத்தைப் பின்பற்றி, அடுத்த முறைக்குப் பிறகு மீண்டும் சரிபாருங்கள்."
+  ],
 }

@@ -4,8 +4,6 @@ import { revalidatePath } from 'next/cache'
 import type { StoolCheck } from '@/domain/stool-check'
 import { recordStoolCheck } from '@/lib/progress'
 
-import type { ReviewedMedication } from '@/domain/medications'
-import { saveMedications } from '@/lib/medications-store'
 import { findPatient, livePatient } from '@/lib/patients'
 import { prepTimingFrom, toggleStep } from '@/lib/progress'
 import { requireSession } from '@/lib/session'
@@ -20,12 +18,6 @@ export async function tickStep(uid: string): Promise<readonly string[]> {
   const progress = await toggleStep(uid)
   const patient = await livePatient(session.phone, progress, prepTimingFrom(progress.doses))
   return patient?.completed ?? progress.completed
-}
-
-/** Keep the medication instructions the patient has confirmed. False if it could not. */
-export async function saveMedicationPlan(entries: ReviewedMedication[]): Promise<boolean> {
-  await requireSession()
-  return saveMedications(entries)
 }
 
 export async function saveStoolCheck(check: StoolCheck): Promise<void> {

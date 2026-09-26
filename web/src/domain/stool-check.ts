@@ -66,22 +66,22 @@ export function stoolPointFor(check: StoolCheck): 1 | 3 | 5 | null {
 export function guidanceFor(check: StoolCheck): { title: string; detail: string; contact: boolean } {
   if (check.colour === 'dark' || check.colour === 'red') return {
     title: 'Check this with your clinical team',
-    detail: 'Do not assume very dark, black or red output is caused by food or iron. Contact your hospital/clinic for advice, even if it is watery or you have been many times.',
+    detail: 'Do not assume very dark, black or red output is caused by food or iron, even if it is watery or you have been many times. See Overall bowel readiness in the Readiness tab for what to do.',
     contact: true,
   }
   if (check.consistency === 'unsure' || (check.consistency === 'watery' && check.clarity === 'unsure')) return {
     title: 'It is okay to be unsure',
-    detail: 'On your next trip, look for solid pieces and whether you can see through the liquid. If you still cannot tell, ask your hospital/clinic.',
+    detail: 'On your next trip, look for solid pieces and whether you can see through the liquid. If you still cannot tell, record “I cannot tell”.',
     contact: true,
   }
   if (check.consistency !== 'watery') return {
     title: 'You are still seeing solid material',
-    detail: 'The latest output is not yet watery and clear. Follow your prescribed plan. If you have finished it and still see solid material, contact your hospital/clinic.',
+    detail: 'The latest output is not yet watery and clear. Follow your prescribed plan and check again after your next trip.',
     contact: true,
   }
   if (check.clarity === 'cloudy') return {
     title: 'Watery, but still cloudy',
-    detail: 'Watery and see-through are different. Cloudy liquid can still contain material. Follow your prescribed plan; if you have finished it and the output remains cloudy, contact your hospital/clinic.',
+    detail: 'Watery and see-through are different. Cloudy liquid can still contain material. Follow your prescribed plan and check again after your next trip.',
     contact: true,
   }
   return {

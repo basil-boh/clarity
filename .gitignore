@@ -28,3 +28,5 @@ supabase/.temp/
 supabase/.branches/
 # Edge Function secrets: the OpenAI key lives here in local dev
 supabase/functions/.env
+.vercel
+.env*

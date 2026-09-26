@@ -2,7 +2,7 @@ import { getI18n } from '@/lib/i18n-server'
 import { Card, Notice, SectionTitle } from '@/components/ui'
 import { NoPatient } from '@/components/NoPatient'
 import { DoseTracker } from '@/components/DoseTracker'
-import { dosesFor, hasDepartmentPhone } from '@/domain/prep'
+import { dosesFor } from '@/domain/prep'
 import { findPatient } from '@/lib/patients'
 import { readProgress, recordDose } from '@/lib/progress'
 import { requireSession } from '@/lib/session'
@@ -39,7 +39,7 @@ export default async function Doses() {
       </header>
 
       <div className="mb-6">
-        <Notice tone="alert">{tx("Finishing the full volume is what decides whether the scope works. If you cannot keep it down, call your hospital/clinic — do not take extra to make up for it.")}</Notice>
+        <Notice tone="alert">{tx("Finishing the full volume is what decides whether the scope works. If you cannot keep it down, do not take extra to make up for it.")}</Notice>
       </div>
 
       <SectionTitle>{tx("Tonight’s doses")}</SectionTitle>
@@ -53,13 +53,6 @@ export default async function Doses() {
           />
         ))}
       </Card>
-
-      {hasDepartmentPhone(patient.procedure) ? (
-        <a
-          href={`tel:${patient.procedure.departmentPhone}`}
-          className="mt-6 inline-flex min-h-[52px] w-full items-center justify-center rounded-lg border border-hairline-strong px-4 text-[17px] font-semibold text-ink"
-        >{tx("Call the hospital/clinic")}</a>
-      ) : null}
     </>
   )
 }

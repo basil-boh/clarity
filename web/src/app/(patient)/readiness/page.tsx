@@ -1,7 +1,7 @@
 import { getI18n } from '@/lib/i18n-server'
 import Link from 'next/link'
 import { ReadinessSummary } from '@/components/ReadinessSummary'
-import { dietRating, prepRating, stoolRating, PREP_REPORTS, type PrepReport } from '@/domain/readiness'
+import { prepRating, stoolRating, PREP_REPORTS, type PrepReport } from '@/domain/readiness'
 import { SaveForm } from './SaveForm'
 import { revalidatePath } from 'next/cache'
 
@@ -10,16 +10,14 @@ import { NoPatient } from '@/components/NoPatient'
 import { StoolCheck } from '@/components/StoolCheck'
 import { saveStoolCheck } from '../actions'
 import { dosesFor, offsetFor, hasDepartmentPhone, todayIn } from '@/domain/prep'
-import { DIET_ANSWERS, type DietAnswer } from '@/domain/progress'
 import { findPatient } from '@/lib/patients'
-import { readProgress, recordDietDay, toggleStep, writeProgress } from '@/lib/progress'
+import { readProgress, toggleStep, writeProgress } from '@/lib/progress'
 import { requireSession } from '@/lib/session'
 
 export async function generateMetadata() {
   const { tx } = await getI18n()
   return { title: tx('Readiness — Colonaid') }
 }
-const DIET_OFFSETS = [-3, -2, -1]
 const actionStyle = 'inline-flex min-h-[48px] items-center justify-center rounded-lg border px-3 py-2 text-[15px] font-semibold'
 
 export default async function Readiness() {
@@ -31,8 +29,6 @@ export default async function Readiness() {
   const progress = await readProgress()
   const offset = offsetFor(patient.procedure.date)
   const doses = dosesFor()
-  const dietRecorded = DIET_OFFSETS.filter(day => progress.dietDays[String(day)]).length
-  const dietKept = DIET_OFFSETS.filter(day => progress.dietDays[String(day)] === 'yes').length
   const timingConfirmed = doses.filter(dose => progress.completed.includes(`-1:timing-${dose.id}`)).length
 
   const prepReport = (['incomplete', 'completing', 'late'] as const).find(value => progress.completed.includes(`-1:readiness-${value}`)) ?? 'records'
@@ -50,18 +46,6 @@ export default async function Readiness() {
     const completed = current.completed.filter(uid => !['-1:readiness-incomplete', '-1:readiness-completing', '-1:readiness-late'].includes(uid))
     if (value !== 'records') completed.push(`-1:readiness-${value}`)
     await writeProgress({ ...current, completed })
-    revalidatePath('/readiness')
-  }
-
-  async function saveDiet(form: FormData) {
-    'use server'
-    const { phone } = await requireSession()
-    const currentPatient = await findPatient(phone)
-    const day = Number(form.get('day'))
-    const answer = form.get('answer')
-    if (!currentPatient || !DIET_OFFSETS.includes(day) || day > offsetFor(currentPatient.procedure.date) ||
-      !DIET_ANSWERS.some(option => option.id === answer)) throw new Error('Please choose a valid diet day and answer.')
-    await recordDietDay(day, answer as DietAnswer)
     revalidatePath('/readiness')
   }
 
@@ -90,53 +74,22 @@ export default async function Readiness() {
       </header>
       <div className="space-y-6">
         <Card>
-          <SectionTitle>{tx("01 · Low-residue diet")}</SectionTitle>
-          <h2 className="text-[22px] font-bold tracking-[-0.02em] text-ink">
-            {tx(dietRecorded === 0 ? 'How have your meals been?' : dietKept === 3 ? 'Diet followed on all three days' : `${dietRecorded} of 3 days checked in`)}
-          </h2>
-          <p className="mt-2 text-[15px] leading-relaxed text-ink-muted">{tx("Record how each day went. It is okay if things did not go exactly to plan.")}</p>
-          <div className="mt-5 space-y-5">
-            {DIET_OFFSETS.map(day => {
-              const answer = progress.dietDays[String(day)]
-              const future = day > offset
-              return (
-                <SaveForm key={day} action={saveDiet}>
-                  <input type="hidden" name="day" value={day} />
-                  <fieldset disabled={future}>
-                    <legend className="mb-2 text-[16px] font-semibold text-ink">{day === -1 ? tx('1 day before') : tx('{0} days before', { 0: Math.abs(day) })} · {tx(future ? 'Upcoming' : answer ? DIET_ANSWERS.find(a => a.id === answer)?.label : 'Not recorded')}</legend>
-                    <div className="grid grid-cols-3 gap-2">
-                      {DIET_ANSWERS.map(option => (
-                        <button key={option.id} name="answer" value={option.id} aria-pressed={answer === option.id}
-                          className={`${actionStyle} disabled:opacity-45 ${answer === option.id ? 'border-blue bg-blue text-white' : 'border-hairline-strong text-ink hover:bg-paper-sunken'}`}>
-                          {tx(option.label)}
-                        </button>
-                      ))}
-                    </div>
-                  </fieldset>
-                </SaveForm>
-              )
-            })}
-          </div>
-          <Link href="/diet" className="mt-5 inline-flex min-h-[44px] items-center font-semibold text-blue">{tx("View my meal list →")}</Link>
-        </Card>
-
-        <Card>
-          <SectionTitle>{tx("02 · Purgative schedule")}</SectionTitle>
+          <SectionTitle>{tx("01 · Purgative schedule")}</SectionTitle>
           <h2 className="text-[22px] font-bold tracking-[-0.02em] text-ink">{tx(timingConfirmed === doses.length ? 'Schedule confirmed by you' : `${timingConfirmed} of ${doses.length} doses confirmed on time`)}</h2>
-          <p className="mt-2 text-[15px] leading-relaxed text-ink-muted">{tx("Check against your hospital/clinic’s instructions. Recorded volume and timing are separate — only confirm a dose after taking it.")}</p>
+          <p className="mt-2 text-[15px] leading-relaxed text-ink-muted">{tx("Only confirm a dose after you have finished the whole volume.")}</p>
           <div className="mt-5 space-y-5">
             {doses.map(dose => {
               const confirmed = progress.completed.includes(`-1:timing-${dose.id}`)
               return (
                 <div key={dose.id} className="border-t border-hairline pt-4">
                   <h3 className="text-[17px] font-semibold text-ink">{tx(dose.label)} · {tx(dose.at)}</h3>
-                  <p className="mt-1 text-[15px] text-ink-muted">{tx(dose.id === 'dose-1' ? 'Evening before' : 'Procedure morning')} · {tx(progress.doses[dose.id] ?? 0)} / {tx(dose.volumeMl)}{' '}{tx("ml recorded")}</p>
+                  <p className="mt-1 text-[15px] text-ink-muted">{tx(dose.id === 'dose-1' ? 'Evening before' : 'Same night, after midnight')} · {tx('{0} ml', { 0: dose.volumeMl })}</p>
                   <SaveForm action={confirmTiming} className="mt-3">
                     <input type="hidden" name="dose" value={dose.id} />
                     <input type="hidden" name="confirmed" value={confirmed ? 'no' : 'yes'} />
                     <button disabled={offset < (dose.id === 'dose-2' ? 0 : -1)} aria-pressed={confirmed}
                       className={`${actionStyle} w-full disabled:opacity-45 ${confirmed ? 'border-blue bg-blue-wash text-blue' : 'border-hairline-strong text-ink'}`}>
-                      {tx(confirmed ? '✓ Taken on time · Undo' : 'I took this dose on time')}
+                      {tx(confirmed ? '✓ Finished on time · Undo' : 'I finished this dose on time')}
                     </button>
                   </SaveForm>
                 </div>
@@ -155,24 +108,21 @@ export default async function Readiness() {
               </div>
             </fieldset>
           </SaveForm>
-          <Link href="/doses" className="mt-4 inline-flex min-h-[44px] items-center font-semibold text-blue">{tx("Record my glasses →")}</Link>
-          <p className="text-[14px] leading-relaxed text-ink-faint">{tx("Missed a dose or unsure about timing? Contact your hospital/clinic. Do not take extra preparation.")}</p>
+          <p className="mt-4 text-[14px] leading-relaxed text-ink-faint">{tx("Missed a dose? Do not take extra preparation to make up for it.")}</p>
         </Card>
 
         <section aria-labelledby="stool-heading">
-          <SectionTitle>{tx("03 · Stool check-in")}</SectionTitle>
+          <SectionTitle>{tx("02 · Stool check-in")}</SectionTitle>
           <h2 id="stool-heading" className="text-[22px] font-bold tracking-[-0.02em] text-ink">{tx("Let’s check your latest output")}</h2>
           <p className="mb-4 mt-2 text-[15px] leading-relaxed text-ink-muted">{tx("A few short questions about what you see. No photo needed.")}</p>
-          <StoolCheck saved={progress.stoolCheck ?? null} onSave={saveStoolCheck}
-            departmentPhone={hasDepartmentPhone(patient.procedure) ? patient.procedure.departmentPhone : undefined} />
+          <StoolCheck saved={progress.stoolCheck ?? null} onSave={saveStoolCheck} />
         </section>
         <Card>
           <h2 className="text-[17px] font-semibold text-ink">{tx("Your team makes the final call")}</h2>
           <p className="mt-2 text-[15px] leading-relaxed text-ink-muted">{tx("These check-ins help you share your progress. Colour or frequent toilet trips alone cannot confirm readiness for your colonoscopy.")}</p>
           <Link href="/ask" className="mt-3 inline-flex min-h-[44px] items-center font-semibold text-blue">{tx("Ask a question →")}</Link>
-          {hasDepartmentPhone(patient.procedure) ? <a href={`tel:${patient.procedure.departmentPhone}`} className="mt-2 flex min-h-[48px] items-center justify-center rounded-lg border border-hairline-strong font-semibold text-ink">{tx("Call the hospital/clinic")}</a> : null}
         </Card>
-        <ReadinessSummary diet={dietRating(progress.dietDays)}
+        <ReadinessSummary
           prep={prepRating(doses, progress.doses, progress.completed)}
           stool={stoolRating(progress.stoolCheck, morningCheck)}
           concerning={progress.stoolCheck?.colour === 'dark' || progress.stoolCheck?.colour === 'red'}

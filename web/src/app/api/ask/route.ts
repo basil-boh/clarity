@@ -4,6 +4,7 @@ import { RESPONSE_LANGUAGES } from '@/domain/i18n'
 
 import { recordExchange } from '@/lib/chat'
 import { findPatient } from '@/lib/patients'
+import { buildPlan } from '@/domain/prep'
 import { readSession } from '@/lib/session'
 
 /**
@@ -60,6 +61,25 @@ How to answer:
 End with an escalation line whenever the answer is uncertain or the situation
 sounds unsafe.
 `.trim()
+
+/**
+ * The timed steps of the patient's purge night, as the Plan tab shows them.
+ *
+ * Without this the assistant was asked "when is my second dose?" knowing only
+ * the procedure date, and answered with whatever regimen is common -- which is
+ * how a patient ended up with dose times that disagreed with the Plan tab.
+ */
+function scheduleContext(procedureDate: string): string {
+  const timed = buildPlan(procedureDate)
+    .flatMap((day) => day.steps)
+    .filter((step) => step.at && step.weight === 'critical')
+    .map((step) => `${step.date} ${step.at} — ${step.title}`)
+  return (
+    `Their preparation schedule in this app (Singapore time) is: ${timed.join('; ')}. ` +
+    'When asked about dose times, use exactly these and never suggest different ones. ' +
+    'If they say their hospital/clinic sheet gives different times, the sheet applies.'
+  )
+}
 
 /**
  * A last-line check on the generated reply.
@@ -183,7 +203,8 @@ export async function POST(request: Request) {
   const context = patient
     ? `The patient's procedure is on ${patient.procedure.date} at ${patient.procedure.hospital}, ` +
       `arriving ${patient.procedure.arriveAt}. Their hospital/clinic's number is ` +
-      `${patient.procedure.departmentPhone}. Use that number when you tell them to call.`
+      `${patient.procedure.departmentPhone}. Use that number when you tell them to call. ` +
+      scheduleContext(patient.procedure.date)
     : 'This patient has no procedure on file. Tell them to call the number in their appointment letter.'
 
   try {

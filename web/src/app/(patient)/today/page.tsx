@@ -12,9 +12,9 @@ import {
   buildPlan,
   currentDay,
   headingFor,
-  hasDepartmentPhone,
   offsetFor,
   phaseFor,
+  upcomingPlan,
 } from '@/domain/prep'
 import { FLAG_LABEL, computeFlag } from '@/domain/progress'
 import { livePatient } from '@/lib/patients'
@@ -70,8 +70,13 @@ export default async function Today() {
   const { procedure, profile, signals, completed } = patient
   const offset = offsetFor(procedure.date)
   const phase = phaseFor(offset)
-  const plan = buildPlan(procedure.date)
+  const plan = upcomingPlan(buildPlan(procedure.date))
   const day = currentDay(plan, offset)
+  // After midnight the 2am second dose is still listed under last night; it
+  // belongs on today's list until it is done, not in a day the patient has left.
+  const carried = plan.filter((d) => d.offset < offset).flatMap((d) => d.steps)
+  const todaySteps = [...carried, ...(day?.steps ?? [])]
+  const purgeTonight = phase === 'purge_night' || carried.some((step) => step.kind === 'purgative')
   const flag = computeFlag(signals)
   const date = parseISO(procedure.date)
 
@@ -106,12 +111,6 @@ export default async function Today() {
         {procedure.location ? (
           <p className="mt-3 text-[15px] leading-relaxed text-ink-muted">{tx(procedure.location)}</p>
         ) : null}
-        {hasDepartmentPhone(procedure) ? (
-          <a
-            href={`tel:${procedure.departmentPhone}`}
-            className="mt-4 inline-flex min-h-[48px] w-full items-center justify-center rounded-lg border border-hairline-strong px-4 text-[16px] font-semibold text-ink"
-          >{tx("Call the hospital/clinic")}</a>
-        ) : null}
         <Link
           href="/welcome"
           className="mt-4 inline-flex min-h-[48px] w-full items-center justify-center rounded-lg border border-hairline-strong px-4 text-[16px] font-semibold text-ink"
@@ -137,7 +136,7 @@ export default async function Today() {
 
       {REMINDER_PHASES.has(phase) ? <TelegramConnect phone={session.phone} t={t} /> : null}
 
-      {phase === 'purge_night' ? (
+      {purgeTonight ? (
         <section className="mb-5">
           <SectionTitle>{tx("The preparation")}</SectionTitle>
           <Card>
@@ -150,14 +149,14 @@ export default async function Today() {
         </section>
       ) : null}
 
-      {day && day.steps.length > 0 ? (
+      {todaySteps.length > 0 ? (
         <section className="mb-5">
           <SectionTitle>{tx("What to do today")}</SectionTitle>
           <Card>
             <StepList
-              steps={day.steps}
+              steps={todaySteps}
               completed={completed}
-              tickable={day.steps.map((step) => step.uid)}
+              tickable={todaySteps.map((step) => step.uid)}
               onToggle={tickStep}
             />
           </Card>

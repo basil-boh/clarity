@@ -5,9 +5,7 @@ import { cookies } from 'next/headers'
 import { notFound, redirect } from 'next/navigation'
 import { SignJWT, jwtVerify } from 'jose'
 
-import type { ReviewedMedication } from '@/domain/medications'
 import type { Language, Reader } from '@/domain/prep'
-import { medicationsOf } from '@/lib/medications-store'
 import { questionnaireOf, type Stored } from '@/lib/questionnaire-store'
 import { livePatient, type LivePatient } from '@/lib/patients'
 import { prepTimingFrom } from '@/lib/progress'
@@ -263,8 +261,6 @@ export type PatientDetails = {
   readonly chat: readonly ChatMessage[]
   /** Sign-in codes requested. Not sign-ins: a code can be asked for and never used. */
   readonly codes: { readonly sends: number; readonly lastSentAt: string } | null
-  /** Medication instructions the patient checked and added to their plan. */
-  readonly medications: readonly ReviewedMedication[]
   /** The first-sign-in questionnaire: null if never asked. */
   readonly questionnaire: Stored | null
 }
@@ -286,10 +282,9 @@ export async function patientDetails(phone: string): Promise<PatientDetails | nu
   if (!patient) return null
 
   const client = db()
-  const [progress, medications, questionnaire, progressStamp, doseStamps, chat, codes] =
+  const [progress, questionnaire, progressStamp, doseStamps, chat, codes] =
     await Promise.all([
       progressOf(phone),
-      medicationsOf(phone),
       questionnaireOf(phone),
       client.from('web_progress').select('updated_at').eq('phone', phone).maybeSingle(),
       client.from('web_doses').select('updated_at').eq('phone', phone),
@@ -340,7 +335,6 @@ export async function patientDetails(phone: string): Promise<PatientDetails | nu
       at: row.created_at,
     })),
     codes: codes.data ? { sends: codes.data.sends, lastSentAt: codes.data.last_sent_at } : null,
-    medications,
     questionnaire,
   }
 }
